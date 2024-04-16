@@ -363,6 +363,7 @@ class InlineShaderExample(Scene):
         # self.embed_2()
 
 
+
 class NamedShaderExample(Scene):
     def construct(self):
         shader = Shader(self.renderer.context, "manim_coords")
@@ -446,15 +447,17 @@ class InteractiveDevelopment(Scene):
 
 class SurfaceExample(Scene):
     def construct(self):
-        # surface_text = Text("For 3d scenes, try using surfaces")
-        # surface_text.fix_in_frame()
-        # surface_text.to_edge(UP)
-        # self.add(surface_text)
-        # self.wait(0.1)
+        surface_text = Text("For 3d scenes, try using surfaces")
+        surface_text.fix_in_frame()
+        surface_text.to_edge(UP)
+        self.add(surface_text)
+        self.wait(0.1)
 
-        torus1 = Torus(major_radius=1, minor_radius=1)
-        torus2 = Torus(major_radius=3, minor_radius=1)
-        sphere = Sphere(radius=3, resolution=torus1.resolution)
+        sphere = Sphere(radius=3, resolution=[24,24])
+        self.play(Create(sphere))
+        torus1 = Torus(major_radius=1, minor_radius=1,resolution=(24, 24))
+        torus2 = Torus(major_radius=3, minor_radius=1,resolution=(24, 24))
+
         # You can texture a surface with up to two images, which will
         # be interpreted as the side towards the light, and away from
         # the light.  These can be either urls, or paths to a local file
@@ -524,3 +527,21 @@ class SurfaceExample(Scene):
         # drag_text = Text("Try moving the mouse while pressing d or s")
         # drag_text.move_to(light_text)
         # drag_text.fix_in_frame()
+
+
+class OpenGLSurfaceMeshDemo(Scene):
+     def construct(self):
+         surface = OpenGLSurface(
+             lambda u, v: (u, v, u * np.sin(v) + v * np.cos(u)),
+             u_range=(-3, 3),
+             v_range=(-3, 3),
+         )
+
+         mesh = OpenGLSurfaceMesh(surface)
+         self.add(surface)
+         self.add(mesh)
+
+# "renderer": "opengl"
+with tempconfig({"preview": True, "disable_caching": True}):
+    SurfaceExample().render()
+    exit(1)
