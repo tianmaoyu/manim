@@ -177,3 +177,6 @@ class LineJoints(Scene):
 
 
 # See many more examples at https://docs.manim.community/en/stable/examples.html
+
+with tempconfig({"preview": True, "disable_caching": True}):
+    SpiralInExample().render()
