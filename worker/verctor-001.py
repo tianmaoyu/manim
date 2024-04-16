@@ -14,6 +14,7 @@ class VectoDemo001(Scene):
         self.play(ApplyMethod(vec.put_start_and_end_on, vec.get_start(), [5, 4, 0]))
         self.wait(1)
 
+
 # "renderer": "opengl"
 with tempconfig({"preview": True, "disable_caching": True}):
     VectoDemo001().render()

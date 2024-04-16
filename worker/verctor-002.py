@@ -2,15 +2,17 @@
 from manim import *
 
 
-class VectoDemo002(Scene):
+class Demo002(Scene):
     def construct(self):
-        vec= Vector([2,3])
-        label= vec.coordinate_label(color=YELLOW)
-        vec.add(label)
-        self.add(vec)
+        text= Text("不要送礼物")
+        self.add(text)
+        def move(obj,dt):
+            print(f"-{dt}-"*20)
+        text.add_updater(move)
+        self.wait(2)
 
 
 # "renderer": "opengl"
 with tempconfig({"preview": True, "disable_caching": True}):
-    VectoDemo002().render()
+    Demo002().render()
     exit(1)

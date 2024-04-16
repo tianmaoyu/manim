@@ -846,10 +846,11 @@ class Mobject:
         if self.updating_suspended:
             return self
         for updater in self.updaters:
-            if "dt" in inspect.signature(updater).parameters:
-                updater(self, dt)
-            else:
-                updater(self)
+            updater(self, dt)
+            # if "dt" in inspect.signature(updater).parameters:
+            #     updater(self, dt)
+            # else:
+            #     updater(self)
         if recursive:
             for submob in self.submobjects:
                 submob.update(dt, recursive)
