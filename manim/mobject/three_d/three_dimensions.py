@@ -760,6 +760,7 @@ class Cylinder(Surface):
     ) -> None:
         self._height = height
         self.radius = radius
+
         super().__init__(
             self.func,
             resolution=resolution,

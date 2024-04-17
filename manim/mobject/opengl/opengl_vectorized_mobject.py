@@ -416,6 +416,8 @@ class OpenGLVMobject(OpenGLMobject):
 
     def has_stroke(self):
         stroke_widths = self.get_stroke_widths()
+        if isinstance(stroke_widths,float):
+            stroke_widths=[stroke_widths]
         stroke_opacities = self.get_stroke_opacities()
         return (
             stroke_widths is not None
