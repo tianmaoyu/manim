@@ -214,6 +214,6 @@ class ProjectImageOnSphere(ThreeDScene):
 
 
 # "renderer": "opengl"
-with tempconfig({"preview": True, "disable_caching": True}):
+with tempconfig({"preview": True, "disable_caching": True,"renderer": "opengl"}):
     WorldToSphere3().render()
     exit(1)
