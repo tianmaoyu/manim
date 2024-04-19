@@ -13,55 +13,46 @@ from PIL import Image
 from manim.mobject.opengl.opengl_vectorized_mobject import OpenGLVMobject
 
 
+class CircleRun(Scene):
+    def construct(self):
+        axes = Axes()
+        circle = Circle(radius=1).shift(UP)
+        dot = Dot().move_to(circle.get_right())
+        self.add(circle, dot, axes)
+        self.wait()
+
+        # animate= MoveToTarget(circle, TAU, about_point=circle.get_center(), rate_func=linear)
+        target_position = circle.get_center() + RIGHT * 2 * PI
+        animate = circle.animate.move_to(target_position)
+
+        value_tracker = ValueTracker()
+        value_tracker_animate = value_tracker.animate.set_value(2 * PI)
+
+        def updata_func(dot: Dot, dt):
+            deg = np.rad2deg(value_tracker.get_value() * PI / 180)
+            x = value_tracker.get_value() + np.cos(deg)
+            y = np.sin(deg)
+            dot.move_to([x, y+1, 0])
+
+        dot_animate = UpdateFromAlphaFunc(dot, update_function=updata_func)
+
+        path = TracedPath(dot.get_center, stroke_color=dot.get_color(), stroke_width=2.0)
+        self.add(path)
+
+        self.play(animate, value_tracker_animate, dot_animate, run_time=3)
+
+
+
+
+
+
+
+
 class ProjectionDemo(ThreeDScene):
     def construct(self):
-        image_obj = OpenGLImageMobject("mini.jpg")
-        self.add(image_obj)
-
-        # self.set_camera_orientation(phi=75 * DEGREES, theta=15 * DEGREES)
-        # self.begin_ambient_camera_rotation(rate=1)
-        # self.add(ThreeDAxes())
-
-        # point= OpenGLPMPoint(stroke_width=5)
-        # point.points=np.array([[1, 1, 1],[0, 0, 0]])
-        # point.rgbas=np.array([[1, 0, 0, 1]])
-        # self.add(point)
-        # self.wait(1)
-
-        image= Image.open("mini.jpg").convert("RGBA")
-        image_data=np.array(image)
-
-        h,w= image_data.shape[:2]
-        width = image_obj.width
-        height = image_obj.height
-        pixel = width/w
-        print("一个图像的大小",pixel)
-        #取第一个像素点 ，四个角
-        data0= image_data[0,0]/255
-        data1 = image_data[h-1, 0]
-        data2 = image_data[h-1, w-1]
-        data3 = image_data[0,w-1]
-
-        point = OpenGLPMPoint(stroke_width=5)
-        x,y= self.image_coor_to_screen_coor([0,0],h,w)
-        point0=np.array([x,y,100])*pixel
-        point.points = np.array([point0])
-        point.rgbas = np.array([data0])
-        self.add(point)
-
-        # self.wait()
-
-    def image_coor_to_screen_coor(self,point:np.ndarray,heigth,width):
-         y= point[0]+heigth/2
-         x= point[1]-width/2
-         return (int(x),int(y))
-
-
-class ProjectionDemo2(ThreeDScene):
-    def construct(self):
         # self.set_camera_orientation(phi=75 * DEGREES, theta=15 * DEGREES)
         image_obj = OpenGLImageMobject("mini.jpg")
-        self.add(image_obj.shift(UP*2))
+        self.add(image_obj.shift(UP * 2))
         # self.wait(2)
 
         image = Image.open("mini.jpg").convert("RGBA")
@@ -70,7 +61,7 @@ class ProjectionDemo2(ThreeDScene):
         h, w, _ = image_data.shape
         width = image_obj.width
         height = image_obj.height
-        #每个图片像素 在平面上的长度，宽度
+        # 每个图片像素 在平面上的长度，宽度
         pixel = width / w
 
         points = []
@@ -86,9 +77,7 @@ class ProjectionDemo2(ThreeDScene):
         mpoint = OpenGLPMPoint(stroke_width=2)
         mpoint.points = np.array(points)
         mpoint.rgbas = np.array(rgbas)
-        self.add(mpoint.next_to(image_obj,direction=DOWN))
-
-
+        self.add(mpoint.next_to(image_obj, direction=DOWN))
 
     def image_coor_to_screen_coor(self, point: np.ndarray, height: int, width: int):
         """
@@ -100,6 +89,6 @@ class ProjectionDemo2(ThreeDScene):
 
 
 # "renderer": "opengl"  "background_color":"WHITE",
-with tempconfig({"preview": True, "disable_caching": True,"renderer": "opengl"}):
-    ProjectionDemo2().render()
+with tempconfig({"preview": True, "disable_caching": True, "renderer": "opengl"}):
+    CircleRun().render()
     exit(1)
