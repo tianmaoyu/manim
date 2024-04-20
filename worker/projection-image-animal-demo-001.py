@@ -308,5 +308,5 @@ class ProjectionDemo(ThreeDScene):
 
 # "renderer": "opengl"  "background_color":"WHITE",
 with tempconfig({"preview": True, "disable_caching": True, "renderer": "opengl"}):
-    LineToCircle().render()
+    ProjectionDemo().render()
     exit(1)
