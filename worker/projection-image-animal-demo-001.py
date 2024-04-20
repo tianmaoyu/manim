@@ -75,7 +75,8 @@ class CircleRun(Scene):
         self.play(animate, value_tracker_animate, dot_animate, run_time=3)
 
     def show_003(self):
-        axes = Axes()
+        self.camera.move_to(RIGHT * 2)
+        axes = Axes(x_range=[-10,10],x_length=20)
         circle = Circle(radius=1)
         dot = Dot().move_to(circle.get_right())
         self.add(circle, dot, axes)
@@ -100,6 +101,19 @@ class CircleRun(Scene):
 
         self.play(animate, value_tracker_animate, dot_animate, run_time=3)
 
+
+class LineToCircle(Scene):
+    def construct(self):
+        self.show001()
+    def show001(self):
+        circle = Circle()
+
+
+
+    def show003(self):
+        pass
+    def show004(self):
+        pass
 
 class ProjectionDemo(ThreeDScene):
     def construct(self):
@@ -143,5 +157,5 @@ class ProjectionDemo(ThreeDScene):
 
 # "renderer": "opengl"  "background_color":"WHITE",
 with tempconfig({"preview": True, "disable_caching": True, "renderer": "opengl"}):
-    CircleRun().render()
+    LineToCircle().render()
     exit(1)
