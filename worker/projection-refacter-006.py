@@ -151,7 +151,8 @@ class ProjectionRefactor(ThreeDScene):
         # self.show001()
         # self.show002()
         # self.show003()
-        self.show004()
+        # self.show004()
+        self.show005()
 
     def show001(self):
         circle = Circle(radius=1)
@@ -207,7 +208,7 @@ class ProjectionRefactor(ThreeDScene):
     def show004(self):
         circle = Circle(radius=1)
         axes = ThreeDAxes(x_range=[-5, 5, 1], y_range=[-3, 3, 1])
-        dot_list = [Dot(point=[x+circle_r, 0, 0], stroke_width=1) for x in x_list]
+        dot_list = [Dot(point=[x + circle_r, 0, 0], stroke_width=1) for x in x_list]
         dot_path_list = [TracedPath(dot.get_center, stroke_width=1) for dot in dot_list]
         self.add(circle, axes, *dot_list, *dot_path_list)
         self.time = 0
@@ -221,7 +222,7 @@ class ProjectionRefactor(ThreeDScene):
                 if distance >= init_x:
                     # rad 弧长是有放心的，默认逆时针
                     read_rad = (distance - init_x) / circle_r
-                    x = np.cos(-read_rad) +distance
+                    x = np.cos(-read_rad) + distance
                     y = np.sin(-read_rad)
                     point = [x, y, 0]
                     dot.move_to(point)
@@ -230,7 +231,65 @@ class ProjectionRefactor(ThreeDScene):
         self.wait(2 * PI * circle_r)
 
     def show005(self):
-        pass
+        image_obj = OpenGLImageMobject("mini.jpg")
+
+        image = Image.open("mini.jpg").convert("RGBA")
+        image_data = np.array(image)
+        height, width = image_data.shape[:2]
+        # 单个像素的长度
+        pixel_width = image_obj.width / width
+        # 需要把图片数据，转成对应的坐标点&&点对应的rgba颜色
+        y_indices, x_indices = np.mgrid[0:height, 0:width]
+        points = np.zeros((height * width, 3))
+        points[:, 0] = x_indices.flatten()  # x坐标
+        points[:, 1] = y_indices.flatten()  # y坐标
+        # 创建一个颜色数组，每个颜色是一个(r, g, b, a)四元组
+        rgbas = image_data.reshape(-1, 4)
+        point_obj = OpenGLPMPoint(stroke_width=2)
+        # 坐标点的处理: 每个坐标进行缩放 && y轴翻转
+        point_obj.points = points * pixel_width * [1, -1, 1]
+        # 颜色的处理 / 255
+        point_obj.rgbas = rgbas / 255
+
+        self.set_camera_orientation(65 * DEGREES, 15 * DEGREES)
+        self.camera.move_to(RIGHT * 2)
+        axes = ThreeDAxes()
+        self.add(axes)
+
+        self.time = 0
+        self.is_end = False
+        init_points = point_obj.points.copy()
+        circle_r = image_obj.width / (2 * PI)
+        cylinder = Cylinder(radius=circle_r, height=image_obj.height, show_ends=False, checkerboard_colors=[GREY])
+        cylinder.rotate(axis=RIGHT, angle=PI / 2)
+        cylinder.move_to(DOWN * image_obj.height / 2 + LEFT * circle_r)
+        self.add(cylinder)
+        self.add(point_obj)
+
+        def update_func(dt):
+            if self.is_end:
+                return
+            self.time += dt
+            distance = move_speed * self.time
+            current_points = point_obj.points.copy()
+            for index, point in enumerate(point_obj.points):
+                init_x, init_y = init_points[index][:2]
+                if distance >= init_x:
+                    real_rad = (distance - init_x) / circle_r
+                    x = circle_r * np.cos(-real_rad) + distance - circle_r
+                    z = circle_r * np.sin(-real_rad)
+                    new_point = np.array([x, init_y, z])
+                    current_points[index] = new_point
+            point_obj.points = current_points
+            cx, cy, cz = cylinder.get_center()
+            cylinder.move_to([cx + dt, cy, cz])
+
+        self.add_updater(func=update_func)
+        self.wait(2 * PI * circle_r)
+        self.is_end = True
+        ani= self.camera.animate.move_to(RIGHT * 4)
+        self.play(ani)
+        self.move_camera(75 * DEGREES, theta=135 * DEGREES,run_time=2)
 
 
 # "renderer": "opengl"  "background_color":"WHITE",
