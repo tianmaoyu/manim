@@ -11,6 +11,7 @@ import numpy as np
 from PIL import Image
 
 circle_r = 1
+move_speed = 1
 circle_init_point = np.array([0, 0, 0])
 x_list = np.arange(-1, 6, 0.1)
 
@@ -148,7 +149,8 @@ class ProjectionDemo(ThreeDScene):
 class ProjectionRefactor(ThreeDScene):
     def construct(self):
         # self.show001()
-        self.show002()
+        # self.show002()
+        self.show003()
 
     def show001(self):
         circle = Circle(radius=1)
@@ -173,14 +175,32 @@ class ProjectionRefactor(ThreeDScene):
         # 创建一个颜色数组，每个颜色是一个(r, g, b, a)四元组
         rgbas = image_data.reshape(-1, 4)
         point_obj = OpenGLPMPoint(stroke_width=2)
-        #坐标点的处理: 每个坐标进行缩放 && y轴翻转
+        # 坐标点的处理: 每个坐标进行缩放 && y轴翻转
         point_obj.points = points * pixel_width * [1, -1, 1]
         # 颜色的处理 / 255
         point_obj.rgbas = rgbas / 255
         self.add(point_obj)
 
     def show003(self):
-        pass
+        circle = Circle(radius=1)
+        axes = ThreeDAxes(x_range=[-5, 5, 1], y_range=[-3, 3, 1])
+        dot = Dot().shift(RIGHT)
+        dot_path = TracedPath(dot.get_center)
+        self.add(circle, axes, dot, dot_path)
+        self.time = 0
+        def update_func(dt):
+            self.time += dt;
+            distance = move_speed * self.time
+            circle.move_to([distance, 0, 0])
+            #rad 弧长是有放心的，默认逆时针
+            rad = distance / circle_r
+            x = np.cos(-rad) + distance
+            y = np.sin(-rad)
+            point = [x, y, 0]
+            dot.move_to(point)
+
+        self.add_updater(func=update_func)
+        self.wait(2 * PI * circle_r)
 
     def show004(self):
         pass
