@@ -232,7 +232,13 @@ class ProjectionRefactor(ThreeDScene):
 
     def show005(self):
         image_obj = OpenGLImageMobject("mini.jpg")
-
+        self.add(image_obj)
+        self.wait(2)
+        axes = ThreeDAxes()
+        self.add(axes)
+        self.move_camera(65 * DEGREES, 15 * DEGREES)
+        self.remove(image_obj)
+        return
         image = Image.open("mini.jpg").convert("RGBA")
         image_data = np.array(image)
         height, width = image_data.shape[:2]
@@ -253,8 +259,7 @@ class ProjectionRefactor(ThreeDScene):
 
         self.set_camera_orientation(65 * DEGREES, 15 * DEGREES)
         self.camera.move_to(RIGHT * 2)
-        axes = ThreeDAxes()
-        self.add(axes)
+
 
         self.time = 0
         self.is_end = False
@@ -263,8 +268,16 @@ class ProjectionRefactor(ThreeDScene):
         cylinder = Cylinder(radius=circle_r, height=image_obj.height, show_ends=False, checkerboard_colors=[GREY])
         cylinder.rotate(axis=RIGHT, angle=PI / 2)
         cylinder.move_to(DOWN * image_obj.height / 2 + LEFT * circle_r)
-        self.add(cylinder)
+        # self.add(cylinder)
         self.add(point_obj)
+
+        self.begin_ambient_camera_rotation(rate=0.8)
+        self.play(point_obj.animate.scale(4),run_time=3)
+        self.wait(1)
+        self.play(point_obj.animate.scale(1/4), run_time=2)
+        self.wait(1.8)
+        self.stop_ambient_camera_rotation()
+        return
 
         def update_func(dt):
             if self.is_end:
