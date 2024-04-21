@@ -13,7 +13,7 @@ from PIL import Image
 circle_r = 1
 move_speed = 1
 circle_init_point = np.array([0, 0, 0])
-x_list = np.arange(-1, 6, 0.1)
+x_list = np.arange(-1, 5, 0.5)
 
 
 class LineToCircle(Scene):
@@ -150,7 +150,8 @@ class ProjectionRefactor(ThreeDScene):
     def construct(self):
         # self.show001()
         # self.show002()
-        self.show003()
+        # self.show003()
+        self.show004()
 
     def show001(self):
         circle = Circle(radius=1)
@@ -188,11 +189,12 @@ class ProjectionRefactor(ThreeDScene):
         dot_path = TracedPath(dot.get_center)
         self.add(circle, axes, dot, dot_path)
         self.time = 0
+
         def update_func(dt):
             self.time += dt;
             distance = move_speed * self.time
             circle.move_to([distance, 0, 0])
-            #rad 弧长是有放心的，默认逆时针
+            # rad 弧长是有放心的，默认逆时针
             rad = distance / circle_r
             x = np.cos(-rad) + distance
             y = np.sin(-rad)
@@ -203,7 +205,29 @@ class ProjectionRefactor(ThreeDScene):
         self.wait(2 * PI * circle_r)
 
     def show004(self):
-        pass
+        circle = Circle(radius=1)
+        axes = ThreeDAxes(x_range=[-5, 5, 1], y_range=[-3, 3, 1])
+        dot_list = [Dot(point=[x+circle_r, 0, 0], stroke_width=1) for x in x_list]
+        dot_path_list = [TracedPath(dot.get_center, stroke_width=1) for dot in dot_list]
+        self.add(circle, axes, *dot_list, *dot_path_list)
+        self.time = 0
+
+        def update_func(dt):
+            self.time += dt;
+            distance = move_speed * self.time
+            circle.move_to([distance, 0, 0])
+            for index, dot in enumerate(dot_list):
+                init_x = x_list[index]
+                if distance >= init_x:
+                    # rad 弧长是有放心的，默认逆时针
+                    read_rad = (distance - init_x) / circle_r
+                    x = np.cos(-read_rad) +distance
+                    y = np.sin(-read_rad)
+                    point = [x, y, 0]
+                    dot.move_to(point)
+
+        self.add_updater(func=update_func)
+        self.wait(2 * PI * circle_r)
 
     def show005(self):
         pass
