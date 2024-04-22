@@ -794,7 +794,7 @@ def earclip_triangulation(verts: np.ndarray, ring_ends: list) -> list:
 def cartesian_to_spherical(vec: Sequence[float]) -> np.ndarray:
     """Returns an array of numbers corresponding to each
     polar coordinate value (distance, phi, theta).
-
+    笛卡尔坐标转极坐标
     Parameters
     ----------
     vec
@@ -809,10 +809,21 @@ def cartesian_to_spherical(vec: Sequence[float]) -> np.ndarray:
     return np.array([r, theta, phi])
 
 
+# def cartesian_to_spherical2(cartesian: Sequence[float]) -> np.ndarray:
+#     """
+#     笛卡尔坐标转 极坐标 与  spherical_to_cartesian 正好相反
+#     """
+#     x,y,z= cartesian
+#
+#     r = np.sqrt(x * x + y * y + z * z)
+#     theta = np.arctan2(y, x)
+#     phi = np.arccos(z / r)
+#     return [r, theta, phi]
+
 def spherical_to_cartesian(spherical: Sequence[float]) -> np.ndarray:
     """Returns a numpy array ``[x, y, z]`` based on the spherical
     coordinates given.
-
+    极坐标 转笛卡尔坐标
     Parameters
     ----------
     spherical

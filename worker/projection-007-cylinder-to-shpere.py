@@ -8,10 +8,13 @@ from manim.mobject.opengl.opengl_cylinder import OpenGLCylinder
 from manim.mobject.opengl.opengl_image_mobject import OpenGLImageMobject
 from manim.mobject.opengl.opengl_mobject import OpenGLMobject, OpenGLPoint
 from manim.mobject.opengl.opengl_shpere import OpenGLSphere
+from manim.mobject.opengl.opengl_something import OpenGLArrow3D
 
 from manim.mobject.opengl.opengl_surface import OpenGLTexturedSurface, OpenGLSurface
 import numpy as np
 from PIL import Image
+
+
 
 circle_r = 1
 move_speed = 1
@@ -309,8 +312,7 @@ class ProjectionRefactor(ThreeDScene):
 
 class CylinderToShpere(ThreeDScene):
     def construct(self):
-        self.show003()
-
+        self.show004()
 
     def show001_cube(self):
         axes = ThreeDAxes()
@@ -336,20 +338,50 @@ class CylinderToShpere(ThreeDScene):
         self.move_camera(phi=75 * DEGREES, theta=15 * DEGREES)
         self.begin_ambient_camera_rotation(rate=0.5)
         self.wait(4)
+
     def show003(self):
-        axes = ThreeDAxes()
-        self.add(axes)
+        # axes = ThreeDAxes()
+        # self.add(axes)
 
-        for point in ORIGIN,RIGHT,UP,UP+RIGHT:
-            dot = Dot3D(point=point)
-            self.add(dot)
+        def uv_func(u, v):
+            z = np.sin(u)
+            y = np.cos(u) * np.sin(v)
+            x = np.cos(u) * np.cos(v)
+            return np.array([x, y, z])
 
-        # cube = Cube(fill_opacity=0, stroke_width=2).shift(OUT)
-        # self.add(cube)
+        shpere = OpenGLSurface(uv_func=uv_func, u_range=[-PI / 2, PI / 2], v_range=[0, TAU], resolution=[100, 100])
+        self.add(shpere)
         self.wait()
         self.move_camera(phi=75 * DEGREES, theta=15 * DEGREES)
         self.begin_ambient_camera_rotation(rate=0.5)
         self.wait(4)
+
+    def cylinder_to_sphere(self, x, y, z):
+        # 计算径向距离
+        r = np.sqrt(x * x + y * y + z * z)
+        theta = np.arctan2(y, x)
+        phi = np.arccos(z/r)
+        return [r, theta, phi]
+
+    # 坐标原点出发 射线 clinder to,shpere 与他们的交点  theta,phi 两个角相等，不等是 点到 坐标原点的距离不等
+    # 方位角，极坐标的phi 是不同的
+    def show004(self):
+        self.set_camera_orientation(phi=75 * DEGREES, theta=10 * DEGREES)
+        axes = ThreeDAxes()
+        self.add(axes)
+        point=[1, 1, 1]
+        #笛卡尔转 极坐标，极坐标转笛卡尔
+        r, theta, phi = cartesian_to_spherical(point)
+        vector_coord = spherical_to_cartesian([r, theta, phi])
+
+        vector = OpenGLArrow3D(ORIGIN, vector_coord, color=YELLOW)
+        self.add(vector)
+
+        dot = Dot3D(point=point)
+        self.add(dot)
+        self.move_camera(phi=75 * DEGREES, theta=215 * DEGREES,run_time=2)
+
+
 
 
 
