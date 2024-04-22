@@ -7,6 +7,7 @@ from manim import *
 from manim.mobject.opengl.opengl_cylinder import OpenGLCylinder
 from manim.mobject.opengl.opengl_image_mobject import OpenGLImageMobject
 from manim.mobject.opengl.opengl_mobject import OpenGLMobject, OpenGLPoint
+from manim.mobject.opengl.opengl_point_image_mobject import ImagePixelMobject
 from manim.mobject.opengl.opengl_shpere import OpenGLSphere
 from manim.mobject.opengl.opengl_something import OpenGLArrow3D
 
@@ -392,22 +393,42 @@ class CylinderToShpere(ThreeDScene):
         r, theta, phi = cartesian_to_spherical(point)
         vector_coord = spherical_to_cartesian([r, theta, phi])
 
-        vector = OpenGLArrow3D(ORIGIN, vector_coord, color=YELLOW,shade_in_3d=True)
-
+        vector = OpenGLArrow3D(ORIGIN, vector_coord, color=YELLOW, shade_in_3d=True)
 
         dot = Dot3D(point=point)
         self.add(dot)
 
-        image = Image.open("mini.jpg").convert("RGBA")
-        image_data = np.array(image)
-        points,rgbs= image_to_points_and_rgbas(image_data)
-
-        opengl_object = OpenGLPMobject()
-        opengl_object.points=points
-        opengl_object.rgbas=rgbs
-        self.add(opengl_object)
+        image = ImagePixelMobject("mini.jpg")
+        self.add(image)
         self.add(vector)
-        self.move_camera(phi=75 * DEGREES, theta=215 * DEGREES, run_time=2)
+
+
+        cylinder_r = image.image_width / (2 * PI)
+        move_speed= image.image_width / 3
+        cylinder_animation= image.cylinder_animation(cylinder_r,move_speed)
+        self.play(cylinder_animation,run_time=3)
+
+
+        # self.time = 0
+        # self.is_end = False
+        # def update_func(dt):
+        #     if self.is_end:
+        #         return
+        #     self.time += dt
+        #     distance = move_speed * self.time
+        #     current_points = image.points.copy()
+        #     for index, point in enumerate(image.points):
+        #         init_x, init_y =image.init_points[index][:2]
+        #         if distance >= init_x:
+        #             real_rad = (distance - init_x) / cylinder_r
+        #             x = cylinder_r * np.cos(-real_rad) + distance - cylinder_r
+        #             z = cylinder_r * np.sin(-real_rad)
+        #             new_point = np.array([x, init_y, z])
+        #             current_points[index] = new_point
+        #     image.points = current_points
+        # self.add_updater(func=update_func)
+        # self.wait(cylinder_r)
+
 
 
 

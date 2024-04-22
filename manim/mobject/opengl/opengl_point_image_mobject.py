@@ -1,0 +1,93 @@
+from __future__ import annotations
+
+__all__ = [
+    "ImagePixelMobject",
+]
+
+from pathlib import Path
+
+import numpy as np
+from PIL import Image
+from PIL.Image import Resampling
+
+from manim import OpenGLPMobject, Animation
+from manim.mobject.opengl.opengl_surface import OpenGLSurface, OpenGLTexturedSurface
+from manim.utils.images import get_full_raster_image_path
+
+__all__ = ["ImagePixelMobject"]
+
+
+class ImagePixelMobject(OpenGLPMobject):
+    """
+     一张图片进行像素点化，方便操作 每一个像素点
+    """
+
+    def __init__(
+            self,
+            filename: str,
+            **kwargs,
+    ):
+        super().__init__(**kwargs)
+
+        image = np.array(Image.open(filename).convert("RGBA"))
+        height, width = image.shape[:2]
+
+        # 单个像素的长度 这是参考  OpenGLImageMobject 中图片长度得的固定值
+        pixel_width = 4 / height
+        self.pixel_width = pixel_width
+        self.image_width = pixel_width * width
+        self.image_height = pixel_width * height
+
+        points = np.zeros((height * width, 3))
+        y_indices, x_indices = np.mgrid[0:height, 0:width]
+        points[:, 0] = x_indices.flatten()  # x坐标
+        points[:, 1] = y_indices.flatten()  # y坐标
+        # 创建一个颜色数组，每个颜色是一个(r, g, b, a)四元组
+        rgbas = image.reshape(-1, 4)
+        # 图像反转，平移到中间
+        points = points * pixel_width * [1, -1, 1]
+        # 颜色的处理 / 255
+        rgbas = rgbas / 255
+
+        self.init_image = image
+        self.init_points = points.copy()
+        self.init_rgbas = rgbas.copy()
+        self.points = points
+        self.rgbas = rgbas
+
+    def to_center(self):
+        height, width =self.init_image.shape[:2]
+        self.points = self.points + np.array([-width / 2, height / 2, 0]) * self.pixel_width
+        return self
+    def _cylinder_func(self,cylinder_r,move_speed):
+
+        self.time=0
+        def update_func(mobj:ImagePixelMobject, dt):
+            mobj.time += dt
+            distance = move_speed * self.time
+            current_points = mobj.points.copy()
+            for index, point in enumerate(mobj.points):
+                init_x, init_y = mobj.init_points[index][:2]
+                if distance >= init_x:
+                    real_rad = (distance - init_x) / cylinder_r
+                    x = cylinder_r * np.cos(-real_rad) + distance - cylinder_r
+                    z = cylinder_r * np.sin(-real_rad)
+                    new_point = np.array([x, init_y, z])
+                    current_points[index] = new_point
+            mobj.points = current_points
+
+        return update_func
+
+    def cylinder_animation(self,radius,move_speed):
+        return CylinderAnimation(self,radius,move_speed)
+
+
+class CylinderAnimation(Animation):
+    def __init__(self, mobject:ImagePixelMobject, radius, move_speed, **kwargs):
+        self.radius = radius
+        self.move_speed = move_speed
+        self.mobject=mobject
+        super().__init__(mobject, **kwargs)
+
+    def interpolate_mobject(self, alpha):
+        self.mobject._cylinder_func(self.radius, self.move_speed)(self.mobject, alpha)
