@@ -6,6 +6,7 @@ from scipy.interpolate import interp2d
 from manim import *
 from manim.mobject.opengl.opengl_image_mobject import OpenGLImageMobject
 from manim.mobject.opengl.opengl_mobject import OpenGLMobject, OpenGLPoint
+from manim.mobject.opengl.opengl_shpere import OpenGLSphere
 from manim.mobject.opengl.opengl_surface import OpenGLTexturedSurface, OpenGLSurface
 import numpy as np
 from PIL import Image
@@ -305,7 +306,24 @@ class ProjectionRefactor(ThreeDScene):
         self.move_camera(75 * DEGREES, theta=135 * DEGREES,run_time=2)
 
 
+
+class CylinderToShpere(ThreeDScene):
+    def construct(self):
+
+        # axes = ThreeDAxes()
+        # self.add(axes)
+        # clylinder = Cylinder(radius=circle_r,height=2*PI*circle_r,show_ends=False)
+        # self.add(clylinder)
+        sphere = OpenGLSphere(radius=circle_r)
+        self.add( sphere)
+
+
+        # self.move_camera(phi=75*DEGREES,theta=15*DEGREES)
+
+
+
+
 # "renderer": "opengl"  "background_color":"WHITE",
 with tempconfig({"preview": True, "disable_caching": True, "renderer": "opengl"}):
-    ProjectionRefactor().render()
+    CylinderToShpere().render()
     exit(1)
