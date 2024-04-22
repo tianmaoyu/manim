@@ -405,7 +405,7 @@ class CylinderToShpere(ThreeDScene):
 
         cylinder_r = image.image_width / (2 * PI)
         move_speed= image.image_width / 3
-        cylinder_animation= image.cylinder_animation(cylinder_r,move_speed)
+        cylinder_animation= image.cylinder_animation(cylinder_r,3)
         self.play(cylinder_animation,run_time=3)
 
 
