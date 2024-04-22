@@ -4,9 +4,11 @@ import moderngl
 from scipy.interpolate import interp2d
 
 from manim import *
+from manim.mobject.opengl.opengl_cylinder import OpenGLCylinder
 from manim.mobject.opengl.opengl_image_mobject import OpenGLImageMobject
 from manim.mobject.opengl.opengl_mobject import OpenGLMobject, OpenGLPoint
 from manim.mobject.opengl.opengl_shpere import OpenGLSphere
+
 from manim.mobject.opengl.opengl_surface import OpenGLTexturedSurface, OpenGLSurface
 import numpy as np
 from PIL import Image
@@ -261,7 +263,6 @@ class ProjectionRefactor(ThreeDScene):
         self.set_camera_orientation(65 * DEGREES, 15 * DEGREES)
         self.camera.move_to(RIGHT * 2)
 
-
         self.time = 0
         self.is_end = False
         init_points = point_obj.points.copy()
@@ -273,9 +274,9 @@ class ProjectionRefactor(ThreeDScene):
         self.add(point_obj)
 
         self.begin_ambient_camera_rotation(rate=0.8)
-        self.play(point_obj.animate.scale(4),run_time=3)
+        self.play(point_obj.animate.scale(4), run_time=3)
         self.wait(1)
-        self.play(point_obj.animate.scale(1/4), run_time=2)
+        self.play(point_obj.animate.scale(1 / 4), run_time=2)
         self.wait(1.8)
         self.stop_ambient_camera_rotation()
         return
@@ -301,25 +302,54 @@ class ProjectionRefactor(ThreeDScene):
         self.add_updater(func=update_func)
         self.wait(2 * PI * circle_r)
         self.is_end = True
-        ani= self.camera.animate.move_to(RIGHT * 4)
+        ani = self.camera.animate.move_to(RIGHT * 4)
         self.play(ani)
-        self.move_camera(75 * DEGREES, theta=135 * DEGREES,run_time=2)
-
+        self.move_camera(75 * DEGREES, theta=135 * DEGREES, run_time=2)
 
 
 class CylinderToShpere(ThreeDScene):
     def construct(self):
-
-        # axes = ThreeDAxes()
-        # self.add(axes)
-        # clylinder = Cylinder(radius=circle_r,height=2*PI*circle_r,show_ends=False)
-        # self.add(clylinder)
-        sphere = OpenGLSphere(radius=circle_r)
-        self.add( sphere)
+        self.show003()
 
 
-        # self.move_camera(phi=75*DEGREES,theta=15*DEGREES)
+    def show001_cube(self):
+        axes = ThreeDAxes()
+        self.add(axes)
+        cube = Cube(fill_opacity=0, stroke_width=2).shift(OUT)
+        self.add(cube)
+        self.wait()
+        self.move_camera(phi=75 * DEGREES, theta=15 * DEGREES)
+        self.begin_ambient_camera_rotation(rate=0.5)
+        self.wait(4)
 
+    def show002(self):
+        axes = ThreeDAxes()
+        self.add(axes)
+        clylinder = OpenGLCylinder(radius=circle_r, height=2 * circle_r, color=BLUE_D, show_ends=False)
+        self.add(clylinder)
+        dot = Dot3D(color=RED)
+        self.add(dot)
+        sphere = OpenGLSphere(radius=circle_r, opacity=0.5)
+        self.add(sphere)
+        cube = Cube(fill_opacity=0, stroke_width=2)
+        self.add(cube)
+        self.move_camera(phi=75 * DEGREES, theta=15 * DEGREES)
+        self.begin_ambient_camera_rotation(rate=0.5)
+        self.wait(4)
+    def show003(self):
+        axes = ThreeDAxes()
+        self.add(axes)
+
+        for point in ORIGIN,RIGHT,UP,UP+RIGHT:
+            dot = Dot3D(point=point)
+            self.add(dot)
+
+        # cube = Cube(fill_opacity=0, stroke_width=2).shift(OUT)
+        # self.add(cube)
+        self.wait()
+        self.move_camera(phi=75 * DEGREES, theta=15 * DEGREES)
+        self.begin_ambient_camera_rotation(rate=0.5)
+        self.wait(4)
 
 
 
