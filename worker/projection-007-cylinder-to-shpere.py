@@ -384,7 +384,8 @@ class CylinderToShpere(ThreeDScene):
     # 坐标原点出发 射线 clinder to,shpere 与他们的交点  theta,phi 两个角相等，不等是 点到 坐标原点的距离不等
     # 方位角，极坐标的phi 是不同的
     def show004(self):
-        self.set_camera_orientation(phi=75 * DEGREES, theta=10 * DEGREES)
+        self.set_camera_orientation(phi=85 * DEGREES, theta=10 * DEGREES)
+        self.camera.move_to(RIGHT*4)
         axes = ThreeDAxes()
 
         self.add(axes)
@@ -405,8 +406,8 @@ class CylinderToShpere(ThreeDScene):
 
         cylinder_r = image.image_width / (2 * PI)
         move_speed= image.image_width / 3
-        cylinder_animation= image.cylinder_animation(cylinder_r,3)
-        self.play(cylinder_animation,run_time=3)
+        cylinder_animation= image.cylinder_animation(cylinder_r,8)
+        self.play(cylinder_animation,run_time=4)
 
 
         # self.time = 0
