@@ -14,8 +14,6 @@ from manim.mobject.opengl.opengl_surface import OpenGLTexturedSurface, OpenGLSur
 import numpy as np
 from PIL import Image
 
-
-
 circle_r = 1
 move_speed = 1
 circle_init_point = np.array([0, 0, 0])
@@ -360,32 +358,60 @@ class CylinderToShpere(ThreeDScene):
         # 计算径向距离
         r = np.sqrt(x * x + y * y + z * z)
         theta = np.arctan2(y, x)
-        phi = np.arccos(z/r)
+        phi = np.arccos(z / r)
         return [r, theta, phi]
+
+    def image_to_points_and_rgbas(self, image: np.ndarray):
+        """
+        把图片数据 转 成 对应 的 points  和 rgbs
+        """
+        height, width = image.shape[:2]
+        # 单个像素的长度 这是参考  OpenGLImageMobject 中图片长度得的固定值
+        pixel_width = 4 / height
+        # 需要把图片数据，转成对应的坐标点&&点对应的rgba颜色
+        y_indices, x_indices = np.mgrid[0:height, 0:width]
+        points = np.zeros((height * width, 3))
+        points[:, 0] = x_indices.flatten()  # x坐标
+        points[:, 1] = y_indices.flatten()  # y坐标
+        # 创建一个颜色数组，每个颜色是一个(r, g, b, a)四元组
+        rgbas = image.reshape(-1, 4)
+        points = points * pixel_width * [1, -1, 1]
+        # 颜色的处理 / 255
+        rgbas = rgbas / 255
+        return points, rgbas
 
     # 坐标原点出发 射线 clinder to,shpere 与他们的交点  theta,phi 两个角相等，不等是 点到 坐标原点的距离不等
     # 方位角，极坐标的phi 是不同的
     def show004(self):
         self.set_camera_orientation(phi=75 * DEGREES, theta=10 * DEGREES)
         axes = ThreeDAxes()
+
         self.add(axes)
-        point=[1, 1, 1]
-        #笛卡尔转 极坐标，极坐标转笛卡尔
+        point = [1, 1, 1]
+        # 笛卡尔转 极坐标，极坐标转笛卡尔
         r, theta, phi = cartesian_to_spherical(point)
         vector_coord = spherical_to_cartesian([r, theta, phi])
 
-        vector = OpenGLArrow3D(ORIGIN, vector_coord, color=YELLOW)
-        self.add(vector)
+        vector = OpenGLArrow3D(ORIGIN, vector_coord, color=YELLOW,shade_in_3d=True)
+
 
         dot = Dot3D(point=point)
         self.add(dot)
-        self.move_camera(phi=75 * DEGREES, theta=215 * DEGREES,run_time=2)
+
+        image = Image.open("mini.jpg").convert("RGBA")
+        image_data = np.array(image)
+        points,rgbs= image_to_points_and_rgbas(image_data)
+
+        opengl_object = OpenGLPMobject()
+        opengl_object.points=points
+        opengl_object.rgbas=rgbs
+        self.add(opengl_object)
+        self.add(vector)
+        self.move_camera(phi=75 * DEGREES, theta=215 * DEGREES, run_time=2)
 
 
 
-
-
-# "renderer": "opengl"  "background_color":"WHITE",
+# "renderer": "opengl"  "background_color":"WHITE","quality":"fourk_quality",
 with tempconfig({"preview": True, "disable_caching": True, "renderer": "opengl"}):
     CylinderToShpere().render()
     exit(1)

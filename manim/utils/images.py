@@ -7,6 +7,7 @@ __all__ = [
     "drag_pixels",
     "invert_image",
     "change_to_rgba_array",
+    "image_to_points_and_rgbas",
 ]
 
 from pathlib import Path
@@ -63,3 +64,25 @@ def change_to_rgba_array(image, dtype="uint8"):
         )
         pa = np.append(pa, alphas, axis=2)
     return pa
+
+
+def image_to_points_and_rgbas(image: np.ndarray):
+    """
+    把图片数据 转 成 对应 的 points  和 rgbs
+    """
+    height, width = image.shape[:2]
+    # 单个像素的长度 这是参考  OpenGLImageMobject 中图片长度得的固定值
+    pixel_width = 4 / height
+    y_indices, x_indices = np.mgrid[0:height, 0:width]
+    points = np.zeros((height * width, 3))
+    points[:, 0] = x_indices.flatten()  # x坐标
+    points[:, 1] = y_indices.flatten()  # y坐标
+    # 创建一个颜色数组，每个颜色是一个(r, g, b, a)四元组
+    rgbas = image.reshape(-1, 4)
+
+
+    # 图像反转，平移到中间
+    points = points * pixel_width * [1, -1, 1] +np.array([-width / 2,height / 2,0])*pixel_width
+    # 颜色的处理 / 255
+    rgbas = rgbas / 255
+    return points, rgbas
