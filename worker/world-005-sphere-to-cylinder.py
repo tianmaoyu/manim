@@ -13,8 +13,8 @@ class WorldToShpere(ThreeDScene):
         # self.camera.light_source.animate.move_to()
         image = ImagePixelMobject("Whole_world.jpg")
         image.to_center()
-        self.add(ThreeDAxes())
         self.add(image)
+        self.add(ThreeDAxes())
         self.wait(1)
         self.set_camera_orientation(phi=90 * DEGREES, theta=15 * DEGREES)
         self.begin_ambient_camera_rotation(rate=0.5)
@@ -30,10 +30,11 @@ class WorldToShpere(ThreeDScene):
         cartesian_points = np.apply_along_axis(spherical_to_cartesian, axis=1, arr=spherical_points)
         self.set_camera_orientation(phi=90 * DEGREES, theta=15 * DEGREES)
 
-        # image.points = cartesian_points
+        image.points = cartesian_points
+        # self.play(ApplyMethod(image.set_points, cartesian_points),   run_time=1 ,  rate_func=smooth)
+        self.move_camera(phi=75 * DEGREES, theta=150 * DEGREES, run_time=2)
+        self.wait(4)
 
-        self.play(ApplyMethod(image.set_points, cartesian_points),   run_time=1 ,  rate_func=smooth)
-        self.wait(6)
 
 
 # "renderer": "opengl" "quality": "fourk_quality",
