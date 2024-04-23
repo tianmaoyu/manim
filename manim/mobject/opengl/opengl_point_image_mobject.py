@@ -59,12 +59,12 @@ class ImagePixelMobject(OpenGLPMobject):
         height, width =self.init_image.shape[:2]
         self.points = self.points + np.array([-width / 2, height / 2, 0]) * self.pixel_width
         return self
-    def _cylinder_func(self,cylinder_r,move_speed):
+    def _cylinder_func(self,cylinder_r,move_distance):
 
         self.time=0
         def update_func(mobj:ImagePixelMobject, dt):
             mobj.time += dt
-            distance = move_speed * self.time
+            distance = move_distance * self.time
             current_points = mobj.points.copy()
             for index, point in enumerate(mobj.points):
                 init_x, init_y = mobj.init_points[index][:2]
@@ -78,16 +78,21 @@ class ImagePixelMobject(OpenGLPMobject):
 
         return update_func
 
-    def cylinder_animation(self,radius,move_speed):
-        return CylinderAnimation(self,radius,move_speed)
+    def cylinder_animation(self,radius,move_distance):
+        """
+        圆柱半径
+        要滚动的距离
+        """
+        return CylinderAnimation(self,radius,move_distance)
 
 
 class CylinderAnimation(Animation):
-    def __init__(self, mobject:ImagePixelMobject, radius, move_speed, **kwargs):
+    def __init__(self, mobject:ImagePixelMobject, radius, move_distance, **kwargs):
         self.radius = radius
-        self.move_speed = move_speed
+        self.move_distance = move_distance
         self.mobject=mobject
         super().__init__(mobject, **kwargs)
 
     def interpolate_mobject(self, alpha):
-        self.mobject._cylinder_func(self.radius, self.move_speed)(self.mobject, alpha)
+        """alpha  0-1 之间"""
+        self.mobject._cylinder_func(self.radius, self.move_distance)(self.mobject, alpha)
