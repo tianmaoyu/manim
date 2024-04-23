@@ -384,7 +384,7 @@ class CylinderToShpere(ThreeDScene):
     # 坐标原点出发 射线 clinder to,shpere 与他们的交点  theta,phi 两个角相等，不等是 点到 坐标原点的距离不等
     # 方位角，极坐标的phi 是不同的
     def show004(self):
-        self.set_camera_orientation(phi=85 * DEGREES, theta=10 * DEGREES)
+        self.set_camera_orientation(phi=75 * DEGREES, theta=15 * DEGREES)
         self.camera.move_to(RIGHT*4)
         axes = ThreeDAxes()
 
@@ -395,39 +395,56 @@ class CylinderToShpere(ThreeDScene):
         vector_coord = spherical_to_cartesian([r, theta, phi])
 
         vector = OpenGLArrow3D(ORIGIN, vector_coord, color=YELLOW, shade_in_3d=True)
-
         dot = Dot3D(point=point)
-        self.add(dot)
+        # self.add(dot)
 
         image = ImagePixelMobject("mini.jpg")
         self.add(image)
-        self.add(vector)
+        # self.add(vector)
 
 
         cylinder_r = image.image_width / (2 * PI)
-        cylinder_animation= image.cylinder_animation(cylinder_r,image.image_width+3)
-        self.play(cylinder_animation,run_time=3)
+        cylinder_animation= image.cylinder_animation(cylinder_r,image.image_width+1)
+        self.play(cylinder_animation,run_time=2)
+        rotate_animation=  Rotate(image,angle=PI/2,axis=RIGHT,about_point=image.get_center())
+        self.play(rotate_animation)
+        image.move_to(ORIGIN)
+        # sphere = OpenGLSphere(radius=1,center=image.get_center())
+        # self.add(sphere)
+
+        self.camera.move_to(ORIGIN)
+        self.wait()
+
+        point_count= image.points.shape[0]
+        value_tracker = ValueTracker()
+        value_tracker.set_value(0)
+
+        self.set_camera_orientation(phi=90 * DEGREES, theta=15 * DEGREES)
+        self.previous_count=0
+        def update_func(dt):
+            current = value_tracker.get_value()
+            current=int(current)
+            point_list= image.points[self.previous_count:current]
+            for i, point in enumerate(point_list):
+                r, theta, phi = cartesian_to_spherical(point)
+                x,y,z = spherical_to_cartesian([1.3, theta, phi])
+                point[0]=x
+                point[1] = y
+                point[2] = z
+            self.previous_count=current
 
 
-        # self.time = 0
-        # self.is_end = False
-        # def update_func(dt):
-        #     if self.is_end:
-        #         return
-        #     self.time += dt
-        #     distance = move_speed * self.time
-        #     current_points = image.points.copy()
-        #     for index, point in enumerate(image.points):
-        #         init_x, init_y =image.init_points[index][:2]
-        #         if distance >= init_x:
-        #             real_rad = (distance - init_x) / cylinder_r
-        #             x = cylinder_r * np.cos(-real_rad) + distance - cylinder_r
-        #             z = cylinder_r * np.sin(-real_rad)
-        #             new_point = np.array([x, init_y, z])
-        #             current_points[index] = new_point
-        #     image.points = current_points
-        # self.add_updater(func=update_func)
-        # self.wait(cylinder_r)
+        self.add_updater(func=update_func)
+        self.play(value_tracker.animate.increment_value(point_count),run_time=2)
+
+        self.begin_ambient_camera_rotation(rate=0.5)
+        self.wait(3)
+
+
+
+
+
+
 
 
 
