@@ -25,6 +25,7 @@ class ImagePixelMobject(OpenGLPMobject):
     def __init__(
             self,
             filename: str,
+            y_inversion:bool=True,
             **kwargs,
     ):
         super().__init__(**kwargs)
@@ -45,7 +46,10 @@ class ImagePixelMobject(OpenGLPMobject):
         # 创建一个颜色数组，每个颜色是一个(r, g, b, a)四元组
         rgbas = image.reshape(-1, 4)
         # 图像反转，平移到中间
-        points = points * pixel_width * [1, -1, 1]
+        if y_inversion:
+            points = points * pixel_width * [1, -1, 1]
+        else:
+            points = points * pixel_width
         # 颜色的处理 / 255
         rgbas = rgbas / 255
 
@@ -77,6 +81,9 @@ class ImagePixelMobject(OpenGLPMobject):
             mobj.points = current_points
 
         return update_func
+
+    def set_points(self,new_points:np.ndarray):
+        self.points=new_points
 
     def cylinder_animation(self,radius,move_distance):
         """
