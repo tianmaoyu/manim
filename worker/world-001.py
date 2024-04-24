@@ -9,7 +9,7 @@ class WorldDemo(ThreeDScene):
         self.begin_ambient_camera_rotation(rate=0.5)
         # self.camera.light_source.animate.move_to()
         def uv_func(u, v):
-            return 2 * np.array([
+            return 20 * np.array([
                 np.cos(u) * np.sin(v),
                 np.sin(u) * np.sin(v),
                 -np.cos(v)
@@ -23,10 +23,9 @@ class WorldDemo(ThreeDScene):
             resolution=(101, 51))
 
         # 替换为你的纹理图片的路径 dark_image_file="night.jpg"
-        texture = OpenGLTexturedSurface(uv_surface=sphere, image_file="Whole_world.jpg")
+        texture = OpenGLTexturedSurface(uv_surface=sphere, image_file="Whole_world.jpg",dark_image_file="night.jpg")
         self.add(texture)
         self.wait(1)
-        points=texture.points
 
         #
 

@@ -26,6 +26,7 @@ class ImagePixelMobject(OpenGLPMobject):
             self,
             filename: str,
             y_inversion:bool=True,
+            image_width=8,
             **kwargs,
     ):
         super().__init__(**kwargs)
@@ -34,7 +35,7 @@ class ImagePixelMobject(OpenGLPMobject):
         height, width = image.shape[:2]
 
         # 单个像素的长度 这是参考  OpenGLImageMobject 中图片长度得的固定值
-        pixel_width = 4 / height
+        pixel_width = image_width / width
         self.pixel_width = pixel_width
         self.image_width = pixel_width * width
         self.image_height = pixel_width * height
