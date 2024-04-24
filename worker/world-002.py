@@ -23,22 +23,25 @@ class WorldDemo(ThreeDScene):
             resolution=(101, 51))
 
         # 替换为你的纹理图片的路径 dark_image_file="night.jpg"
-        texture = OpenGLTexturedSurface(uv_surface=sphere, image_file="Whole_world_-_land_and_oceans_12000.jpg")
+        #360_big.jpg
+        texture = OpenGLTexturedSurface(uv_surface=sphere, image_file="360_big.jpg")
         self.add(texture)
 
-        self.play(texture.animate.scale(6),run_time=3)
+        # self.play(texture.animate.scale(6),run_time=3)
 
         self.set_camera_orientation(phi=0 * DEGREES, theta=15 * DEGREES)
 
         self.move_camera(phi=45 * DEGREES, theta=15 * DEGREES,run_time=2)
 
-        # self.move_camera(phi=90 * DEGREES, theta=15 * DEGREES, run_time=2)
-        #
+        self.move_camera(phi=90 * DEGREES, theta=15 * DEGREES, run_time=2)
+
         # self.move_camera(phi=135 * DEGREES, theta=15 * DEGREES, run_time=2)
         #
         # self.move_camera(phi=180 * DEGREES, theta=15 * DEGREES, run_time=2)
+
+        self.begin_ambient_camera_rotation(rate=0.5)
         #
-        # self.wait(1)
+        self.wait(5)
 
         #
 

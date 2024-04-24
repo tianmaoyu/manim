@@ -39,7 +39,7 @@ class Panorama6(ThreeDScene):
         text = MarkupText("phi=180", font="sans-serif")
         # self.add_fixed_orientation_mobjects(text)
         self.set_camera_orientation(phi=90 * DEGREES, theta=5 * DEGREES)
-        animate= self.camera.animate.move_to(RIGHT*4)
+        animate= self.camera.animate.move_to(UP*4)
         self.play(animate,run_time=2)
         return
         # self.move_camera(phi=75 * DEGREES, theta=150 * DEGREES, run_time=1)
