@@ -1,5 +1,23 @@
 import numpy as np
 
+array = np.random.randint(15,size=(4,3))
+print(array)
+array=array.reshape(3,4)
+print(array)
+array=array.reshape(-1,1)
+print(array)
+array=array.reshape(1,-1)
+print(array)
+
+array=array.reshape(2,-1)
+print(array)
+
+y,x= np.mgrid[0:10, 0:20]
+y=y.flatten()
+x=x.flatten()
+points=np.vstack([x,y])
+print(y,x)
+
 coordinates = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])  # 每一行代表一个坐标[x, y, z]
 def transform_coordinate(item):
     return item-1

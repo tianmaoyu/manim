@@ -22,7 +22,7 @@ class Panorama6(ThreeDScene):
         spherical_points[:, 2] = PI * (spherical_points[:, 1] / 4) - PI / 2
         # θ = 2πx
         # spherical_points[:, 1] = spherical_points[:, 0]/ 8 * 2 * PI
-        # θ = πx : -π 到  π
+        #  ϕ= πx : -π 到  π
         spherical_points[:, 1] = PI * spherical_points[:, 0] / 4
 
         spherical_points[:, 0] = 20
