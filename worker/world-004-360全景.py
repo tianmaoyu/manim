@@ -26,7 +26,7 @@ class Panorama(ThreeDScene):
         # θ = πx : -π 到  π
         spherical_points[:, 1] = PI * spherical_points[:, 0] / 8
 
-        spherical_points[:, 0] = r * 3
+        spherical_points[:, 0] = r * 20
 
         cartesian_points = np.apply_along_axis(spherical_to_cartesian, axis=1, arr=spherical_points)
 
