@@ -8,11 +8,14 @@ import numpy as np
 
 class Panorama6(ThreeDScene):
     def construct(self):
-        image = ImagePixelMobject("360_big.jpg")
+
+        image = ImagePixelMobject("Whole_world.jpg",image_width=16)
         image.to_center()
         self.add(image)
         self.add(ThreeDAxes(x_length=[-4, 4, 1], x_range=[-4, 4, 1], z_range=[-4, 4, 1]))
 
+        self.move_camera(phi=65 * DEGREES, theta=15 * DEGREES, run_time=2)
+        return
         self.set_camera_orientation(phi=75 * DEGREES, theta=15 * DEGREES)
 
         # self.begin_ambient_camera_rotation(rate=0.5)
@@ -22,7 +25,7 @@ class Panorama6(ThreeDScene):
         r = 8 / PI / 2
         spherical_points[:, 2] = PI * (points[:, 1] / 4) - PI / 2
         spherical_points[:, 1] = PI * points[:, 0] / 4
-        spherical_points[:, 0] = 20
+        spherical_points[:, 0] = 3
 
         # 性能改进
         # cartesian_points = np.apply_along_axis(spherical_to_cartesian, axis=1, arr=spherical_points)
@@ -40,7 +43,12 @@ class Panorama6(ThreeDScene):
         # self.play(ApplyMethod(image.set_points, cartesian_points), run_time=2, rate_func=smooth)
 
         # self.move_camera(phi=75 * DEGREES, theta=150 * DEGREES, run_time=1)
-        self.set_camera_orientation(phi=0 * DEGREES, theta=15 * DEGREES)
+        self.set_camera_orientation(phi=0 * DEGREES, theta=0 * DEGREES)
+
+        self.play(image.animate.scale(7),run_time=2)
+        return
+
+
 
         self.move_camera(phi=45 * DEGREES, theta=15 * DEGREES,run_time=2)
 
