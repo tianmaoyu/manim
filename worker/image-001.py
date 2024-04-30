@@ -198,7 +198,7 @@ class Image006(ThreeDScene):
         self.add_updater(func=update_func_rotation)
         self.wait(5)
 
-# 模拟风
+# 分解
 class Image007(ThreeDScene):
     def construct(self):
 
@@ -227,10 +227,39 @@ class Image007(ThreeDScene):
 
         self.add_updater(func=update_func_move2)
         self.wait(20)
+# 倒叙分解
+class Image008(ThreeDScene):
+    def construct(self):
 
+        self.set_camera_orientation(phi=65 * DEGREES, theta=15 * DEGREES)
+        self.begin_ambient_camera_rotation(rate=0.3)
+        image2 = ImagePixelMobject("rose.jpg")
+        image2.to_center()
+        self.add(image2)
+        self.add(ThreeDAxes())
+
+        height, width = image2.init_image.shape[:2]
+
+        # verctor_list = (np.random.random((height * width, 3)) -0.5)*0.0125
+        verctor_list = np.zeros((height * width, 3))
+
+        self.count=0
+        def update_func_move1(dt):
+            verctor_list[self.count]=(np.random.random((1, 3)) -0.5)*0.0125
+            image2.points += verctor_list
+            self.count += 1
+
+        def update_func_move2(dt):
+
+            verctor_list[self.count*100:(self.count+1)*100]=(np.random.random((100, 3)) -0.5)*0.035
+            image2.points += verctor_list[::-1]
+            self.count += 1
+
+        self.add_updater(func=update_func_move2)
+        self.wait(20)
 
 
 # "renderer": "opengl" "quality": "fourk_quality",
 with tempconfig({"preview": True, "disable_caching": True, "renderer": "opengl"}):
-    Image007().render()
+    Image008().render()
     exit(1)
