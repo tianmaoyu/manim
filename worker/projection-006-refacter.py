@@ -238,7 +238,7 @@ class ProjectionRefactor(ThreeDScene):
         self.add(axes)
         self.move_camera(65 * DEGREES, 15 * DEGREES)
         self.remove(image_obj)
-        return
+
         image = Image.open("mini.jpg").convert("RGBA")
         image_data = np.array(image)
         height, width = image_data.shape[:2]
@@ -277,7 +277,7 @@ class ProjectionRefactor(ThreeDScene):
         self.play(point_obj.animate.scale(1/4), run_time=2)
         self.wait(1.8)
         self.stop_ambient_camera_rotation()
-        return
+
 
         def update_func(dt):
             if self.is_end:
