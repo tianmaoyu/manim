@@ -2,6 +2,7 @@ from typing import Sequence
 
 from manim import *
 from manim.mobject.opengl.opengl_mobject import OpenGLMobject
+from manim.mobject.opengl.opengl_shpere import OpenGLSphere
 from manim.mobject.opengl.opengl_surface import OpenGLSurface
 import numpy as np
 
@@ -611,3 +612,45 @@ class OpenGLArrow3D(OpenGLLine3D):
         self.add(self.cone)
         self.set_color(color)
 
+class OpenGLDot3D(OpenGLSphere):
+    """A spherical dot.
+
+    Parameters
+    ----------
+    point
+        The location of the dot.
+    radius
+        The radius of the dot.
+    color
+        The color of the :class:`Dot3D`.
+    resolution
+        The number of samples taken of the :class:`Dot3D`. A tuple can be
+        used to define different resolutions for ``u`` and ``v`` respectively.
+
+    Examples
+    --------
+
+    .. manim:: Dot3DExample
+        :save_last_frame:
+
+        class Dot3DExample(ThreeDScene):
+            def construct(self):
+                self.set_camera_orientation(phi=75*DEGREES, theta=-45*DEGREES)
+
+                axes = ThreeDAxes()
+                dot_1 = Dot3D(point=axes.coords_to_point(0, 0, 1), color=RED)
+                dot_2 = Dot3D(point=axes.coords_to_point(2, 0, 0), radius=0.1, color=BLUE)
+                dot_3 = Dot3D(point=[0, 0, 0], radius=0.1, color=ORANGE)
+                self.add(axes, dot_1, dot_2,dot_3)
+    """
+
+    def __init__(
+        self,
+        point: list | np.ndarray = ORIGIN,
+        radius: float = DEFAULT_DOT_RADIUS,
+        color: ParsableManimColor = WHITE,
+        resolution: tuple[int, int] = (8, 8),
+        **kwargs,
+    ) -> None:
+        super().__init__(center=point, radius=radius, resolution=resolution, **kwargs)
+        self.set_color(color)

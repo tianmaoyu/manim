@@ -2,6 +2,10 @@ from manim import *
 
 
 class VectoDemo001(Scene):
+    config["background_color"]=WHITE
+    config["output_file"] = "output.mp4"
+    config["video_dir"] = "./temp/video"
+    config["disable_caching"] = True
     def construct(self):
         number_plane = NumberPlane(background_line_style={
             "stroke_color": TEAL,
@@ -9,7 +13,7 @@ class VectoDemo001(Scene):
             "stroke_opacity": 0.5
         })
         vec = Vector().set_color(BLUE)
-        self.add(number_plane, vec)
+        # self.add(number_plane, vec)
         self.wait(1)
         self.play(ApplyMethod(vec.put_start_and_end_on, vec.get_start(), [5, 4, 0]))
         self.wait(1)
