@@ -44,6 +44,11 @@ class Demo004(ThreeDScene):
         cartesian_points = np.stack((x, y, z), axis=-1)
         image.points = cartesian_points
         self.wait(0.5)
+        self.move_camera(phi=75 * DEGREES, theta=15 * DEGREES, run_time=3)
+        self.begin_ambient_camera_rotation(rate=0.5)
+        self.wait(3)
+        self.stop_ambient_camera_rotation()
+        self.set_camera_orientation(theta=0,phi=0)
         self.remove(image)
         # 球面- 映射到平面-小行星
         perspective_point = [0, 0, 3]
