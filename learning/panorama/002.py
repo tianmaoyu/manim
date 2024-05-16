@@ -28,7 +28,7 @@ phi: 3/4PI - PI  120°-180°
 
 class Demo002(ThreeDScene):
     def construct(self):
-        image = ImagePixelMobject("src/360.jpg", image_width=16, stroke_width=6.0)
+        image = ImagePixelMobject("src/360-001.jpg", image_width=16, stroke_width=6.0)
         image.to_center()
         self.add(image)
         axex = ThreeDAxes(x_length=[-4, 4, 1], x_range=[-4, 4, 1], z_range=[-4, 4, 1])
@@ -59,7 +59,15 @@ class Demo002(ThreeDScene):
 
         cartesian_points = np.stack((x, y, z), axis=-1)
         image.points = cartesian_points
-        self.wait(0.5)
+        # self.set_camera_orientation(theta=0 * DEGREES, phi=90 * DEGREES)
+        animate=Rotate(image,angle=189*DEGREES,axis=UP,about_point=ORIGIN)
+        # animate= image.animate.rotate(angle=89*DEGREES,axis=UP)
+        self.play(animate,run_time=1)
+        #
+
+        # self.begin_ambient_camera_rotation(rate=0.5)
+        # self.wait(2)
+        # return
         self.remove(image)
         # 球面- 映射到平面-小行星
         # perspective_point=(0,0,3)
@@ -70,14 +78,14 @@ class Demo002(ThreeDScene):
 
         #优化版本
         perspective_point = (0, 0, 3)
-        projection_point_list = point_from_collinearity_np(perspective_point, cartesian_points, -3)
+        projection_point_list = point_from_collinearity_np(perspective_point, cartesian_points, 2)
 
         pm_omject = OpenGLPMobject()
         pm_omject.points = projection_point_list
         pm_omject.rgbas = image.rgbas
 
         self.add(pm_omject)
-        self.wait(0.5)
+        self.wait(1)
 
 
 def point_from_collinearity_np(light, points: np.ndarray, z):
@@ -86,7 +94,7 @@ def point_from_collinearity_np(light, points: np.ndarray, z):
     points 需要投影的数据，
     z 值
     """
-    λ = (points[:, 2] - light[2]) / (points[:, 2] - z)
+    λ = (points[:, 2] - light[2]) / (z- points[:, 2] )
 
     x = (points[:, 0] - light[0]) / λ + points[:, 0]
     y = (points[:, 1] - light[1]) / λ + points[:, 1]
