@@ -8,8 +8,7 @@ import numpy as np
 
 class Demo001(ThreeDScene):
     def construct(self):
-
-        image = ImagePixelMobject("src/360.jpg",image_width=16,stroke_width=6.0)
+        image = ImagePixelMobject("src/360.jpg", image_width=16, stroke_width=6.0)
         image.to_center()
         self.add(image)
         axex = ThreeDAxes(x_length=[-4, 4, 1], x_range=[-4, 4, 1], z_range=[-4, 4, 1])
@@ -42,15 +41,17 @@ class Demo001(ThreeDScene):
         self.begin_ambient_camera_rotation(rate=0.5)
         self.wait(2)
 
+
 """
 theta: 0-2PI  0-360°
 phi: 3/4PI - PI  120°-180°
 假设：new_r= 2r 
 坐标z: 映射到 z=-r 平面上"""
+
+
 class Demo002(ThreeDScene):
     def construct(self):
-
-        image = ImagePixelMobject("src/360.jpg",image_width=16,stroke_width=6.0)
+        image = ImagePixelMobject("src/360.jpg", image_width=16, stroke_width=6.0)
         image.to_center()
         self.add(image)
         axex = ThreeDAxes(x_length=[-4, 4, 1], x_range=[-4, 4, 1], z_range=[-4, 4, 1])
@@ -59,12 +60,16 @@ class Demo002(ThreeDScene):
         # self.set_camera_orientation(phi=75 * DEGREES, theta=15 * DEGREES)
 
         points = image.points
+
+        # 平面转球面;
+        # 1：平面尺寸映射：归一化；2. 归一化的长度 弧度化 映射，； 3： 再补充的半径就是极坐标
         # [r,phi,theta]
         spherical_points = np.empty_like(points)
+        # 归一化，弧度化 映射
         width = 8
         spherical_points[:, 2] = PI * (points[:, 1] / width) - PI / 2
         spherical_points[:, 1] = PI * points[:, 0] / width
-        spherical_points[:, 0] = 3
+        spherical_points[:, 0] = 3  # 半径
 
         # 性能改进
         r = spherical_points[:, 0]
@@ -79,16 +84,30 @@ class Demo002(ThreeDScene):
         image.points = cartesian_points
         self.wait(0.5)
 
+        # 球面- 映射到平面-小行星
+        sphere_points = cartesian_points.copy()
+
+        #一个 极坐标-到 另一个极坐标
+
+        r2 = 6
+        theta2 = theta
+        phi2 = np.arccos(z / r2)
+
+        # 极坐标映射成到一个平面
 
 
+        x2 = r2 * np.cos(theta2) * np.sin(phi2)
+        y2 = r2 * np.sin(theta2) * np.sin(phi2)
+        z2 = r2 * np.cos(phi2)
+        cartesian_points2 =np.stack((x2,y2,z2),axis=-1)
+        pm_omject2 = OpenGLPMobject()
+        pm_omject2.points=cartesian_points2
+        pm_omject2.rgbas=image.rgbas
 
-
-
-
-
-
-
-
+        self.add(pm_omject2)
+        self.remove(image)
+        self.wait(0.5)
+        self.move_camera(phi=75 * DEGREES, theta=150 * DEGREES, run_time=1)
 
 
 
