@@ -14,7 +14,7 @@ from rich.progress import track
 
 class Demo004(ThreeDScene):
     def construct(self):
-        image = ImagePixelMobject("src/360.jpg", image_width=16, stroke_width=2.0)
+        image = ImagePixelMobject("src/360mini.jpg", image_width=16, stroke_width=2.0)
         image.to_center()
         self.add(image)
         axex = ThreeDAxes(x_length=[-4, 4, 1], x_range=[-4, 4, 1], z_range=[-4, 4, 1])
@@ -91,7 +91,9 @@ class Demo004(ThreeDScene):
 
             projection_point_list = point_from_collinearity_np(perspective_point, points, value)
 
-            projection_point_list[(np.abs(projection_point_list[:,0]) >3)|(np.abs(projection_point_list[:,1])>3)]=float('inf')
+            # projection_point_list[(np.abs(projection_point_list[:,0]) >5)|(np.abs(projection_point_list[:,1])>5)]=float('inf')
+
+
             # squared_sums = np.square(points[:, 0]) + np.square(points[:, 1])
             # points[squared_sums > 9] = float('inf')
             # 找到平方和大于15的点，并将这些点的值设置为无限大
@@ -104,6 +106,8 @@ class Demo004(ThreeDScene):
         self.play(valueTracker.animate.increment_value(5), run_time=2)
         self.remove_updater(func=update_func)
         self.add(axex)
+
+        return
         self.move_camera(phi=75*DEGREES,theta=15*DEGREES,run_time=3)
 
         self.move_camera(phi=175 * DEGREES, theta=15 * DEGREES, run_time=3)
