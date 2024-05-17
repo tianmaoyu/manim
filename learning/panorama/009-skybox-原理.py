@@ -19,7 +19,7 @@ phi: 3/4PI - PI  120°-180°
 import numpy as np
 
 
-class DemoSkybox003(ThreeDScene):
+class DemoSkybox008(ThreeDScene):
     def construct(self):
         axes = ThreeDAxes()
         axes.add(axes.get_axis_labels())
