@@ -30,39 +30,6 @@ phi: 3/4PI - PI  120°-180°
 import numpy as np
 
 
-def sphere_to_cube_mapping(spherical_points):
-    """
-    将球面上的点映射到正方形盒子上。
-
-    :param spherical_points: 形状为(N, 3)的数组，包含(r, theta, phi)坐标
-    :return: 形状为(N, 2)的数组，包含映射到正方形上的(x, y)坐标
-    """
-    # 确保r恒定为3，忽略r的计算
-    theta, phi = spherical_points[:, 1], spherical_points[:, 2]
-    z_values = 3 * np.cos(phi)  # 计算z坐标作为深度信息
-
-    # 确定立方体面
-    face_id = np.digitize(phi, [-np.pi / 2, 0])  # 简化处理，仅区分前后两面
-    face_id += np.digitize(theta + np.pi / 2, [-np.pi / 2, np.pi / 2]) * 2  # 添加左右面区分
-
-    # 映射到正方形的简化逻辑，这里仅示意性处理前后两个面
-    x = np.zeros_like(theta)
-    y = np.zeros_like(theta)
-
-    # 前后面映射示例，实际应用中需展开到其他面
-    x[face_id == 1] = np.abs(theta[face_id == 1]) / np.pi  # 前面映射
-    y[face_id == 1] = (phi[face_id == 1] + np.pi / 2) / np.pi  # 转换phi范围
-
-    # 这里省略了对其他四个面的映射逻辑，实际应用中需要完整实现
-    # 注意：映射到正方形的最终调整可能需要根据面的不同进行适当的旋转和平移
-
-    # 返回映射后的2D坐标
-    return np.column_stack((x, y,z_values))
-
-
-
-
-
 class DemoSkybox003(ThreeDScene):
     def construct(self):
         size=100000
@@ -107,32 +74,7 @@ class DemoSkybox003(ThreeDScene):
         self.begin_ambient_camera_rotation(rate=1)
         self.wait(2)
 
-        # front_face_points = []
-        # back_face_points = []
-        # left_face_points = []
-        # right_face_points = []
-        # up_face_points = []
-        # down_face_points = []
-        #
-        # for point in cube_points:
-        #     x, y, z = point
-        #     abs_x, abs_y, abs_z = abs(x), abs(y), abs(z)
-        #
-        #     if abs_x >= abs_y and abs_x >= abs_z:
-        #         if x > 0:
-        #             right_face_points.append(point)
-        #         else:
-        #             left_face_points.append(point)
-        #     elif abs_y >= abs_x and abs_y >= abs_z:
-        #         if y > 0:
-        #             up_face_points.append(point)
-        #         else:
-        #             down_face_points.append(point)
-        #     else:
-        #         if z > 0:
-        #             front_face_points.append(point)
-        #         else:
-        #             back_face_points.append(point)
+
         # 六个面
         copy_cube_points=cube_points.copy()
         new_cube_points=[]
