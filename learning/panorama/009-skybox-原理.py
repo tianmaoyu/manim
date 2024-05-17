@@ -21,6 +21,9 @@ import numpy as np
 
 class DemoSkybox003(ThreeDScene):
     def construct(self):
+        axes = ThreeDAxes()
+        axes.add(axes.get_axis_labels())
+        self.add(axes)
 
         image = ImagePixelMobject("src/mini.jpg", image_width=8, stroke_width=6.0)
         image.to_center()
@@ -63,8 +66,8 @@ class DemoSkybox003(ThreeDScene):
         self.set_camera_orientation(phi=75 * DEGREES, theta=15 * DEGREES)
         self.begin_ambient_camera_rotation(rate=1)
         self.wait(2)
-        self.bring_to_back(obj2)
-        self.bring_to_back(image)
+        self.remove(obj)
+        self.remove(image)
 
         # 六个面
         copy_cube_points=cube_points.copy()
