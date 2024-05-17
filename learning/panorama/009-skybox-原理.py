@@ -25,7 +25,7 @@ class DemoSkybox003(ThreeDScene):
         axes.add(axes.get_axis_labels())
         self.add(axes)
 
-        image = ImagePixelMobject("src/mini.jpg", image_width=8, stroke_width=6.0)
+        image = ImagePixelMobject("src/360mini.jpg", image_width=8, stroke_width=6.0)
         image.to_center()
         points= image.points.copy()
         spherical_points = np.empty_like(points)
@@ -48,6 +48,9 @@ class DemoSkybox003(ThreeDScene):
         obj.points=np.array(cartesian_points)
         obj.rgbas=image.rgbas.copy()
         self.add(obj)
+        self.set_camera_orientation(phi=75 * DEGREES, theta=15 * DEGREES)
+        self.begin_ambient_camera_rotation(rate=1)
+        self.wait(2)
 
         #转 正方体坐标
         cartesian_points2 = cartesian_points.copy()
@@ -63,8 +66,7 @@ class DemoSkybox003(ThreeDScene):
         obj2.points = np.array(cube_points)
         obj2.rgbas =image.rgbas.copy()
         self.add(obj2)
-        self.set_camera_orientation(phi=75 * DEGREES, theta=15 * DEGREES)
-        self.begin_ambient_camera_rotation(rate=1)
+
         self.wait(2)
         self.remove(obj)
         self.remove(image)
