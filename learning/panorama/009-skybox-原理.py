@@ -25,7 +25,7 @@ class DemoSkybox008(ThreeDScene):
         axes.add(axes.get_axis_labels())
         self.add(axes)
 
-        image = ImagePixelMobject("src/360mini.jpg", image_width=8, stroke_width=6.0)
+        image = ImagePixelMobject("src/360mini1.jpg", image_width=8, stroke_width=6.0)
         image.to_center()
         points= image.points.copy()
         spherical_points = np.empty_like(points)

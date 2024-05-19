@@ -31,7 +31,7 @@ class DemoSkybox007(ThreeDScene):
 
         self.next_section(name="init",skip_animations=False)
 
-        image = ImagePixelMobject("src/360mini.jpg", image_width=16, stroke_width=6.0)
+        image = ImagePixelMobject("src/360mini1.jpg", image_width=16, stroke_width=6.0)
         image.to_center()
         self.add(image)
         axex = ThreeDAxes().shift([-3,0,0])

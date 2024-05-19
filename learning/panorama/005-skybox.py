@@ -29,7 +29,7 @@ phi: 3/4PI - PI  120°-180°
 class DemoSkybox001(ThreeDScene):
     def construct(self):
         self.next_section(skip_animations=False)
-        image = ImagePixelMobject("src/360mini.jpg", image_width=16, stroke_width=6.0)
+        image = ImagePixelMobject("src/360mini1.jpg", image_width=16, stroke_width=6.0)
         image.to_center()
         self.add(image)
 

@@ -14,7 +14,7 @@ from rich.progress import track
 
 class Demo004(ThreeDScene):
     def construct(self):
-        image = ImagePixelMobject("src/360mini.jpg", image_width=16, stroke_width=2.0)
+        image = ImagePixelMobject("src/360mini1.jpg", image_width=16, stroke_width=2.0)
         image.to_center()
         self.add(image)
         axex = ThreeDAxes(x_length=[-4, 4, 1], x_range=[-4, 4, 1], z_range=[-4, 4, 1])
