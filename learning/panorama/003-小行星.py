@@ -44,9 +44,10 @@ class Demo004(ThreeDScene):
         cartesian_points = np.stack((x, y, z), axis=-1)
         image.points = cartesian_points
         self.wait(0.5)
-        self.move_camera(phi=75 * DEGREES, theta=15 * DEGREES, run_time=3)
+        # self.move_camera(phi=75 * DEGREES, theta=15 * DEGREES, run_time=3)
+        self.set_camera_orientation(phi=75 * DEGREES, theta=15 * DEGREES)
         self.begin_ambient_camera_rotation(rate=0.5)
-        self.wait(3)
+        self.wait(1)
         self.stop_ambient_camera_rotation()
         self.set_camera_orientation(theta=0,phi=0)
         self.remove(image)
@@ -86,10 +87,10 @@ class Demo004(ThreeDScene):
                         [0, np.sin(value), np.cos(value)]]
 
             points_t = np.transpose(points)
-            _points=np.dot(matrix_x,points_t)
+            _points=np.dot(matrix_z,points_t)
             _points=np.transpose(_points)
 
-            projection_point_list = point_from_collinearity_np(perspective_point, points, value)
+            projection_point_list = point_from_collinearity_np(perspective_point, _points, value)
 
             # projection_point_list[(np.abs(projection_point_list[:,0]) >5)|(np.abs(projection_point_list[:,1])>5)]=float('inf')
 
@@ -103,7 +104,7 @@ class Demo004(ThreeDScene):
 
 
         self.add_updater(func=update_func)
-        self.play(valueTracker.animate.increment_value(5), run_time=2)
+        self.play(valueTracker.animate.increment_value(5), run_time=5)
         self.remove_updater(func=update_func)
         self.add(axex)
 
