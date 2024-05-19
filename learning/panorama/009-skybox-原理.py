@@ -109,5 +109,5 @@ class DemoSkybox008(ThreeDScene):
 
 
 with tempconfig({"preview": True, "disable_caching": True, "renderer": "opengl"}):
-    DemoSkybox003().render()
+    DemoSkybox008().render()
     exit(1)
