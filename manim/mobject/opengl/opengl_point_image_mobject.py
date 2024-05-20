@@ -24,16 +24,19 @@ class ImagePixelMobject(OpenGLPMobject):
 
     def __init__(
             self,
-            filename: str,
+            filename: str=None,
+            image:np.ndarray=None,
             y_inversion:bool=True,
             image_width=8,
             **kwargs,
     ):
-        super().__init__(**kwargs)
+        super().__init__(**kwargs,depth_test=True)
 
-        image = np.array(Image.open(filename).convert("RGBA"))
-        height, width = image.shape[:2]
+        if filename is not None and len(filename):
+            image = np.array(Image.open(filename).convert("RGBA"))
 
+        height, width,channel = image.shape
+        assert channel == 4, "只支持 r,g,b,a"
         # 单个像素的长度 这是参考  OpenGLImageMobject 中图片长度得的固定值
         pixel_width = image_width / width
         self.pixel_width = pixel_width
