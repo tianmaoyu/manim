@@ -72,7 +72,7 @@ class ParametricSurfaceExample(ThreeDScene):
             resolution=(101, 51))
 
         # 替换为你的纹理图片的路径
-        texture = OpenGLTexturedSurface(uv_surface=sphere, image_file="Whole_world.jpg",dark_image_file="night.jpg")
+        texture = OpenGLTexturedSurface(uv_surface=sphere, image_file="world-daytime.jpg", dark_image_file="world-night.jpg")
         self.add(texture)
         self.wait(5)  # 显示一段时间
         # 创建一个移动光源的动画

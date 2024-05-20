@@ -127,7 +127,7 @@ class Image005(ThreeDScene):
         self.set_camera_orientation(phi=65 * DEGREES, theta=15 * DEGREES)
         self.begin_ambient_camera_rotation(rate=0.3)
 
-        image2 = ImagePixelMobject("rose.jpg")
+        image2 = ImagePixelMobject("rose-474-366.jpg")
         image2.to_center()
         self.add(image2)
         self.add(ThreeDAxes())
@@ -160,7 +160,7 @@ class Image006(ThreeDScene):
         self.set_camera_orientation(phi=65 * DEGREES, theta=15 * DEGREES)
         self.begin_ambient_camera_rotation(rate=0.3)
 
-        image2 = ImagePixelMobject("rose.jpg")
+        image2 = ImagePixelMobject("rose-474-366.jpg")
         image2.to_center()
         self.add(image2)
         self.add(ThreeDAxes())
@@ -206,7 +206,7 @@ class Image007(ThreeDScene):
     def construct(self):
         self.set_camera_orientation(phi=65 * DEGREES, theta=15 * DEGREES)
         self.begin_ambient_camera_rotation(rate=0.3)
-        image2 = ImagePixelMobject("rose.jpg")
+        image2 = ImagePixelMobject("rose-474-366.jpg")
         image2.to_center()
         self.add(image2)
         self.add(ThreeDAxes())
@@ -236,7 +236,7 @@ class Image007(ThreeDScene):
 class ImagePixelMobjectDemo(ThreeDScene):
     def construct(self):
         self.set_camera_orientation(phi=65 * DEGREES, theta=15 * DEGREES)
-        image = ImagePixelMobject("rose.jpg")
+        image = ImagePixelMobject("rose-474-366.jpg")
         self.add(image)
 
         height, width = image.init_image.shape[:2]
@@ -250,7 +250,7 @@ class ImagePixelMobjectDemo(ThreeDScene):
 class OpenGLImageMobjectDemo(ThreeDScene):
     def construct(self):
         self.set_camera_orientation(phi=65 * DEGREES, theta=15 * DEGREES)
-        image = OpenGLImageMobject("rose.jpg")
+        image = OpenGLImageMobject("rose-474-366.jpg")
         self.add(image)
         length = len(image.points)
         speed_vector = np.random.random((length, 3)) * 0.02
@@ -264,7 +264,7 @@ from PIL import Image
 class PixelDemo(ThreeDScene):
     def construct(self):
         m_point = OpenGLPMPoint()
-        image= Image.open("rose.jpg")
+        image= Image.open("rose-474-366.jpg")
         pixel_array= np.array(image)
         heigth,width= pixel_array.shape[:2]
 

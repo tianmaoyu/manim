@@ -32,7 +32,7 @@ class DemoSkybox007(ThreeDScene):
 
         self.next_section(name="init",skip_animations=True)
 
-        image = ImagePixelMobject("src/360mini1.jpg", image_width=8, stroke_width=6.0)
+        image = ImagePixelMobject("src/360-1280-640.jpg", image_width=8, stroke_width=6.0)
         image.to_center()
         # self.add(image)
         self.play(Create(image))

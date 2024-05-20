@@ -11,7 +11,7 @@ class WorldToShpere(ThreeDScene):
 
     def construct(self):
         # self.camera.light_source.animate.move_to()
-        image = ImagePixelMobject("Whole_world.jpg")
+        image = ImagePixelMobject("world-daytime.jpg")
         image.to_center()
         self.add(image)
         self.add(ThreeDAxes())

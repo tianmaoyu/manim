@@ -158,7 +158,7 @@ class ProjectionRefactor(ThreeDScene):
         circle = Circle(radius=1)
         axes = ThreeDAxes(x_range=[-5, 5, 1], y_range=[-3, 3, 1])
         dot = Dot()
-        image_mobj = OpenGLImageMobject("Whole_world.jpg")
+        image_mobj = OpenGLImageMobject("world-daytime.jpg")
         self.add(image_mobj, circle, axes, dot)
 
     def show002(self):

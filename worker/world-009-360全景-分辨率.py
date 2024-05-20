@@ -9,7 +9,7 @@ import numpy as np
 class Panorama009(ThreeDScene):
     def construct(self):
 
-        image = ImagePixelMobject("360.jpg",image_width=16,stroke_width=6.0)
+        image = ImagePixelMobject("360-2048-1024.jpg", image_width=16, stroke_width=6.0)
         image.to_center()
         self.add(image)
         axex = ThreeDAxes(x_length=[-4, 4, 1], x_range=[-4, 4, 1], z_range=[-4, 4, 1])

@@ -8,7 +8,7 @@ import numpy as np
 
 class Demo001(ThreeDScene):
     def construct(self):
-        image = ImagePixelMobject("src/360.jpg", image_width=16, stroke_width=6.0)
+        image = ImagePixelMobject("src/360-2048-1024.jpg", image_width=16, stroke_width=6.0)
         image.to_center()
         self.add(image)
         axex = ThreeDAxes(x_length=[-4, 4, 1], x_range=[-4, 4, 1], z_range=[-4, 4, 1])
@@ -51,7 +51,7 @@ phi: 3/4PI - PI  120°-180°
 
 class Demo002(ThreeDScene):
     def construct(self):
-        image = ImagePixelMobject("src/360.jpg", image_width=16, stroke_width=6.0)
+        image = ImagePixelMobject("src/360-2048-1024.jpg", image_width=16, stroke_width=6.0)
         image.to_center()
         self.add(image)
         axex = ThreeDAxes(x_length=[-4, 4, 1], x_range=[-4, 4, 1], z_range=[-4, 4, 1])

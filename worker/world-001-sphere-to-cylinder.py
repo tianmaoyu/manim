@@ -25,8 +25,8 @@ class WorldToCylinder(ThreeDScene):
             checkerboard_colors=[RED_D, RED_E],
             resolution=(101, 51))
 
-        # 替换为你的纹理图片的路径 dark_image_file="night.jpg"
-        texture = OpenGLTexturedSurface(uv_surface=sphere, image_file="Whole_world.jpg")
+        # 替换为你的纹理图片的路径 dark_image_file="world-night.jpg"
+        texture = OpenGLTexturedSurface(uv_surface=sphere, image_file="world-daytime.jpg")
         self.add(texture)
         # self.wait(1)
         points=texture.get_all_points()

@@ -21,11 +21,11 @@ class ImageToVideo(ThreeDScene):
             mob.rgbas[:,3]=alpha/2
             # mob.set_opacity(alpha)
 
-        image = ImagePixelMobject("360.jpg")
+        image = ImagePixelMobject("360-2048-1024.jpg")
         self.add(image.to_center())
         self.play(UpdateFromAlphaFunc(image, update_func), run_time=2, rate_func=linear)
         #
-        # image2 = ImagePixelMobject("Whole_world.jpg")
+        # image2 = ImagePixelMobject("world-daytime.jpg")
         # self.add(image2.to_center())
         # self.play(UpdateFromAlphaFunc(image2, update_func), run_time=1, rate_func=linear)
         self.wait()

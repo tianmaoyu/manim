@@ -6,7 +6,7 @@ import numpy as np
 
 class Panorama(ThreeDScene):
     def construct(self):
-        image = ImagePixelMobject("360.jpg",image_width=16)
+        image = ImagePixelMobject("360-2048-1024.jpg", image_width=16)
         image.to_center()
         self.add(image)
         self.add(ThreeDAxes(x_length=[-4, 4, 1], x_range=[-4, 4, 1], z_range=[-4, 4, 1]))

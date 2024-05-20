@@ -22,7 +22,7 @@ class WorldDemo(ThreeDScene):
             checkerboard_colors=[RED_D, RED_E],
             resolution=(101, 51))
 
-        # 替换为你的纹理图片的路径 dark_image_file="night.jpg"
+        # 替换为你的纹理图片的路径 dark_image_file="world-night.jpg"
         #360_big.jpg
         texture = OpenGLTexturedSurface(uv_surface=sphere, image_file="360_big.jpg")
         self.add(texture)

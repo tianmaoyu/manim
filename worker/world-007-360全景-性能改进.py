@@ -9,7 +9,7 @@ import numpy as np
 class Panorama6(ThreeDScene):
     def construct(self):
 
-        image = ImagePixelMobject("Whole_world.jpg",image_width=16)
+        image = ImagePixelMobject("world-daytime.jpg", image_width=16)
         image.to_center()
         self.add(image)
         self.add(ThreeDAxes(x_length=[-4, 4, 1], x_range=[-4, 4, 1], z_range=[-4, 4, 1]))

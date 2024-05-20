@@ -11,7 +11,7 @@ from PIL import Image
 
 class WorldDemo(ThreeDScene):
     def construct(self):
-        iamge = OpenGLImageMobject("Whole_world_-_land_and_oceans_12000.jpg")
+        iamge = OpenGLImageMobject("whole_world_and_oceans_12000.jpg")
         self.add(iamge)
         self.set_camera_orientation(phi=75 * DEGREES, theta=15 * DEGREES)
         self.begin_ambient_camera_rotation(rate=0.5)
@@ -22,7 +22,7 @@ class WorldDemo(ThreeDScene):
 
 class WorldToSphere(ThreeDScene):
     def construct(self):
-        iamge = OpenGLImageMobject("Whole_world_-_land_and_oceans_12000.jpg")
+        iamge = OpenGLImageMobject("whole_world_and_oceans_12000.jpg")
 
         def uv_func(u, v):
             return 5 * np.array([
@@ -48,7 +48,7 @@ class WorldToSphere(ThreeDScene):
             resolution=(101, 51))
 
         # 替换为你的纹理图片的路径
-        texture = OpenGLTexturedSurface(uv_surface=sphere, image_file="Whole_world_-_land_and_oceans_12000.jpg")
+        texture = OpenGLTexturedSurface(uv_surface=sphere, image_file="whole_world_and_oceans_12000.jpg")
 
         self.add(iamge)
 
@@ -88,7 +88,7 @@ class WorldToSphere2(ThreeDScene):
         return x, y, z
 
     def construct(self):
-        image = Image.open("Whole_world.jpg").convert("RGB")
+        image = Image.open("world-daytime.jpg").convert("RGB")
         img_array = np.array(image)
         # 图像的宽度和高度
         width, height = img_array.shape[:2]
@@ -164,7 +164,7 @@ class ProjectImageOnSphere(ThreeDScene):
         return np.array([r * np.cos(phi), r * np.sin(phi), height])
 
     def construct(self):
-        # iamge = OpenGLImageMobject("Whole_world.jpg")
+        # iamge = OpenGLImageMobject("world-daytime.jpg")
         # self.add(iamge)
         self.set_camera_orientation(phi=65 * DEGREES, theta=15 * DEGREES)
         self.begin_ambient_camera_rotation(rate=0.5)
@@ -178,7 +178,7 @@ class ProjectImageOnSphere(ThreeDScene):
             resolution=(101, 51)
         )
         Surface
-        plane_texture = OpenGLTexturedSurface(uv_surface=plane_surface, image_file="Whole_world.jpg")
+        plane_texture = OpenGLTexturedSurface(uv_surface=plane_surface, image_file="world-daytime.jpg")
         self.add(plane_texture)
 
         # scale_animate = plane_texture.animate.scale(3)
@@ -204,7 +204,7 @@ class ProjectImageOnSphere(ThreeDScene):
             resolution=(101, 51)
         )
         cylinder_texture = OpenGLTexturedSurface(uv_surface=cylinder_surface,
-                                                 image_file="Whole_world_-_land_and_oceans_12000.jpg")
+                                                 image_file="whole_world_and_oceans_12000.jpg")
         # self.play(Create(texture))
 
         # self.play(ReplacementTransform(plane_texture, cylinder_texture))
