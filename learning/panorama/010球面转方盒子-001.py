@@ -21,7 +21,7 @@ import numpy as np
 
 class DemoSkybox008(ThreeDScene):
     def construct(self):
-        axes = ThreeDAxes()
+        axes = ThreeDAxes(depth_test=True)
         axes.add(axes.get_axis_labels())
         self.add(axes)
 
@@ -48,7 +48,7 @@ class DemoSkybox008(ThreeDScene):
         obj.points=np.array(cartesian_points)
         obj.rgbas=image.rgbas.copy()
         self.add(obj)
-        self.add(axes)
+
 
         self.set_camera_orientation(phi=65 * DEGREES, theta=15 * DEGREES)
         self.begin_ambient_camera_rotation(rate=1)
@@ -69,7 +69,7 @@ class DemoSkybox008(ThreeDScene):
         obj2.points = np.array(cube_points)*2
         obj2.rgbas =image.rgbas.copy()
         self.add(obj2)
-        self.add(axes)
+
         self.wait(4)
         self.remove(image)
 
