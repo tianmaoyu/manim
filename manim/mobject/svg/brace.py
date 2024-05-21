@@ -139,6 +139,10 @@ class Brace(VMobjectFromSVGPath):
         text_mob = Tex(*text)
         self.put_at_tip(text_mob, **kwargs)
         return text_mob
+    def set_text(self, *text, **kwargs):
+        text_mob = Tex(*text)
+        self.put_at_tip(text_mob, **kwargs)
+        return text_mob
 
     def get_tex(self, *tex, **kwargs):
         tex_mob = MathTex(*tex)

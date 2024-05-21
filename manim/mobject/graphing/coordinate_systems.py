@@ -1846,6 +1846,7 @@ class Axes(VGroup, CoordinateSystem, metaclass=ConvertToOpenGL):
         x_axis_config: dict | None = None,
         y_axis_config: dict | None = None,
         tips: bool = True,
+        include_numbers=True,
         **kwargs: Any,
     ) -> None:
         VGroup.__init__(self, **kwargs)
@@ -1853,6 +1854,7 @@ class Axes(VGroup, CoordinateSystem, metaclass=ConvertToOpenGL):
 
         self.axis_config = {
             "include_tip": tips,
+            "include_numbers":include_numbers,
             "numbers_to_exclude": [0],
         }
         self.x_axis_config = {}

@@ -96,6 +96,29 @@ class ImagePixelMobject(OpenGLPMobject):
         """
         return CylinderAnimation(self,radius,move_distance)
 
+class NumpyImage(OpenGLPMobject):
+    def __init__(self, image_array: np.ndarray, stroke_width=2.0, distance=0.025, **kwargs):
+        super().__init__(**kwargs, stroke_width=stroke_width, depth_test=True)
+
+        # 构建三维坐标
+        height, width, channel = image_array.shape
+        assert channel == 4, "必须是r,g,b,a"
+        points = np.zeros((height * width, 3))
+        y_indices, x_indices = np.mgrid[0:height, 0:width]
+        points[:, 0] = x_indices.flatten()  # x坐标
+        points[:, 1] = y_indices.flatten()  # y坐标
+        rgbas = image_array.reshape(-1, 4)
+
+        # y轴反转和缩小- 一个坐标间隔为1
+        points = points * distance * np.array([1, -1, 1])
+        # 居中
+        points += np.array([-width * distance / 2, height * distance / 2, 0])
+        self.points = points
+        self.rgbas = rgbas / 255
+
+    def set_points(self,points:np.ndarray):
+        self.points = points
+        return self
 
 class CylinderAnimation(Animation):
     def __init__(self, mobject:ImagePixelMobject, radius, move_distance, **kwargs):
