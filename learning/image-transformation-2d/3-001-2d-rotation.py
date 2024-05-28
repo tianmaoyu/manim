@@ -171,6 +171,46 @@ sin(\theta) & cos(\theta)
 
 
 
+class Rotation004(ThreeDScene):
+    config.output_file = "Rotation004-原点逆时针.mp4"
+
+    def construct(self):
+        latex_str1 = r"""
+            \begin{bmatrix} x' \\ y' \end{bmatrix}
+            =
+            \begin{bmatrix} cos(\alpha) & -sin(\alpha) \\ sin(\alpha) & cos(\alpha)\end{bmatrix}
+            \cdot 
+            \begin{bmatrix} x \\ y \end{bmatrix}
+         """
+        math_tex1 = MathTex(latex_str1)
+        self.play(Create(math_tex1))
+        self.play(math_tex1.animate.to_corner(UR))
+
+        image_array = np.array(Image.open("src/test.jpg").convert("RGBA"))
+        image_array_part = image_array[50:150, 50:150]
+        image = NumpyImage(image_array=image_array_part, distance=0.025, stroke_width=2)
+        self.play(Create(image))
+
+        self.play(Create(Axes(tips=True,include_numbers=False)))
+
+        latex_str2 = r"""
+          \begin{bmatrix} cos(30) & -sin(30) \\ sin(30) & cos(30)\end{bmatrix}
+           \cdot 
+        """
+        math_tex2 = MathTex(latex_str2).to_corner(corner=LEFT)
+        self.play(Create(math_tex2.next_to(math_tex1, direction=DOWN)))
+
+        rad=30*DEGREES
+        scale_matrix = np.array([
+            [np.cos(rad), -np.sin(rad), 0],
+            [np.sin(rad), np.cos(rad), 0],
+            [0, 0, 1]
+        ])
+        new_points = scale_matrix @ image.points.T
+        new_points = new_points.T
+        self.play(ApplyMethod(image.set_points, new_points))
+
+
 with tempconfig({"preview": True, "disable_caching": True, "renderer": "opengl"}):
-    Rotation003().render()
+    Rotation004().render()
     exit(1)
