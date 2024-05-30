@@ -58,6 +58,8 @@ class AddImage001(ThreeDScene):
         vector.add(vector.coordinate_label())
         self.add(vector)
 
+
+
 #生成一些像素点
 class AddImage002(ThreeDScene):
 
@@ -142,7 +144,46 @@ class AddImage004(ThreeDScene):
         new_points = image.points + mover_vector
         self.play(ApplyMethod(image.set_points, new_points))
 
+class Translation001(ThreeDScene):
+    config.output_file="Translation001-平移.mp4"
+    def construct(self):
 
-with tempconfig({"preview": True, "disable_caching": True, "renderer": "opengl"}):
-    AddImage004().render()
+        latex_str1 = r"""
+\begin{bmatrix}x'\\y'\\\end{bmatrix}
+=
+\begin{bmatrix}x\\y\\\end{bmatrix}
++
+\begin{bmatrix}x_b\\ y_b\end{bmatrix}
+=
+\begin{bmatrix}x+x_b\\y+y_b\end{bmatrix}
+         """
+        math_tex1 = MathTex(latex_str1)
+        self.play(Create(math_tex1))
+        self.play(math_tex1.animate.to_corner(UL))
+
+
+        image = np.zeros((50, 50, 4), dtype=np.uint8)
+        image[:, :, 0] = 255
+        image[:, :, 3] = 255
+        image_obj = NumpyImage(image_array=image, distance=0.05, stroke_width=2)
+        # self.add(image_obj)
+        self.play(Create(image_obj))
+        # plane = NumberPlane()
+        # self.play(Create(plane))
+        axes = Axes(x_range=[-7, 7, 1],include_numbers=False, y_range=[-5, 5, 1],x_length=14, y_length=10)
+        self.play(Create(axes))
+        lines = axes.get_lines_to_point([2,2,0])
+        self.play(Create(lines))
+
+        vector = Vector(direction=[2,2,0])
+        vector.add(vector.coordinate_label())
+        self.play(Create(vector))
+        self.next_section("移动图像")
+        mover_vector = np.array([2, 2, 0])
+
+        new_points= image_obj.points+mover_vector
+        self.play(ApplyMethod(image_obj.set_points,new_points))
+
+with tempconfig({"preview": True, "renderer": "opengl"}):
+    Translation001().render()
     exit(1)

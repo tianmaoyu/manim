@@ -2677,7 +2677,7 @@ class NumberPlane(Axes):
     ):
         # configs
         self.axis_config = {
-            "stroke_width": 2,
+            "stroke_width": 1.2,
             "include_ticks": False,
             "include_tip": False,
             "line_to_number_buff": SMALL_BUFF,
@@ -2687,10 +2687,9 @@ class NumberPlane(Axes):
         self.y_axis_config = {"label_direction": DR}
         self.background_line_style = {
             "stroke_color": BLUE_D,
-            "stroke_width": 2,
+            "stroke_width": 1.2,
             "stroke_opacity": 1,
         }
-
         self._update_default_configs(
             (self.axis_config, self.y_axis_config, self.background_line_style),
             (

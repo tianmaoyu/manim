@@ -14,9 +14,10 @@ from PIL import Image
 
 
 class Reflection001(ThreeDScene):
-    config.output_file = "Reflection001-镜像x轴翻转.mp4"
-
+    def setup(self):
+        config.output_file = "Reflection001-镜像x轴翻转.mp4"
     def construct(self):
+
         latex_str1 = r"""
                     \begin{bmatrix}
                     x'\\
@@ -35,7 +36,11 @@ class Reflection001(ThreeDScene):
                     """
         math_tex1 = MathTex(latex_str1)
         self.play(Create(math_tex1))
-        self.play(math_tex1.animate.to_corner(UR))
+        self.play(math_tex1.animate.to_corner(UL))
+
+
+        axes = Axes(x_range=[-7, 7, 1], include_numbers=False, y_range=[-5, 5, 1], x_length=14, y_length=10)
+        self.play(Create(axes))
 
         image_array = np.array(Image.open("src/test.jpg").convert("RGBA"))
         image_array_part = image_array[50:150, 50:150]
@@ -49,8 +54,8 @@ class Reflection001(ThreeDScene):
                                \end{bmatrix}
                                 \cdot
                                """
-        math_tex2 = MathTex(latex_str2).to_corner(corner=LEFT)
-        self.play(Create(math_tex2.next_to(math_tex1, direction=DOWN)))
+        math_tex2 = MathTex(latex_str2).to_corner(corner=UR)
+        self.play(Create(math_tex2))
 
         scale_matrix = np.array([
             [-1, 0, 0],
@@ -64,7 +69,9 @@ class Reflection001(ThreeDScene):
 
 
 class Reflection002(ThreeDScene):
-    config.output_file = "Reflection002-镜像y轴翻转.mp4"
+    def setup(self):
+        config.output_file = "Reflection002-镜像y轴翻转.mp4"
+
     def construct(self):
 
         latex_str1 = r"""
@@ -85,7 +92,10 @@ class Reflection002(ThreeDScene):
                """
         math_tex1 = MathTex(latex_str1)
         self.play(Create(math_tex1))
-        self.play(math_tex1.animate.to_corner(UR))
+        self.play(math_tex1.animate.to_corner(UL))
+
+        axes = Axes(x_range=[-7, 7, 1], include_numbers=False, y_range=[-5, 5, 1], x_length=14, y_length=10)
+        self.play(Create(axes))
 
         image_array = np.array(Image.open("src/test.jpg").convert("RGBA"))
         image_array_part = image_array[50:150, 50:150]
@@ -100,8 +110,8 @@ class Reflection002(ThreeDScene):
                           \end{bmatrix}
                            \cdot
                           """
-        math_tex2 = MathTex(latex_str2).to_corner(corner=LEFT)
-        self.play(Create(math_tex2.next_to(math_tex1, direction=DOWN)))
+        math_tex2 = MathTex(latex_str2).to_corner(UR)
+        self.play(Create(math_tex2))
 
         scale_matrix = np.array([
             [1, 0, 0],
@@ -117,9 +127,10 @@ class Reflection002(ThreeDScene):
 
 
 class Reflection003(ThreeDScene):
-    config.output_file = "Reflection003-原点翻转.mp4"
-    def construct(self):
+    def setup(self):
+        config.output_file = "Reflection003-原点翻转.mp4"
 
+    def construct(self):
         latex_str1 = r"""
                \begin{bmatrix}
                x'\\
@@ -167,7 +178,6 @@ class Reflection003(ThreeDScene):
 
 
 
-
-with tempconfig({"preview": True, "disable_caching": True, "renderer": "opengl"}):
-    Reflection003().render()
+with tempconfig({"preview": True, "renderer": "opengl"}):
+    Reflection001().render()
     exit(1)

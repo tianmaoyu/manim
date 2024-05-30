@@ -184,7 +184,7 @@ class Rotation004(ThreeDScene):
          """
         math_tex1 = MathTex(latex_str1)
         self.play(Create(math_tex1))
-        self.play(math_tex1.animate.to_corner(UR))
+        self.play(math_tex1.animate.to_corner(UL))
 
         image_array = np.array(Image.open("src/test.jpg").convert("RGBA"))
         image_array_part = image_array[50:150, 50:150]
@@ -197,8 +197,8 @@ class Rotation004(ThreeDScene):
           \begin{bmatrix} cos(30) & -sin(30) \\ sin(30) & cos(30)\end{bmatrix}
            \cdot 
         """
-        math_tex2 = MathTex(latex_str2).to_corner(corner=LEFT)
-        self.play(Create(math_tex2.next_to(math_tex1, direction=DOWN)))
+        math_tex2 = MathTex(latex_str2).to_corner(corner=UR)
+        self.play(Create(math_tex2))
 
         rad=30*DEGREES
         scale_matrix = np.array([

@@ -64,7 +64,7 @@ class Scaling003(ThreeDScene):
 
 #等比缩放
 class Scaling004(ThreeDScene):
-
+    config.output_file = "Scaling004-等比缩放.mp4"
     def construct(self):
 
         latex_str = r"""
@@ -81,7 +81,7 @@ class Scaling004(ThreeDScene):
         """
         math_tex = MathTex(latex_str)
         self.play(Create(math_tex))
-        self.play(math_tex.animate.to_corner(UR))
+        self.play(math_tex.animate.to_corner(UL))
 
 
         image = np.zeros((50, 50, 4), dtype=np.uint8)
@@ -90,9 +90,8 @@ class Scaling004(ThreeDScene):
         image = NumpyImage(image_array=image, distance=0.05, stroke_width=2)
         self.play(Create(image))
 
-
-        plane = NumberPlane()
-        self.play(Create(plane))
+        axes = Axes(x_range=[-7, 7, 1], include_numbers=False, y_range=[-5, 5, 1], x_length=14, y_length=10)
+        self.play(Create(axes))
 
         text = MathTex(r" \times 2").scale(3).next_to(image, direction=RIGHT)
         self.play(Create(text))
@@ -125,8 +124,10 @@ class Scaling005(ThreeDScene):
         """
         math_tex = MathTex(latex_str)
         self.play(Create(math_tex))
-        self.play(math_tex.animate.to_corner(UR))
+        self.play(math_tex.animate.to_corner(UL))
 
+        axes = Axes(x_range=[-7, 7, 1], include_numbers=False, y_range=[-5, 5, 1], x_length=14, y_length=10)
+        self.play(Create(axes))
 
         image = np.zeros((50, 50, 4), dtype=np.uint8)
         image[:, :, 0] = 255
@@ -141,8 +142,8 @@ class Scaling005(ThreeDScene):
                    \end{bmatrix}
                     \cdot
                    """
-        text = MathTex(math_tex2).to_corner(corner=LEFT)
-        self.play(Create(text.next_to(math_tex, direction=DOWN)))
+        text = MathTex(math_tex2).to_corner(corner=UR)
+        self.play(Create(text))
 
         scale_matrix = np.array([
             [1.5, 0, 0],
@@ -154,6 +155,6 @@ class Scaling005(ThreeDScene):
         self.play(ApplyMethod(image.set_points, new_points))
 
 
-with tempconfig({"preview": True, "disable_caching": True, "renderer": "opengl"}):
+with tempconfig({"preview": True,  "renderer": "opengl"}):
     Scaling005().render()
     exit(1)
