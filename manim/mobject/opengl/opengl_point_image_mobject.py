@@ -133,8 +133,10 @@ class ImageBox(NumpyImage):
         offset = self.width / 2
 
         z_in = self.points.copy() + np.array([0, 0, -offset])
-        points = np.append(original_points, z_in, axis=0)
-        rgbas = np.append(original_rgbas, original_rgbas, axis=0)
+        # points = np.append(original_points, z_in, axis=0)
+        # rgbas = np.append(original_rgbas, original_rgbas, axis=0)
+        points = z_in
+        rgbas =  original_rgbas
 
         left = rotation_matrix(90 * DEGREES, axis=UP) @ self.points.copy().T
         left = left.T + np.array([-offset, 0, 0])

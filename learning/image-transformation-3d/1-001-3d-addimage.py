@@ -145,6 +145,30 @@ class AddImageToBox002(ThreeDScene):
         self.begin_ambient_camera_rotation(rate=0.5)
         self.wait(1)
 
+
+class lightSource001(ThreeDScene):
+
+    def construct(self):
+        # obj = self.camera.light_source
+        # self.camera.light_source.move_to([5, -10, 10])
+
+        self.set_camera_orientation(phi=65 * DEGREES, theta=35 * DEGREES)
+        axes = ThreeDAxes(include_numbers=False, x_range=[-7, 7, 1], y_range=[-7, 7, 1], z_range=[-7, 7, 1],   x_length=14, y_length=14, z_length=14)
+        axes.add(axes.get_axis_labels())
+        self.add(axes)
+
+        image_array = np.array(Image.open("src/test.jpg").convert("RGBA"))
+        imageBox = ImageBox(image_array=image_array, distance=0.01, stroke_width=1.5,depth_test=False)
+        self.add(imageBox)
+
+
+        # animate= self.camera.light_source.animate.move_to([0, 0, 10])
+        # self.play(animate,run_time=2)
+
+        self.begin_ambient_camera_rotation(rate=1)
+        self.wait(2)
+
+
 def point_from_collinearity_np(light, points: np.ndarray, z):
     """
     light ，灯光点
@@ -160,5 +184,5 @@ def point_from_collinearity_np(light, points: np.ndarray, z):
 
 # "disable_caching": True,
 with tempconfig({"preview": True, "renderer": "opengl"}):
-    AddImageToBox002().render()
+    lightSource001().render()
     exit(1)

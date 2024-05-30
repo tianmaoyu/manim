@@ -1,48 +1,24 @@
 import time
 
 from manim import *
-from manim.mobject.opengl.opengl_point_image_mobject import ImagePixelMobject
+from manim.mobject.opengl.opengl_point_image_mobject import ImagePixelMobject, ImageBox
 from manim.mobject.opengl.opengl_surface import OpenGLTexturedSurface, OpenGLSurface
 import numpy as np
 from rich.progress import track
 from PIL import Image
 
-# 三点共线，已经知道 O,P 坐标 以及 G（x,y,z）坐标中的z值，计算 x,y 并返回G
-def point_from_collinearity(O: dict, P: dict, z: float) -> dict:
-    if P[2] - O[2] == 0 or z - P[2] == 0:
-        return (float('inf'), float('inf'), z)
-
-    λ = (P[2] - O[2]) / (z - P[2])
-    # λ 为负数时 todo
-    x = (P[0] - O[0]) / λ + P[0]
-    y = (P[1] - O[1]) / λ + P[1]
-    return (x, y, z)
-
-
-"""
-theta: 0-2PI  0-360°
-phi: 3/4PI - PI  120°-180°
-假设：new_r= 2r 
-坐标z: 映射到 z=-r 平面上"""
-
 
 class Translation001(ThreeDScene):
     def construct(self):
-
         latex_str1 = r"""
-                \begin{bmatrix} x\\y\end{bmatrix}
-                =
-                \begin{bmatrix} cos(30) & -sin(30) \\ sin(30) & cos(30) \end{bmatrix}
-                \cdot
-                \left(
-                \begin{bmatrix} x\\y\end{bmatrix}
-                -
-                \begin{bmatrix}  2\\  2 \end{bmatrix}
-                \right)
-                +
-                \begin{bmatrix}  2\\  2 \end{bmatrix}
+            \begin{bmatrix}  x'\\ y'\\  z' \end{bmatrix}
+            =
+            \begin{bmatrix} x\\ y\\ z \end{bmatrix}
+            +
+            \begin{bmatrix} x_1\\  y_1\\  z_1  \end{bmatrix}
          """
-        math_tex1 = MathTex(latex_str1).scale(0.5)
+
+        math_tex1 = MathTex(latex_str1).scale(0.7)
         self.add_fixed_in_frame_mobjects(math_tex1)
         self.play(Create(math_tex1))
         self.play(math_tex1.animate.to_corner(UL))
@@ -52,7 +28,8 @@ class Translation001(ThreeDScene):
         image = ImagePixelMobject("src/360-640-320.jpg", image_width=8, stroke_width=6.0)
         image.to_center()
         self.add(image)
-        axes = ThreeDAxes(include_numbers=False,x_range=[-7, 7, 1],y_range=[-5, 5, 1],z_range=[-7, 7, 1],x_length=14, y_length=10,z_length=14)
+        axes = ThreeDAxes(include_numbers=False, x_range=[-7, 7, 1], y_range=[-5, 5, 1], z_range=[-7, 7, 1],
+                          x_length=14, y_length=10, z_length=14)
         self.add(axes)
 
         points = image.points
@@ -76,47 +53,78 @@ class Translation001(ThreeDScene):
         y = r * np.sin(theta) * np.sin(phi)
         z = r * np.cos(phi)
         cartesian_points = np.stack((x, y, z), axis=-1)
-        box_points= cartesian_points.copy()
+        box_points = cartesian_points.copy()
 
         # 使用NumPy的广播和向量化操作来计算每个点的最大绝对值并进行归一化
         abs_values = np.abs(box_points)
         abs_max = np.max(abs_values, axis=1, keepdims=True)
         cube_points = box_points / abs_max
-        image.points=cube_points
+        image.points = cube_points
         # ------------end----------------
 
         mover_vector = np.array([2, 2, 2])
-        vector = Vector(direction=mover_vector,color=YELLOW)
+        vector = Vector(direction=mover_vector, color=YELLOW)
         vector.add(vector.coordinate_label(n_dim=3))
         self.play(Create(vector))
 
-        lines=axes.get_lines_to_point(mover_vector)
-        line=axes.get_line_from_axis_to_point(index=2,point=mover_vector)
-        self.play(Create(lines),Create(line))
+        lines = axes.get_lines_to_point(mover_vector)
+        line = axes.get_line_from_axis_to_point(index=2, point=mover_vector)
+        self.play(Create(lines), Create(line))
 
         new_points = image.points + mover_vector
         self.play(ApplyMethod(image.set_points, new_points))
 
 
+class Translation002(ThreeDScene):
+
+    def construct(self):
+
+        latex_str1 = r"""
+            \begin{bmatrix}  x'\\ y'\\  z' \end{bmatrix}
+            =
+            \begin{bmatrix} x\\ y\\ z \end{bmatrix}
+            +
+            \begin{bmatrix} x_1\\  y_1\\  z_1  \end{bmatrix}
+         """
+        math_tex1 = MathTex(latex_str1).scale(0.7)
+        self.add_fixed_in_frame_mobjects(math_tex1)
+        self.play(Create(math_tex1))
+        self.play(math_tex1.animate.to_corner(UL))
 
 
+        self.set_camera_orientation(phi=65 * DEGREES, theta=35 * DEGREES)
+        axes = ThreeDAxes(include_numbers=False, x_range=[-7, 7, 1], y_range=[-7, 7, 1], z_range=[-7, 7, 1],   x_length=14, y_length=14, z_length=14)
+        axes.add(axes.get_axis_labels())
+        self.play(Create(axes))
+
+        # self.camera.light_source_position=[0,7,7]
+        self.camera.light_source.move_to([7,7,7])
+
+        image_array = np.array(Image.open("src/test.jpg").convert("RGBA"))
+        imageBox = ImageBox(image_array=image_array, distance=0.01, stroke_width=1.5,depth_test=True)
+        self.add(imageBox)
+        self.add(axes)
+
+        mover_vector = np.array([2, 2, 2])
+        vector = Vector(direction=mover_vector, color=YELLOW,depth_test=True)
+        labes= vector.coordinate_label(n_dim=3, color=YELLOW)
+        self.add_fixed_orientation_mobjects(labes)
+        # vector.add()
+        self.play(Create(vector),Create(labes))
+
+        lines = axes.get_lines_to_point(mover_vector)
+        line = axes.get_line_from_axis_to_point(index=2, point=mover_vector)
+        self.play(Create(lines), Create(line))
+
+        new_points = imageBox.points + mover_vector
+        self.play(ApplyMethod(imageBox.set_points, new_points))
+        self.begin_ambient_camera_rotation(rate=1)
+        self.wait(2)
 
 
-
-def point_from_collinearity_np(light, points: np.ndarray, z):
-    """
-    light ，灯光点
-    points 需要投影的数据，
-    z 值
-    """
-    λ = (points[:, 2] - light[2]) / (z- points[:, 2] )
-    x = (points[:, 0] - light[0]) / λ + points[:, 0]
-    y = (points[:, 1] - light[1]) / λ + points[:, 1]
-    z = np.full_like(x, z)
-    return np.column_stack((x, y, z))
 
 
 # "disable_caching": True,
 with tempconfig({"preview": True, "renderer": "opengl"}):
-    Translation001().render()
+    Translation002().render()
     exit(1)
