@@ -322,8 +322,8 @@ class Complex006(ThreeDScene):
 
 
         image_array = np.array(Image.open("src/test.jpg").convert("RGBA"))
-        image_array_part = image_array[50:150, 50:150]
-        image = NumpyImage(image_array=image_array_part, distance=0.025, stroke_width=2)
+        # image_array_part = image_array[50:150, 50:150]
+        image = NumpyImage(image_array=image_array, distance=0.01, stroke_width=1.5)
         self.play(Create(image))
 
         mover_vector=np.array([24/13,36/13,0])
