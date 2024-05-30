@@ -101,7 +101,7 @@ class Translation002(ThreeDScene):
         self.camera.light_source.move_to([7,7,7])
 
         image_array = np.array(Image.open("src/test.jpg").convert("RGBA"))
-        imageBox = ImageBox(image_array=image_array, distance=0.01, stroke_width=1.5,depth_test=True)
+        imageBox = ImageBox(image_array=image_array, distance=0.01, stroke_width=1.5,depth_test=False)
         self.add(imageBox)
         self.add(axes)
 
@@ -119,7 +119,7 @@ class Translation002(ThreeDScene):
         new_points = imageBox.points + mover_vector
         self.play(ApplyMethod(imageBox.set_points, new_points))
         self.begin_ambient_camera_rotation(rate=1)
-        self.wait(2)
+        self.wait(1)
 
 
 
