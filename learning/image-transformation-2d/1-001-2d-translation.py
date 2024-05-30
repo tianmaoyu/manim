@@ -119,8 +119,8 @@ class AddImage003(ThreeDScene):
 class AddImage004(ThreeDScene):
     def construct(self):
         image_array = np.array(Image.open("src/test.jpg").convert("RGBA"))
-        image_array_part=image_array[50:150,50:150]
-        image = NumpyImage(image_array=image_array_part, distance=0.05, stroke_width=2)
+
+        image = NumpyImage(image_array=image_array, distance=0.04, stroke_width=2)
         self.play(Create(image))
         start_point=image.points[0]
         end_point =image.points[-1]

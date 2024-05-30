@@ -85,10 +85,10 @@ class DemoSkybox003(ThreeDScene):
             if abs_x >= abs_y and abs_x >= abs_z:
                 if x > 0:
                     # right_face_points.append(point)
-                    move_vector=ORIGIN
+                    move_vector=RIGHT
                 else:
                     # left_face_points.append(point)
-                    move_vector=ORIGIN
+                    move_vector=LEFT
             elif abs_y >= abs_x and abs_y >= abs_z:
                 if y > 0:
                     # up_face_points.append(point)

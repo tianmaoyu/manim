@@ -4,6 +4,12 @@ import matplotlib.pyplot as plt
 from sympy import symbols, Function,expand,collect
 
 
+
+arr=np.array([0,0,0])
+arr2=np.array([1,2,1])
+
+all=np.stack([arr,arr2])
+
 # 定义符号
 A, B, C, x, y = symbols('A B C x y')
 

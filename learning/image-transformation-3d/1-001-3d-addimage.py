@@ -1,7 +1,7 @@
 import time
 
 from manim import *
-from manim.mobject.opengl.opengl_point_image_mobject import ImagePixelMobject
+from manim.mobject.opengl.opengl_point_image_mobject import ImagePixelMobject, NumpyImage, ImageBox
 from manim.mobject.opengl.opengl_surface import OpenGLTexturedSurface, OpenGLSurface
 import numpy as np
 from rich.progress import track
@@ -26,29 +26,10 @@ phi: 3/4PI - PI  120°-180°
 坐标z: 映射到 z=-r 平面上"""
 
 
-class Translation001(ThreeDScene):
+class DemoSkybox007(ThreeDScene):
     def construct(self):
-
-        latex_str1 = r"""
-                \begin{bmatrix} x\\y\end{bmatrix}
-                =
-                \begin{bmatrix} cos(30) & -sin(30) \\ sin(30) & cos(30) \end{bmatrix}
-                \cdot
-                \left(
-                \begin{bmatrix} x\\y\end{bmatrix}
-                -
-                \begin{bmatrix}  2\\  2 \end{bmatrix}
-                \right)
-                +
-                \begin{bmatrix}  2\\  2 \end{bmatrix}
-         """
-        math_tex1 = MathTex(latex_str1).scale(0.5)
-        self.add_fixed_in_frame_mobjects(math_tex1)
-        self.play(Create(math_tex1))
-        self.play(math_tex1.animate.to_corner(UL))
-
-        # -------------start---------------
         self.set_camera_orientation(phi=75 * DEGREES, theta=7 * DEGREES)
+
         image = ImagePixelMobject("src/360-640-320.jpg", image_width=8, stroke_width=6.0)
         image.to_center()
         self.add(image)
@@ -83,7 +64,7 @@ class Translation001(ThreeDScene):
         abs_max = np.max(abs_values, axis=1, keepdims=True)
         cube_points = box_points / abs_max
         image.points=cube_points
-        # ------------end----------------
+
 
         mover_vector = np.array([2, 2, 2])
         vector = Vector(direction=mover_vector,color=YELLOW)
@@ -102,6 +83,67 @@ class Translation001(ThreeDScene):
 
 
 
+class AddImageToBox(ThreeDScene):
+    def construct(self):
+        self.set_camera_orientation(phi=75 * DEGREES, theta=35 * DEGREES)
+        axes = ThreeDAxes(include_numbers=False, x_range=[-7, 7, 1], y_range=[-5, 5, 1], z_range=[-7, 7, 1],   x_length=14, y_length=10, z_length=14)
+        axes.add(axes.get_axis_labels())
+
+        image_array = np.array(Image.open("src/test.jpg").convert("RGBA"))
+        image = NumpyImage(image_array=image_array, distance=0.01, stroke_width=2)
+        self.play(Create(image),Create(axes))
+
+        original_points=image.points.copy()
+        original_rgbas = image.rgbas.copy()
+
+        offset = image.width /2
+
+        z_in = image.points.copy() + np.array([0, 0, -offset])
+        points = np.append(original_points, z_in, axis=0)
+        rgbas = np.append(original_rgbas, original_rgbas, axis=0)
+
+        left =rotation_matrix(90*DEGREES,axis=UP) @ image.points.copy().T
+        left=left.T+np.array([-offset,0,0])
+        points= np.append(points,left,axis=0)
+        rgbas = np.append(rgbas, original_rgbas,axis=0)
+
+        up = rotation_matrix(90 * DEGREES, axis=RIGHT) @ image.points.copy().T
+        up = up.T + np.array([0, offset, 0])
+        points = np.append(points, up, axis=0)
+        rgbas = np.append(rgbas, original_rgbas, axis=0)
+
+        right = rotation_matrix(90 * DEGREES, axis=UP) @ image.points.copy().T
+        right = right.T + np.array([offset, 0, 0])
+        points = np.append(points, right, axis=0)
+        rgbas = np.append(rgbas, original_rgbas, axis=0)
+
+        down = rotation_matrix(90 * DEGREES, axis=RIGHT) @ image.points.copy().T
+        down = down.T + np.array([0, -offset, 0])
+        points = np.append(points, down, axis=0)
+        rgbas = np.append(rgbas, original_rgbas, axis=0)
+
+        z_out = image.points.copy() + np.array([0, 0, offset])
+        points = np.append(points, z_out, axis=0)
+        rgbas = np.append(rgbas, original_rgbas, axis=0)
+
+        image.points=points
+        image.rgbas=rgbas
+        # self.begin_ambient_camera_rotation(rate=0.5)
+        self.wait(1)
+
+
+class AddImageToBox002(ThreeDScene):
+    def construct(self):
+        self.set_camera_orientation(phi=75 * DEGREES, theta=35 * DEGREES)
+        axes = ThreeDAxes(include_numbers=False, x_range=[-7, 7, 1], y_range=[-5, 5, 1], z_range=[-7, 7, 1],   x_length=14, y_length=10, z_length=14)
+        axes.add(axes.get_axis_labels())
+
+        image_array = np.array(Image.open("src/test.jpg").convert("RGBA"))
+        imageBox = ImageBox(image_array=image_array, distance=0.01, stroke_width=2)
+        self.add(imageBox)
+
+        self.begin_ambient_camera_rotation(rate=0.5)
+        self.wait(1)
 
 def point_from_collinearity_np(light, points: np.ndarray, z):
     """
@@ -118,5 +160,5 @@ def point_from_collinearity_np(light, points: np.ndarray, z):
 
 # "disable_caching": True,
 with tempconfig({"preview": True, "renderer": "opengl"}):
-    Translation001().render()
+    AddImageToBox002().render()
     exit(1)

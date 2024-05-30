@@ -10,11 +10,13 @@ import numpy as np
 from PIL import Image
 from PIL.Image import Resampling
 
-from manim import OpenGLPMobject, Animation
+from manim import OpenGLPMobject, Animation, DEGREES, UP, rotation_matrix, RIGHT
 from manim.mobject.opengl.opengl_surface import OpenGLSurface, OpenGLTexturedSurface
 from manim.utils.images import get_full_raster_image_path
 
 __all__ = ["ImagePixelMobject"]
+
+
 
 
 class ImagePixelMobject(OpenGLPMobject):
@@ -30,7 +32,7 @@ class ImagePixelMobject(OpenGLPMobject):
             image_width=8,
             **kwargs,
     ):
-        super().__init__(**kwargs,depth_test=True)
+        super().__init__(**kwargs,depth_test=False)
 
         if filename is not None and len(filename):
             image = np.array(Image.open(filename).convert("RGBA"))
@@ -97,8 +99,8 @@ class ImagePixelMobject(OpenGLPMobject):
         return CylinderAnimation(self,radius,move_distance)
 
 class NumpyImage(OpenGLPMobject):
-    def __init__(self, image_array: np.ndarray, stroke_width=2.0, distance=0.025, **kwargs):
-        super().__init__(**kwargs, stroke_width=stroke_width, depth_test=True)
+    def __init__(self, image_array: np.ndarray, stroke_width=2.0, distance=0.025, depth_test=False, **kwargs):
+        super().__init__(**kwargs, stroke_width=stroke_width,depth_test=depth_test)
 
         # 构建三维坐标
         height, width, channel = image_array.shape
@@ -119,6 +121,48 @@ class NumpyImage(OpenGLPMobject):
     def set_points(self,points:np.ndarray):
         self.points = points
         return self
+
+
+class ImageBox(NumpyImage):
+    def __init__(self, image_array: np.ndarray, stroke_width=2.0, distance=0.025, depth_test=False, **kwargs):
+        super().__init__(image_array=image_array,stroke_width=stroke_width, distance=distance,depth_test=depth_test,**kwargs,)
+
+        original_points = self.points.copy()
+        original_rgbas = self.rgbas.copy()
+
+        offset = self.width / 2
+
+        z_in = self.points.copy() + np.array([0, 0, -offset])
+        points = np.append(original_points, z_in, axis=0)
+        rgbas = np.append(original_rgbas, original_rgbas, axis=0)
+
+        left = rotation_matrix(90 * DEGREES, axis=UP) @ self.points.copy().T
+        left = left.T + np.array([-offset, 0, 0])
+        points = np.append(points, left, axis=0)
+        rgbas = np.append(rgbas, original_rgbas, axis=0)
+
+        up = rotation_matrix(90 * DEGREES, axis=RIGHT) @ self.points.copy().T
+        up = up.T + np.array([0, offset, 0])
+        points = np.append(points, up, axis=0)
+        rgbas = np.append(rgbas, original_rgbas, axis=0)
+
+        right = rotation_matrix(90 * DEGREES, axis=UP) @ self.points.copy().T
+        right = right.T + np.array([offset, 0, 0])
+        points = np.append(points, right, axis=0)
+        rgbas = np.append(rgbas, original_rgbas, axis=0)
+
+        down = rotation_matrix(90 * DEGREES, axis=RIGHT) @ self.points.copy().T
+        down = down.T + np.array([0, -offset, 0])
+        points = np.append(points, down, axis=0)
+        rgbas = np.append(rgbas, original_rgbas, axis=0)
+
+        z_out = self.points.copy() + np.array([0, 0, offset])
+        points = np.append(points, z_out, axis=0)
+        rgbas = np.append(rgbas, original_rgbas, axis=0)
+
+        self.points = points
+        self.rgbas = rgbas
+
 
 class CylinderAnimation(Animation):
     def __init__(self, mobject:ImagePixelMobject, radius, move_distance, **kwargs):
