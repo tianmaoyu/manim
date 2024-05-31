@@ -45,7 +45,8 @@ sin(\theta) & cos(\theta)
 
 class ThreeDRotation000(ThreeDScene):
     def construct(self):
-        self.set_camera_orientation(phi=75 * DEGREES, theta=35 * DEGREES)
+        self.set_camera_orientation(phi=70 * DEGREES, theta=35 * DEGREES)
+
 
         axes = ThreeDAxes(include_numbers=False, x_range=[-3, 3, 1], y_range=[-3, 3, 1], z_range=[-3, 3, 1], x_length=6,
                           y_length=6, z_length=6)
@@ -106,8 +107,8 @@ class ThreeDRotation000(ThreeDScene):
             [0,1,0]
         ])
         self.play(ApplyMethod(axes.apply_matrix,matrix_y))
-
-        self.move_camera(phi=75 * DEGREES, theta=35 * DEGREES)
+        self.move_camera(theta=0 * DEGREES, phi=0 * DEGREES)
+        self.move_camera(phi=55 * DEGREES, theta=35 * DEGREES)
         self.wait()
 
         matrix_y = np.array([
@@ -116,8 +117,8 @@ class ThreeDRotation000(ThreeDScene):
             [0, 1, 0]
         ])
         self.play(ApplyMethod(axes.apply_matrix, matrix_y))
-
-        self.move_camera(phi=75 * DEGREES, theta=35 * DEGREES)
+        self.move_camera(theta=0 * DEGREES, phi=0 * DEGREES)
+        self.move_camera(phi=55 * DEGREES, theta=35 * DEGREES)
         self.wait()
 
         matrix_y = np.array([
@@ -126,8 +127,8 @@ class ThreeDRotation000(ThreeDScene):
             [0, 1, 0]
         ])
         self.play(ApplyMethod(axes.apply_matrix, matrix_y))
-
-        self.move_camera(phi=75 * DEGREES, theta=35 * DEGREES)
+        self.move_camera(theta=0 * DEGREES, phi=0 * DEGREES)
+        self.move_camera(phi=55 * DEGREES, theta=35 * DEGREES)
         self.wait()
 
 
