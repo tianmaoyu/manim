@@ -12,37 +12,7 @@ from PIL import Image
 
 
 
-# 逆时针旋转矩阵矩阵
-class ThreeDRotation00test(ThreeDScene):
-    def construct(self):
-
-        tex1=MathTex(r"x' &= x\cos\alpha - y\sin\alpha\\"
-                    r"y' &= x\sin\alpha + y\cos\alpha")
-        tex1.to_corner(UP)
-        brace1 = Brace(tex1, direction=LEFT)
-        self.play(Write(tex1),FadeIn(brace1))
-
-        tex2 = MathTex(r'''
-        \begin{bmatrix}
-cos(\alpha) & -sin(\alpha) \\
-sin(\alpha) & cos(\alpha)
-\end{bmatrix}
-\cdot \begin{bmatrix} x \\ y \end{bmatrix} 
-= \begin{bmatrix} x' \\ y' \end{bmatrix}
-        ''')
-        tex2.next_to(tex1,direction=DOWN*2)
-        self.play(Write(tex2))
-
-        tex3 = MathTex(r'''
-R=
-\begin{bmatrix}
-cos(\theta) & -sin(\theta) \\
-sin(\theta) & cos(\theta)
-\end{bmatrix}
-                ''')
-        tex3.next_to(tex2, direction=DOWN*2)
-        self.play(Write(tex3))
-
+#
 class ThreeDRotation000(ThreeDScene):
     def construct(self):
         self.set_camera_orientation(phi=70 * DEGREES, theta=35 * DEGREES)
@@ -100,6 +70,9 @@ class ThreeDRotation000(ThreeDScene):
         end_vector_label = MathTex(r"""\begin{bmatrix}x'\\y'\\z'\end{bmatrix}""",color=YELLOW).scale(0.7).next_to(end_point,direction=LEFT)
         self.play(Create(end_vector_label))
 
+        self.move_camera(theta=0 * DEGREES, phi=0 * DEGREES,run_time=1)
+
+        self.move_camera(phi=55 * DEGREES, theta=35 * DEGREES)
 
         matrix_y= np.array([
             [0,0,1],
@@ -314,6 +287,6 @@ class ThreeDRotation00x(ThreeDScene):
         self.move_camera(theta=0 * DEGREES, phi=0 * DEGREES)
 
 
-with tempconfig({"preview": True, "disable_caching": True, "renderer": "opengl"}):
+with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl"}):
     ThreeDRotation000().render()
     exit(1)
