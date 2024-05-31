@@ -5,10 +5,23 @@ from sympy import symbols, Function,expand,collect
 
 
 
-arr=np.array([0,0,0])
-arr2=np.array([1,2,1])
+arr=np.array([[3,4,2],[2,3,1]])
+arr2=np.array([[8,6,2],[3,4,2]])
 
-all=np.stack([arr,arr2])
+
+points=np.append(arr,arr2,axis=0)
+new_points=[]
+for point in points:
+    z=point[2]
+    new_point = []
+    new_point.append(point[0]/ z)
+    new_point.append(point[1]/ z)
+    new_point.append(1)
+    new_points.append(new_point)
+
+print(all)
+# test=all[:, 2]
+# all=all.T/ all[:,2]
 
 # 定义符号
 A, B, C, x, y = symbols('A B C x y')
