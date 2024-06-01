@@ -301,7 +301,10 @@ class ImageMobjectFromCamera(AbstractImageMobject):
                 "buff": 0,
             }
         self.default_display_frame_config = default_display_frame_config
-        self.pixel_array = self.camera.pixel_array
+        if hasattr( self.camera, 'pixel_array'):
+            self.pixel_array = self.camera.pixel_array
+        else:
+            self.pixel_array = self.camera.renderer.get_frame()
         super().__init__(scale_to_resolution=False, **kwargs)
 
     # TODO: Get rid of this.
