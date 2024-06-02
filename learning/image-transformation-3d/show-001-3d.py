@@ -108,7 +108,7 @@ class Show001(ThreeDScene):
         self.next_section("1", skip_animations=False)
         self.wait()
         self.play(FadeOut(number_plane),FadeOut(rule_image),FadeOut(arc),FadeOut(arrow))
-        self.move_camera(frame_center=[5.5,0,0])
+        self.move_camera(frame_center=[5,0,0])
         self.wait()
 
         tex = MathTex(r"""
@@ -116,7 +116,7 @@ x' =& \cos( \theta+\alpha)   \\
 y' =& \sin(\theta+ \alpha) 
         """)
 
-        tex.shift(np.array([7, 3, 0]))
+        tex.shift(np.array([7.5, 3, 0]))
         self.play(Write(tex))
 
         brace = Brace(tex, direction=LEFT)
@@ -243,10 +243,16 @@ class Show002(ThreeDScene):
         self.play(ApplyMethod(axes.apply_matrix, matrix_y))
         self.move_camera(theta=0 * DEGREES, phi=0 * DEGREES)
 
+        self.remove(axes)
+        axes= Axes(include_numbers=False, x_range=[-3, 3, 1], y_range=[-3, 3, 1], x_length=6, y_length=6)
+        lables= axes.get_axis_labels(x_label= "z",y_label="x")
+        axes.add(lables)
+        self.add(axes)
+
         self.next_section("1", skip_animations=False)
         self.wait()
         self.play(FadeOut(number_plane),FadeOut(rule_image),FadeOut(arc),FadeOut(arrow))
-        self.move_camera(frame_center=[5.5,0,0])
+        self.move_camera(frame_center=[5,0,0])
         self.wait()
 
         tex = MathTex(r"""
@@ -254,7 +260,7 @@ x' =& \sin( \theta+\alpha)   \\
 z' =& \cos(\theta+ \alpha) 
         """)
 
-        tex.shift(np.array([7, 3, 0]))
+        tex.shift(np.array([7.5, 3, 0]))
         self.play(Write(tex))
 
         brace = Brace(tex, direction=LEFT)
@@ -387,10 +393,16 @@ class Show003(ThreeDScene):
         ])
         self.play(ApplyMethod(axes.apply_matrix, matrix_y))
 
+        self.remove(axes)
+        axes = Axes(include_numbers=False, x_range=[-3, 3, 1], y_range=[-3, 3, 1], x_length=6, y_length=6)
+        lables = axes.get_axis_labels(x_label="y", y_label="z")
+        axes.add(lables)
+        self.add(axes)
+
         self.next_section("1", skip_animations=False)
         self.wait()
         self.play(FadeOut(number_plane),FadeOut(rule_image),FadeOut(arc),FadeOut(arrow))
-        self.move_camera(frame_center=[5.5,0,0])
+        self.move_camera(frame_center=[5,0,0])
         self.wait()
 
         tex = MathTex(r"""
@@ -398,7 +410,7 @@ y' =& \cos( \theta+\alpha)   \\
 z' =& \sin(\theta+ \alpha) 
         """)
 
-        tex.shift(np.array([7, 3, 0]))
+        tex.shift(np.array([7.5, 3, 0]))
         self.play(Write(tex))
 
         brace = Brace(tex, direction=LEFT)
@@ -430,6 +442,7 @@ z' =& y\sin\alpha + z\cos\alpha
         im = Image.fromarray(image)
         im.save("out_img/x-转动.png")
 
+
 with tempconfig({"preview": True, "disable_caching": True, "renderer": "opengl"}):
-    Show001().render()
+    Show003().render()
     exit(1)
