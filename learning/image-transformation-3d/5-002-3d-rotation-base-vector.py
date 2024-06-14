@@ -82,24 +82,32 @@ class ThreeDRotationVector001(ThreeDScene):
 
 
         start_rad = 30 * DEGREES
-
+        end_rad = 90 * DEGREES
 
         start_point = circle.point_at_angle(start_rad)
 
         # start_vector = Vector(start_point, color=BLUE,stroke_width=1)
-        start_arc = Arc(radius=1, start_angle=0, angle=start_rad, color=BLUE)
+        start_arc = Arc(radius=0.7, start_angle=0, angle=start_rad, color=BLUE)
         start_arc_label = MathTex(r"\theta", color=BLUE).scale(0.7).next_to(start_arc, RIGHT, buff=0.15)
+
+        end_arc = Arc(radius=0.7, start_angle=end_rad, angle=start_rad, color=BLUE)
+        end_arc_label = MathTex(r"\theta", color=BLUE).scale(0.7).next_to(end_arc, UP, buff=0.15)
 
         self.play(
             ApplyMethod(axes2.apply_matrix, matrix_y),
                   ApplyMethod(vector_group2.apply_matrix, matrix_y),
-                  Create(start_arc))
+                  Create(start_arc), Create(end_arc))
 
-        self.add(circle, start_arc,start_arc_label)
+        self.add(circle, start_arc,start_arc_label,end_arc_label)
 
         start_lines = axes.get_lines_to_point(start_point)
         start_lines.set_color(BLUE)
-        self.play(Create(start_lines), )
+        self.play(Create(start_lines))
+
+        end_point = circle.point_at_angle(end_rad + start_rad)
+        end_lines = axes.get_lines_to_point(end_point)
+        end_lines.set_color(BLUE)
+        self.play(Create(end_lines))
 
         return
 
