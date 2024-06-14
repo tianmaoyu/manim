@@ -57,8 +57,12 @@ class ThreeDRotationVector001(ThreeDScene):
 
 
         self.wait(2)
-        self.move_camera(zoom=1)
-        self.wait(2)
+
+        circle = Circle(radius=2, color=BLUE)
+
+        self.play(Create(circle))
+        # self.move_camera(zoom=1)
+        # self.wait(2)
 
         self.move_camera(theta=0 * DEGREES, phi=0 * DEGREES, run_time=1)
 
@@ -75,21 +79,27 @@ class ThreeDRotationVector001(ThreeDScene):
             [np.sin(theta), np.cos(theta), 0],
             [0, 0, 1]
         ])
-        self.play(ApplyMethod(axes2.apply_matrix, matrix_y),ApplyMethod(vector_group2.apply_matrix, matrix_y))
+
 
         start_rad = 30 * DEGREES
 
-        circle = Circle(radius=2, color=BLUE)
+
         start_point = circle.point_at_angle(start_rad)
 
         # start_vector = Vector(start_point, color=BLUE,stroke_width=1)
-        start_arc = Arc(radius=1, start_angle=0, angle=start_rad, color=RED)
-        start_arc_label = MathTex(r"\theta", color=RED).scale(0.7).next_to(start_arc, RIGHT, buff=0.15)
+        start_arc = Arc(radius=1, start_angle=0, angle=start_rad, color=BLUE)
+        start_arc_label = MathTex(r"\theta", color=BLUE).scale(0.7).next_to(start_arc, RIGHT, buff=0.15)
+
+        self.play(
+            ApplyMethod(axes2.apply_matrix, matrix_y),
+                  ApplyMethod(vector_group2.apply_matrix, matrix_y),
+                  Create(start_arc))
+
         self.add(circle, start_arc,start_arc_label)
 
         start_lines = axes.get_lines_to_point(start_point)
-        start_lines.set_color(RED)
-        self.play(Create(start_lines), Create(start_arc))
+        start_lines.set_color(BLUE)
+        self.play(Create(start_lines), )
 
         return
 
