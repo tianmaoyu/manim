@@ -38,9 +38,9 @@ class ThreeDRotationVector001(ThreeDScene):
         # self.add(dot1)
 
         # 添加标签
-        e1_label = MathTex("e_1").next_to(e1, RIGHT, buff=SMALL_BUFF).scale(0.5).set_color(GRAY_A)
-        e2_label = MathTex("e_2").next_to(e2, UP, buff=SMALL_BUFF).scale(0.5).set_color(GRAY_A)
-        e3_label = MathTex("e_3").next_to(e3, OUT, buff=SMALL_BUFF).scale(0.5).set_color(GRAY_A)
+        e1_label = MathTex("e_1").next_to(e1, UP+RIGHT, buff=0).scale(0.5).set_color(GRAY_A)
+        e2_label = MathTex("e_2").next_to(e2, LEFT+UP, buff=0).scale(0.5).set_color(GRAY_A)
+        e3_label = MathTex("e_3").next_to(e3, OUT, buff=0).scale(0.5).set_color(GRAY_A)
 
          # NumberLine().normal_vector
 
@@ -48,11 +48,15 @@ class ThreeDRotationVector001(ThreeDScene):
         # self.add(e1, e1_label, e2, e2_label, e3, e3_label)
 
         self.play(Create(e1),Create(e2),Create(e3))
+        self.add(e1, e1_label, e2, e2_label, e3)
         # self.add(e1, e2, e3)
 
+        e1_p_label = MathTex("e_1'").next_to(e1, UP + RIGHT, buff=0).scale(0.5).set_color(GRAY_A)
+        e2_p_label = MathTex("e_2'").next_to(e2, LEFT + UP, buff=0).scale(0.5).set_color(GRAY_A)
+        e3_p_label = MathTex("e_3'").next_to(e3, OUT, buff=0).scale(0.5).set_color(GRAY_A)
         vector_group=Group()
-        # vector_group.add(e1, e1_label, e2, e2_label, e3, e3_label)
-        vector_group.add(e1, e2, e3)
+        vector_group.add(e1, e1_p_label, e2, e2_p_label, e3)
+        # vector_group.add(e1, e2, e3)
 
 
 
@@ -66,8 +70,11 @@ class ThreeDRotationVector001(ThreeDScene):
 
         self.move_camera(theta=0 * DEGREES, phi=0 * DEGREES, run_time=1)
 
-        axes2= axes.copy()
+        axes2 = ThreeDAxes(include_numbers=False, axis_config={"include_ticks": False}, x_range=[-4, 4, 1],
+                          y_range=[-4, 4, 1], z_range=[-3, 3, 1], x_length=8,
+                          y_length=8, z_length=6)
         axes2.set_color(BLUE)
+        axes2.add(axes2.get_axis_labels(x_label="x'",y_label="y'",z_label="z'"))
         self.add(axes2)
         vector_group2 = vector_group.copy().set_color(BLUE_B)
         self.add(vector_group2)
