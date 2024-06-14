@@ -116,6 +116,50 @@ class ThreeDRotationVector001(ThreeDScene):
         end_lines.set_color(BLUE)
         self.play(Create(end_lines))
 
+
+        axes2.get_z_axis_label().set_opacity(0)
+        axes.get_z_axis_label().set_opacity(0)
+        self.move_camera(frame_center=[5, 0, 0])
+        self.wait()
+        return
+        tex = MathTex(r"""
+        x' =& \sin( \theta+\alpha)   \\
+        z' =& \cos(\theta+ \alpha) 
+                """)
+
+        tex.shift(np.array([7.5, 3, 0]))
+        self.play(Write(tex))
+
+        brace = Brace(tex, direction=LEFT)
+        self.play(FadeIn(brace))
+
+        tex1 = MathTex(r"""
+        x' =& x\cos\alpha + z\sin\alpha \\
+        y' =&y\\
+        z' =& -x\sin\alpha + z\cos\alpha
+                """)
+
+        tex1.next_to(tex, direction=DOWN, buff=0.4)
+        brace1 = Brace(tex1, direction=LEFT)
+        self.play(Write(tex1), FadeIn(brace1))
+
+        tex12 = MathTex(r"""
+        \begin{bmatrix} x' \\ y' \\z' \end{bmatrix}
+        =
+        \begin{bmatrix} 
+        cos(\alpha) & 0& sin(\alpha)  \\ 
+        0 & 1 &0\\
+        -sin(\alpha) & 0 & cos(\alpha) 
+        \end{bmatrix}
+        \cdot 
+        \begin{bmatrix} x \\ y \\z \end{bmatrix}
+                        """)
+        self.play(Write(tex12.next_to(tex1, direction=DOWN, buff=0.4)))
+        image = self.renderer.get_frame()
+        im = Image.fromarray(image)
+        im.save("out_img/y-转动.png")
+
+
         return
 
 
