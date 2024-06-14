@@ -443,6 +443,48 @@ z' =& y\sin\alpha + z\cos\alpha
         im.save("out_img/x-转动.png")
 
 
+class MatrixRotate(ThreeDScene):
+
+    def construct(self):
+        tex1 = MathTex(r"""
+        R_z
+        =
+        \begin{bmatrix} 
+        cos(\alpha) & -sin(\alpha) &0 \\ 
+        sin(\alpha) & cos(\alpha) &0\\
+        0 & 0 &1
+        \end{bmatrix}
+       
+                        """)
+        self.play(Write(tex1.to_corner(UP).scale(0.7)))
+
+
+        tex2 = MathTex(r"""
+        R_y
+        =
+\begin{bmatrix} 
+cos(\alpha) & 0& sin(\alpha)  \\ 
+0 & 1 &0\\
+-sin(\alpha) & 0 & cos(\alpha) 
+\end{bmatrix}
+                        """)
+        self.play(Write(tex2.next_to(tex1, direction=DOWN, buff=0.4).scale(0.7)))
+
+        tex3 = MathTex(r"""
+R_x
+=
+\begin{bmatrix}
+1&0&0\\
+0&\cos(\alpha)& -sin(\alpha)\\
+0 &sin(\alpha) &cos(\alpha)
+\end{bmatrix}
+
+                """)
+        self.play(Write(tex3.next_to(tex2,direction=DOWN,buff=0.4).scale(0.7)))
+        image = self.renderer.get_frame()
+        im = Image.fromarray(image)
+        im.save("out_img/MatrixRotate.png")
+
 with tempconfig({"preview": True, "disable_caching": True, "renderer": "opengl"}):
-    Show003().render()
+    MatrixRotate().render()
     exit(1)

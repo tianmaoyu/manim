@@ -80,6 +80,37 @@ class TexTemplateLibrary:
     """An instance of a simple TeX template with only basic AMS packages loaded"""
 
 
+
+class TexTemplateEnum:
+    """
+    A collection of basic TeX template objects
+
+    Examples
+    --------
+    Normal usage as a value for the keyword argument tex_template of Tex() and MathTex() mobjects::
+
+        ``Tex("My TeX code", tex_template=TexTemplateLibrary.ctex)``
+
+    """
+
+    default = TexTemplate(preamble=_3b1b_preamble)
+    """An instance of the default TeX template in manim"""
+
+    threeb1b = TexTemplate(preamble=_3b1b_preamble)
+    """ An instance of the default TeX template used by 3b1b """
+
+    ctex = TexTemplate(
+        tex_compiler="xelatex",
+        output_format=".xdv",
+        preamble=_3b1b_preamble.replace(
+            r"\DisableLigatures{encoding = *, family = * }",
+            r"\usepackage[UTF8]{ctex}",
+        ),
+    )
+    """An instance of the TeX template used by 3b1b when using the use_ctex flag"""
+
+    simple = _new_ams_template()
+    """An instance of a simple TeX template with only basic AMS packages loaded"""
 # TexFontTemplates
 #
 # TexFontTemplates takes a font_id and returns the appropriate TexTemplate()
