@@ -1,4 +1,5 @@
 from manim import *
+from manim.mobject.geometry.tips import  ArrowTriangleFilledTipSmall
 from manim.mobject.opengl.opengl_cylinder import OpenGLCylinder
 from manim.mobject.opengl.opengl_image_mobject import OpenGLImageMobject
 from manim.mobject.opengl.opengl_point_image_mobject import ImagePixelMobject, NumpyImage
@@ -17,8 +18,8 @@ class ThreeDRotationVector001(ThreeDScene):
     def construct(self):
         self.set_camera_orientation(phi=70 * DEGREES, theta=35 * DEGREES)
 
-        axes = ThreeDAxes(include_numbers=False,  axis_config={"include_ticks": False}, x_range=[-3, 3, 1], y_range=[-3, 3, 1], z_range=[-3, 3, 1], x_length=6,
-                          y_length=6, z_length=6)
+        axes = ThreeDAxes(include_numbers=False,  axis_config={"include_ticks": False}, x_range=[-4, 4, 1], y_range=[-4, 4, 1], z_range=[-3, 3, 1], x_length=8,
+                          y_length=8, z_length=6)
         axes.add(axes.get_axis_labels())
         # number_plane = NumberPlane(include_numbers=False, x_range=[-7, 7, 1], y_range=[-7, 7, 1], z_range=[-4, 4, 1],
         #                            x_length=14, y_length=14, z_length=8)
@@ -26,30 +27,47 @@ class ThreeDRotationVector001(ThreeDScene):
         # self.play(Create(axes))
         vector_length=2
         # 创建基向量
-        e1 = Vector([1,0,0], color=RED)
+        e1 = Vector([2,0,0], color=GRAY_A,stroke_width=1.5,tip_shape=ArrowTriangleFilledTipSmall)
         # e1.add(e1.coordinate_label())
-        e2 = Vector([0,1,0], color=RED)
+        e2 = Vector([0,2,0], color=GRAY_A,stroke_width=1.5,tip_shape=ArrowTriangleFilledTipSmall)
         # e1.add(e2.coordinate_label())
-        e3 = Vector([0,0,1], color=RED)
+        e3 = Vector([0,0,2], color=GRAY_A,stroke_width=1.5,tip_shape=ArrowTriangleFilledTipSmall)
         # e1.add(e3.coordinate_label())
 
-        dot1= Dot3D([1,0,0])
-        self.add(dot1)
+        # dot1= Dot3D([1,0,0])
+        # self.add(dot1)
 
         # 添加标签
-        e1_label = MathTex("e_1").next_to(e1, RIGHT, buff=SMALL_BUFF).scale(0.5).set_color(RED)
-        e2_label = MathTex("e_2").next_to(e2, UP, buff=SMALL_BUFF).scale(0.5).set_color(RED)
-        e3_label = MathTex("e_3").next_to(e3, OUT, buff=SMALL_BUFF).scale(0.5).set_color(RED)
+        e1_label = MathTex("e_1").next_to(e1, RIGHT, buff=SMALL_BUFF).scale(0.5).set_color(GRAY_A)
+        e2_label = MathTex("e_2").next_to(e2, UP, buff=SMALL_BUFF).scale(0.5).set_color(GRAY_A)
+        e3_label = MathTex("e_3").next_to(e3, OUT, buff=SMALL_BUFF).scale(0.5).set_color(GRAY_A)
 
          # NumberLine().normal_vector
 
         self.add(axes)
-        self.add(e1, e1_label, e2, e2_label, e3, e3_label)
+        # self.add(e1, e1_label, e2, e2_label, e3, e3_label)
+
+        self.play(Create(e1),Create(e2),Create(e3))
+        # self.add(e1, e2, e3)
+
+        vector_group=Group()
+        # vector_group.add(e1, e1_label, e2, e2_label, e3, e3_label)
+        vector_group.add(e1, e2, e3)
+
+
+
         self.wait(2)
-        return
-        axes1= axes.copy()
-        axes1.set_color(RED)
-        self.add(axes1)
+        self.move_camera(zoom=1)
+        self.wait(2)
+
+        self.move_camera(theta=0 * DEGREES, phi=0 * DEGREES, run_time=1)
+
+        axes2= axes.copy()
+        axes2.set_color(BLUE)
+        self.add(axes2)
+        vector_group2 = vector_group.copy().set_color(BLUE_B)
+        self.add(vector_group2)
+
         self.wait()
         theta=30*DEGREES
         matrix_y = np.array([
@@ -57,7 +75,21 @@ class ThreeDRotationVector001(ThreeDScene):
             [np.sin(theta), np.cos(theta), 0],
             [0, 0, 1]
         ])
-        self.play(ApplyMethod(axes1.apply_matrix, matrix_y))
+        self.play(ApplyMethod(axes2.apply_matrix, matrix_y),ApplyMethod(vector_group2.apply_matrix, matrix_y))
+
+        start_rad = 30 * DEGREES
+
+        circle = Circle(radius=2, color=BLUE)
+        start_point = circle.point_at_angle(start_rad)
+
+        # start_vector = Vector(start_point, color=BLUE,stroke_width=1)
+        start_arc = Arc(radius=1, start_angle=0, angle=start_rad, color=RED)
+        start_arc_label = MathTex(r"\theta", color=RED).scale(0.7).next_to(start_arc, RIGHT, buff=0.15)
+        self.add(circle, start_arc,start_arc_label)
+
+        start_lines = axes.get_lines_to_point(start_point)
+        start_lines.set_color(RED)
+        self.play(Create(start_lines), Create(start_arc))
 
         return
 

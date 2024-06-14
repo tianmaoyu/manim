@@ -275,6 +275,21 @@ class ArrowTriangleFilledTip(ArrowTriangleTip):
         super().__init__(fill_opacity=fill_opacity, stroke_width=stroke_width, **kwargs)
 
 
+
+class ArrowTriangleFilledTipSmall(ArrowTriangleTip):
+    r"""Triangular arrow tip with filled tip.
+
+    This is the default arrow tip shape.
+    """
+
+    def __init__(
+        self, fill_opacity: float = 1, stroke_width: float = 0, **kwargs
+    ) -> None:
+        length = kwargs.pop('length', 0.2)  # 默认值0.25，如果kwargs中有length则使用它
+        length = kwargs.pop('width', 0.2)  # 默认值0.25，如果kwargs中有length则使用它
+        super().__init__(fill_opacity=fill_opacity,stroke_width=stroke_width,length=0.2,width=0.2, **kwargs)
+
+
 class ArrowCircleTip(ArrowTip, Circle):
     r"""Circular arrow tip."""
 
