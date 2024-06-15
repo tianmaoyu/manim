@@ -50,6 +50,109 @@ class ThreeDRotationVector向量基础(ThreeDScene):
         self.play(Create(start_dot),Create(end_dot))
 
         start_dot_lables= MathTex("O(0,0,0)").scale(0.4)
+        # start_dot_lables.shift([0,0,0])
+        start_dot_lables.next_to(start_dot)
+        # self.add_fixed_orientation_mobjects(start_dot_lables)
+        self.add(start_dot_lables)
+
+        end_dot_lables= MathTex("P(x,y,z)").scale(0.4)
+        # end_dot_lables.shift([2,2,2])
+        end_dot_lables.next_to(end_dot)
+        # self.add_fixed_orientation_mobjects(end_dot_lables)
+        self.add(end_dot_lables)
+
+
+
+
+        # self.add(dot_lables.next_to(end_dot).rotate(axis=RIGHT,about_point=dot_lables.get_center(),angle=90*DEGREES))
+
+
+        vector=OpenGLArrow3D(start=[0,0,0],end=[2,2,2],color=BLUE)
+        self.play(Create(vector))
+
+        self.begin_ambient_camera_rotation(rate=1)
+        # self.wait(2)
+
+        # return
+        # self.move_camera(theta=0 * DEGREES, phi=0 * DEGREES)
+
+        # self.remove_fixed_orientation_mobjects(end_dot_lables)
+        # self.remove_fixed_orientation_mobjects(start_dot_lables)
+
+
+        self.move_camera(frame_center=[6, 0, 0])
+
+        # start_dot_lables= MathTex("O(0,0,0)").scale(0.4)
+        # start_dot_lables.shift([-6,0,0])
+        # self.add_fixed_orientation_mobjects(start_dot_lables)
+        #
+        # end_dot_lables= MathTex("P(x,y,z)").scale(0.4)
+        # end_dot_lables.shift([-4,2,2])
+        # self.add_fixed_orientation_mobjects(end_dot_lables)
+
+
+        self.wait()
+
+
+        tex1 = MathTex(r"""
+\vec{e_1}=\begin{bmatrix} 1 \\ 0 \\ 0\end{bmatrix}
+        """)
+
+        self.add_fixed_in_frame_mobjects(tex1)
+        # tex1.shift(np.array([7.5, 3, 0]))
+
+        tex2 = MathTex(r"""
+        \vec{e_2}=\begin{bmatrix} 0 \\ 1 \\ 0\end{bmatrix}
+                """)
+        self.add_fixed_in_frame_mobjects(tex2)
+        tex3 = MathTex(r"""
+        \vec{e_3}=\begin{bmatrix} 0\\ 0 \\ 1\end{bmatrix}
+                """)
+        self.add_fixed_in_frame_mobjects( tex3)
+        self.play(Write(tex1.to_corner(UP)))
+        self.play(Write(tex2.next_to(tex1)))
+        self.play(Write(tex3.next_to(tex2)))
+
+        self.wait()
+
+class ThreeDRotationVector向量基础2(ThreeDScene):
+    def construct(self):
+        self.set_camera_orientation(phi=70 * DEGREES, theta=35 * DEGREES)
+
+        axes = ThreeDAxes(include_numbers=False, axis_config={"include_ticks": False}, x_range=[-4, 4, 1],
+                          y_range=[-4, 4, 1], z_range=[-3, 3, 1], x_length=8,
+                          y_length=8, z_length=6)
+        axes.add(axes.get_axis_labels())
+        # number_plane = NumberPlane(include_numbers=False, x_range=[-7, 7, 1], y_range=[-7, 7, 1], z_range=[-4, 4, 1],
+        #                            x_length=14, y_length=14, z_length=8)
+        # self.play(Create(number_plane))
+        # self.play(Create(axes))
+        vector_length = 2
+        # 创建基向量
+        e1 = Vector([2, 0, 0], color=RED, stroke_width=3.5, tip_shape=ArrowTriangleFilledTipSmall)
+        e2 = Vector([0, 2, 0], color=RED, stroke_width=3.5, tip_shape=ArrowTriangleFilledTipSmall)
+        e3 = Vector([0, 0, 2], color=RED, stroke_width=3.5, tip_shape=ArrowTriangleFilledTipSmall)
+
+
+
+        # 添加标签
+        e1_label = MathTex("e_1").next_to(e1, UP + RIGHT, buff=0).scale(1).set_color(RED)
+        e2_label = MathTex("e_2").next_to(e2, LEFT + UP, buff=0).scale(1).set_color(RED)
+        e3_label = MathTex("e_3").next_to(e3, OUT, buff=0).scale(1).set_color(RED)
+        self.add(axes)
+
+
+        self.play(Create(e1), Create(e2), Create(e3))
+        self.add(e1, e1_label, e2, e2_label, e3, e3_label)
+
+        self.wait()
+
+
+        start_dot= Dot3D(point=[0,0,0],color=BLUE)
+        end_dot=Dot3D([2,2,2],color=BLUE)
+        self.play(Create(start_dot),Create(end_dot))
+
+        start_dot_lables= MathTex("O(0,0,0)").scale(0.4)
         start_dot_lables.shift([0,0,0])
         self.add_fixed_orientation_mobjects(start_dot_lables)
 
@@ -93,8 +196,6 @@ class ThreeDRotationVector向量基础(ThreeDScene):
         self.play(Write(tex3.next_to(tex2)))
 
         self.wait()
-
-
 class ThreeDRotationVectorLatex(ThreeDScene):
     def construct(self):
         tex1 = MathTex(r"""
