@@ -1146,35 +1146,327 @@ class ThreeDRotationVector_z_Latex(ThreeDScene):
                                \vec{e_2}'=\begin{bmatrix} -\sin(\theta) \\ \cos(\theta) \\ 0\end{bmatrix}
                                \vec{e_3}'=\begin{bmatrix} 0\\ 0 \\ 1\end{bmatrix}
                               """)
-        tex2.shift(np.array([6.8, 1.5, 0])).scale(0.6)
+        tex2.shift(np.array([7.3, 1.5, 0])).scale(0.6).set_color(BLUE)
         self.play(Write(tex2))
 
         matrix = Matrix([
             [r"\cos\theta", r"-\sin\theta", 0],
             [r"\sin\theta", r"\cos\theta", 0],
             [0, 0, 1]
-        ], h_buff=1.6).scale(0.6)
+        ], h_buff=1.7).scale(0.6)
 
-        matrix.shift(np.array([6.8, -0.5, 0]))
+        matrix.shift(np.array([8, -0.5, 0]))
 
-        columns0 = SurroundingRectangle(matrix.get_columns()[0], stroke_width=1)
+        columns0 = SurroundingRectangle(matrix.get_columns()[0], stroke_width=1).set_color(BLUE)
         matrix.add(columns0)
-        columns0_labes = MathTex(r"e_1'").next_to(columns0, DOWN).scale(0.6)
+        columns0_labes = MathTex(r"e_1'").next_to(columns0, DOWN).scale(0.6).set_color(BLUE)
 
-        columns1 = SurroundingRectangle(matrix.get_columns()[1], stroke_width=1)
+        columns1 = SurroundingRectangle(matrix.get_columns()[1], stroke_width=1).set_color(BLUE)
         matrix.add(columns1)
-        columns1_labes = MathTex(r"e_2'").next_to(columns1, DOWN).scale(0.6)
+        columns1_labes = MathTex(r"e_2'").next_to(columns1, DOWN).scale(0.6).set_color(BLUE)
 
-        columns2 = SurroundingRectangle(matrix.get_columns()[2], stroke_width=1)
+        columns2 = SurroundingRectangle(matrix.get_columns()[2], stroke_width=1).set_color(BLUE)
         matrix.add(columns2)
-        columns2_labes = MathTex(r"e_3'").next_to(columns2, DOWN).scale(0.6)
+        columns2_labes = MathTex(r"e_3'").next_to(columns2, DOWN).scale(0.6).set_color(BLUE)
 
+        rz = MathTex(r"R_z=")
+        rz.next_to(matrix,LEFT)
+        self.play(Write(rz))
         self.play(Write(matrix))
         self.play(Write(columns0_labes), Write(columns1_labes), Write(columns2_labes))
 
 
+class ThreeDRotationVector_y_Latex(ThreeDScene):
+    def construct(self):
 
+        self.next_section(skip_animations=True,name="1")
+        self.set_camera_orientation(phi=70 * DEGREES, theta=35 * DEGREES)
+
+
+        axes = ThreeDAxes(include_numbers=False,  axis_config={"include_ticks": False}, x_range=[-4, 4, 1], y_range=[-4, 4, 1], z_range=[-3, 3, 1], x_length=8,
+                          y_length=8, z_length=6)
+        axes.add(axes.get_axis_labels(x_label="Z",y_label="X",z_label="Y"))
+
+        # 创建基向量
+        e1 = Vector([2,0,0], color=GRAY_A,stroke_width=1.5,tip_shape=ArrowTriangleFilledTipSmall)
+        e2 = Vector([0,2,0], color=GRAY_A,stroke_width=1.5,tip_shape=ArrowTriangleFilledTipSmall)
+        e3 = Vector([0,0,2], color=GRAY_A,stroke_width=1.5,tip_shape=ArrowTriangleFilledTipSmall)
+
+
+        # 添加标签
+        e1_label = MathTex("e_3").next_to(e1, UP+RIGHT, buff=0).scale(0.5).set_color(GRAY_A)
+        e2_label = MathTex("e_1").next_to(e2, LEFT+UP, buff=0).scale(0.5).set_color(GRAY_A)
+        e3_label = MathTex("e_2").next_to(e3, OUT, buff=0).scale(0.5).set_color(GRAY_A)
+
+
+
+        self.add(axes)
+        # self.play(Create(e1),Create(e2),Create(e3))
+        self.add(e1, e1_label, e2, e2_label, e3,e3_label)
+
+        # self.wait()
+
+
+        e1_p_label = MathTex("e_3'").next_to(e1, UP + RIGHT, buff=0).scale(0.5).set_color(GRAY_A)
+        e2_p_label = MathTex("e_1'").next_to(e2, LEFT + UP, buff=0).scale(0.5).set_color(GRAY_A)
+        e3_p_label = MathTex("e_2'").next_to(e3, OUT, buff=0).scale(0.5).set_color(GRAY_A)
+        vector_group=Group()
+        vector_group.add(e1, e1_p_label, e2, e2_p_label, e3,e3_p_label)
+
+        # self.wait(2)
+
+        circle = Circle(radius=2, color=BLUE)
+
+
+        self.add(circle)
+        # self.play(Create(circle))
+
+
+        self.move_camera(theta=0 * DEGREES, phi=0 * DEGREES, run_time=1)
+
+        axes2 = ThreeDAxes(include_numbers=False, axis_config={"include_ticks": False}, x_range=[-4, 4, 1],
+                          y_range=[-4, 4, 1], z_range=[-3, 3, 1], x_length=8,
+                          y_length=8, z_length=6)
+        axes2.set_color(BLUE)
+        axes2.add(axes2.get_axis_labels(x_label="Z'",y_label="X'",z_label="Y'"))
+        axes2.set_color(BLUE)
+        self.add(axes2)
+        vector_group2 = vector_group.copy().set_color(BLUE_B)
+        self.add(vector_group2)
+
+        # self.wait()
+        theta=30*DEGREES
+        matrix_z = np.array([
+            [np.cos(theta), -np.sin(theta), 0],
+            [np.sin(theta), np.cos(theta), 0],
+            [0, 0, 1]
+        ])
+
+
+        start_rad = 30 * DEGREES
+        end_rad = 90 * DEGREES
+
+        start_point = circle.point_at_angle(start_rad)
+
+        # start_vector = Vector(start_point, color=BLUE,stroke_width=1)
+        start_arc = Arc(radius=0.7, start_angle=0, angle=start_rad, color=YELLOW)
+        start_arc_label = MathTex(r"\theta", color=YELLOW).scale(0.7).next_to(start_arc, RIGHT, buff=0.15)
+
+        end_arc = Arc(radius=0.7, start_angle=end_rad, angle=start_rad, color=YELLOW)
+        end_arc_label = MathTex(r"\theta", color=YELLOW).scale(0.7).next_to(end_arc, UP, buff=0.15)
+
+        self.play(
+            ApplyMethod(axes2.apply_matrix, matrix_z),
+                  ApplyMethod(vector_group2.apply_matrix, matrix_z),
+                  Create(start_arc), Create(end_arc),run_time=0.1)
+
+        self.add(circle, start_arc,start_arc_label,end_arc_label)
+
+        start_lines = axes.get_lines_to_point(start_point)
+        start_lines.set_color(YELLOW)
+        self.add(start_lines)
+
+        end_point = circle.point_at_angle(end_rad + start_rad)
+        end_lines = axes.get_lines_to_point(end_point)
+        end_lines.set_color(YELLOW)
+        self.add(end_lines)
+
+        self.move_camera(theta=0 * DEGREES, phi=0 * DEGREES, run_time=0.1)
+
+        self.next_section(name="texts",skip_animations=False)
+
+        self.move_camera(frame_center=[5, 0, 0])
+
+        self.wait()
+
+        tex1 = MathTex(r"""
+             \vec{e_1}=\begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix}
+             \vec{e_2}=\begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix}
+             \vec{e_3}=\begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix}
+                     """)
+        tex1.shift(np.array([6.5, 3, 0])).scale(0.6)
+        self.play(Write(tex1))
+
+        tex2 = MathTex(r"""
+                               \vec{e_1}'=\begin{bmatrix} cos(\theta) \\ 0 \\ -sin(\theta) \end{bmatrix}
+                               \vec{e_2}'=\begin{bmatrix} 0 \\ 1 \\ 0  \end{bmatrix}
+                               \vec{e_3}'=\begin{bmatrix} sin(\theta) \\ 0 \\ cos(\theta) \end{bmatrix}
+                              """)
+        tex2.shift(np.array([7.3, 1.5, 0])).scale(0.6).set_color(BLUE)
+        self.play(Write(tex2))
+
+        matrix = Matrix([
+            [r"\cos\theta",0, r"\sin\theta"],
+            [0, 1, 0],
+            [r"-\sin\theta",  0,r"\cos\theta"],
+        ], h_buff=1.7).scale(0.6)
+
+        matrix.shift(np.array([8, -0.5, 0]))
+
+        columns0 = SurroundingRectangle(matrix.get_columns()[0], stroke_width=1).set_color(BLUE)
+        matrix.add(columns0)
+        columns0_labes = MathTex(r"e_3'").next_to(columns0, DOWN).scale(0.6).set_color(BLUE)
+
+        columns1 = SurroundingRectangle(matrix.get_columns()[1], stroke_width=1).set_color(BLUE)
+        matrix.add(columns1)
+        columns1_labes = MathTex(r"e_1'").next_to(columns1, DOWN).scale(0.6).set_color(BLUE)
+
+        columns2 = SurroundingRectangle(matrix.get_columns()[2], stroke_width=1).set_color(BLUE)
+        matrix.add(columns2)
+        columns2_labes = MathTex(r"e_2'").next_to(columns2, DOWN).scale(0.6).set_color(BLUE)
+
+        rz = MathTex(r"R_y=")
+        rz.next_to(matrix,LEFT)
+        self.play(Write(rz))
+        self.play(Write(matrix))
+        self.play(Write(columns0_labes), Write(columns1_labes), Write(columns2_labes))
+
+
+class ThreeDRotationVector_x_Latex(ThreeDScene):
+    def construct(self):
+
+        self.next_section(skip_animations=True,name="1")
+        self.set_camera_orientation(phi=70 * DEGREES, theta=35 * DEGREES)
+
+
+        axes = ThreeDAxes(include_numbers=False,  axis_config={"include_ticks": False}, x_range=[-4, 4, 1], y_range=[-4, 4, 1], z_range=[-3, 3, 1], x_length=8,
+                          y_length=8, z_length=6)
+        axes.add(axes.get_axis_labels(x_label="Y",y_label="Z",z_label="X"))
+
+        # 创建基向量
+        e1 = Vector([2,0,0], color=GRAY_A,stroke_width=1.5,tip_shape=ArrowTriangleFilledTipSmall)
+        e2 = Vector([0,2,0], color=GRAY_A,stroke_width=1.5,tip_shape=ArrowTriangleFilledTipSmall)
+        e3 = Vector([0,0,2], color=GRAY_A,stroke_width=1.5,tip_shape=ArrowTriangleFilledTipSmall)
+
+
+        # 添加标签
+        e1_label = MathTex("e_2").next_to(e1, UP+RIGHT, buff=0).scale(0.5).set_color(GRAY_A)
+        e2_label = MathTex("e_3").next_to(e2, LEFT+UP, buff=0).scale(0.5).set_color(GRAY_A)
+        e3_label = MathTex("e_1").next_to(e3, OUT, buff=0).scale(0.5).set_color(GRAY_A)
+
+
+
+        self.add(axes)
+        # self.play(Create(e1),Create(e2),Create(e3))
+        self.add(e1, e1_label, e2, e2_label, e3,e3_label)
+
+        # self.wait()
+
+
+        e1_p_label = MathTex("e_2'").next_to(e1, UP + RIGHT, buff=0).scale(0.5).set_color(GRAY_A)
+        e2_p_label = MathTex("e_3'").next_to(e2, LEFT + UP, buff=0).scale(0.5).set_color(GRAY_A)
+        e3_p_label = MathTex("e_1'").next_to(e3, OUT, buff=0).scale(0.5).set_color(GRAY_A)
+        vector_group=Group()
+        vector_group.add(e1, e1_p_label, e2, e2_p_label, e3,e3_p_label)
+
+        # self.wait(2)
+
+        circle = Circle(radius=2, color=BLUE)
+
+
+        self.add(circle)
+        # self.play(Create(circle))
+
+
+        self.move_camera(theta=0 * DEGREES, phi=0 * DEGREES, run_time=1)
+
+        axes2 = ThreeDAxes(include_numbers=False, axis_config={"include_ticks": False}, x_range=[-4, 4, 1],
+                          y_range=[-4, 4, 1], z_range=[-3, 3, 1], x_length=8,
+                          y_length=8, z_length=6)
+        axes2.set_color(BLUE)
+        axes2.add(axes2.get_axis_labels(x_label="Y'",y_label="Z'",z_label="X'"))
+        axes2.set_color(BLUE)
+        self.add(axes2)
+        vector_group2 = vector_group.copy().set_color(BLUE_B)
+        self.add(vector_group2)
+
+        # self.wait()
+        theta=30*DEGREES
+        matrix_z = np.array([
+            [np.cos(theta), -np.sin(theta), 0],
+            [np.sin(theta), np.cos(theta), 0],
+            [0, 0, 1]
+        ])
+
+
+        start_rad = 30 * DEGREES
+        end_rad = 90 * DEGREES
+
+        start_point = circle.point_at_angle(start_rad)
+
+        # start_vector = Vector(start_point, color=BLUE,stroke_width=1)
+        start_arc = Arc(radius=0.7, start_angle=0, angle=start_rad, color=YELLOW)
+        start_arc_label = MathTex(r"\theta", color=YELLOW).scale(0.7).next_to(start_arc, RIGHT, buff=0.15)
+
+        end_arc = Arc(radius=0.7, start_angle=end_rad, angle=start_rad, color=YELLOW)
+        end_arc_label = MathTex(r"\theta", color=YELLOW).scale(0.7).next_to(end_arc, UP, buff=0.15)
+
+        self.play(
+            ApplyMethod(axes2.apply_matrix, matrix_z),
+                  ApplyMethod(vector_group2.apply_matrix, matrix_z),
+                  Create(start_arc), Create(end_arc),run_time=0.1)
+
+        self.add(circle, start_arc,start_arc_label,end_arc_label)
+
+        start_lines = axes.get_lines_to_point(start_point)
+        start_lines.set_color(YELLOW)
+        self.add(start_lines)
+
+        end_point = circle.point_at_angle(end_rad + start_rad)
+        end_lines = axes.get_lines_to_point(end_point)
+        end_lines.set_color(YELLOW)
+        self.add(end_lines)
+
+        self.move_camera(theta=0 * DEGREES, phi=0 * DEGREES, run_time=0.1)
+
+        self.next_section(name="texts",skip_animations=False)
+
+        self.move_camera(frame_center=[5, 0, 0])
+
+        self.wait()
+
+        tex1 = MathTex(r"""
+             \vec{e_1}=\begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix}
+             \vec{e_2}=\begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix}
+             \vec{e_3}=\begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix}
+                     """)
+        tex1.shift(np.array([6.5, 3, 0])).scale(0.6)
+        self.play(Write(tex1))
+
+        tex2 = MathTex(r"""
+                               \vec{e_1}'=\begin{bmatrix} 1 \\ 0 \\ 0  \end{bmatrix}
+                               \vec{e_2}'=\begin{bmatrix} 0 \\ cos(\theta) \\  sin(\theta) \end{bmatrix}
+                               \vec{e_3}'=\begin{bmatrix} 0 \\ -sin(\theta) \\ cos(\theta) \end{bmatrix}
+                              """)
+        tex2.shift(np.array([7.3, 1.5, 0])).scale(0.6).set_color(BLUE)
+        self.play(Write(tex2))
+
+        matrix = Matrix([
+            [1, 0, 0],
+            [0,r"\cos\theta", r"-\sin\theta"],
+            [ 0, r"\sin\theta", r"\cos\theta"],
+        ], h_buff=1.7).scale(0.6)
+
+        matrix.shift(np.array([8, -0.5, 0]))
+
+        columns0 = SurroundingRectangle(matrix.get_columns()[0], stroke_width=1).set_color(BLUE)
+        matrix.add(columns0)
+        columns0_labes = MathTex(r"e_2'").next_to(columns0, DOWN).scale(0.6).set_color(BLUE)
+
+        columns1 = SurroundingRectangle(matrix.get_columns()[1], stroke_width=1).set_color(BLUE)
+        matrix.add(columns1)
+        columns1_labes = MathTex(r"e_3'").next_to(columns1, DOWN).scale(0.6).set_color(BLUE)
+
+        columns2 = SurroundingRectangle(matrix.get_columns()[2], stroke_width=1).set_color(BLUE)
+        matrix.add(columns2)
+        columns2_labes = MathTex(r"e_1'").next_to(columns2, DOWN).scale(0.6).set_color(BLUE)
+
+        rz = MathTex(r"R_x=")
+        rz.next_to(matrix,LEFT)
+        self.play(Write(rz))
+        self.play(Write(matrix))
+        self.play(Write(columns0_labes), Write(columns1_labes), Write(columns2_labes))
 
 with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl"}):
-    ThreeDRotationVector_z_Latex().render()
+    ThreeDRotationVector_y_Latex().render()
     exit(1)
