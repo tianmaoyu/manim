@@ -711,6 +711,108 @@ class ThreeDRotationVector002(ThreeDScene):
         self.move_camera(phi=55 * DEGREES, theta=35 * DEGREES)
         self.wait()
 
+class ThreeDRotationVector_x_y_z(ThreeDScene):
+    def construct(self):
+        self.set_camera_orientation(phi=70 * DEGREES, theta=35 * DEGREES)
+
+        axes = ThreeDAxes(include_numbers=False,  axis_config={"include_ticks": False}, x_range=[-4, 4, 1], y_range=[-4, 4, 1], z_range=[-3, 3, 1], x_length=8,
+                          y_length=8, z_length=6)
+        axes.add(axes.get_axis_labels(x_label="X",y_label="Y",z_label="Z"))
+
+        e1 = Vector([2,0,0], color=GRAY_A,stroke_width=1.5,tip_shape=ArrowTriangleFilledTipSmall)
+        e2 = Vector([0,2,0], color=GRAY_A,stroke_width=1.5,tip_shape=ArrowTriangleFilledTipSmall)
+        e3 = Vector([0,0,2], color=GRAY_A,stroke_width=1.5,tip_shape=ArrowTriangleFilledTipSmall)
+
+        # 添加标签
+        e1_label = MathTex("e_1").next_to(e1, UP+RIGHT, buff=0).scale(0.5).set_color(GRAY_A)
+        e2_label = MathTex("e_2").next_to(e2, LEFT+UP, buff=0).scale(0.5).set_color(GRAY_A)
+        e3_label = MathTex("e_3").next_to(e3, OUT, buff=0).scale(0.5).set_color(GRAY_A)
+
+        self.add(axes)
+
+        self.play(Create(e1),Create(e2),Create(e3))
+        self.add(e1, e1_label, e2, e2_label, e3,e3_label)
+        self.wait()
+
+        group = Group()
+        group.add(e1, e1_label, e2, e2_label, e3,e3_label)
+
+        self.move_camera(theta=0 * DEGREES, phi=0 * DEGREES,run_time=1)
+
+        self.move_camera(phi=55 * DEGREES, theta=35 * DEGREES)
+
+        matrix_y= np.array([
+            [0,0,1],
+            [1,0,0],
+            [0,1,0]
+        ])
+        self.play(ApplyMethod(axes.apply_matrix,matrix_y),ApplyMethod(group.apply_matrix,matrix_y))
+        self.move_camera(theta=0 * DEGREES, phi=0 * DEGREES)
+        self.move_camera(phi=55 * DEGREES, theta=35 * DEGREES)
+        self.wait()
+
+
+        self.play(ApplyMethod(axes.apply_matrix, matrix_y),ApplyMethod(group.apply_matrix,matrix_y))
+        self.move_camera(theta=0 * DEGREES, phi=0 * DEGREES)
+        self.move_camera(phi=55 * DEGREES, theta=35 * DEGREES)
+        self.wait()
+
+
+        self.play(ApplyMethod(axes.apply_matrix, matrix_y),ApplyMethod(group.apply_matrix,matrix_y))
+        self.move_camera(theta=0 * DEGREES, phi=0 * DEGREES)
+        self.move_camera(phi=55 * DEGREES, theta=35 * DEGREES)
+        self.wait()
+
+#标准单位基
+class ThreeDRotationVector_base_vector(ThreeDScene):
+    def construct(self):
+        self.set_camera_orientation(phi=70 * DEGREES, theta=35 * DEGREES)
+
+        axes = ThreeDAxes(include_numbers=False,  axis_config={"include_ticks": False}, x_range=[-5, 5, 1], y_range=[-5, 5, 1], z_range=[-4, 4, 1], x_length=10,
+                          y_length=10, z_length=8)
+        axes.add(axes.get_axis_labels(x_label="X",y_label="Y",z_label="Z"))
+
+        e1 = Vector([2,0,0], color=RED)
+        e2 = Vector([0,2,0], color=RED)
+        e3 = Vector([0,0,2], color=RED)
+
+        # 添加标签
+        e1_label = MathTex("e_1").next_to(e1, UP+RIGHT, buff=0).set_color(RED)
+        e2_label = MathTex("e_2").next_to(e2, LEFT+UP, buff=0).set_color(RED)
+        e3_label = MathTex("e_3").next_to(e3, OUT, buff=0).set_color(RED)
+
+        self.add(axes)
+        number_plane = NumberPlane(include_numbers=False, x_range=[-7, 7, 1], y_range=[-7, 7, 1], z_range=[-4, 4, 1],
+                                   x_length=14, y_length=14, z_length=8)
+        self.add(number_plane)
+
+        self.play(Create(e1),Create(e2),Create(e3))
+        self.add(e1, e1_label, e2, e2_label, e3,e3_label)
+        self.wait()
+
+        self.begin_ambient_camera_rotation(rate=0.5)
+
+        tex1 = MathTex(r"""
+        \vec{e_1}=\begin{pmatrix} 1 & 0 & 0\end{pmatrix}
+                """)
+        tex2 = MathTex(r"""
+                \vec{e_2}=\begin{pmatrix} 0 & 1 & 0\end{pmatrix}
+                        """)
+        tex3 = MathTex(r"""
+                \vec{e_3}=\begin{pmatrix} 0 & 0 & 1\end{pmatrix}
+                        """)
+
+        tex1.to_corner(UR)
+        tex2.next_to(tex1,DOWN)
+        tex3.next_to(tex2,DOWN)
+        tex1.fix_in_frame()
+        tex2.fix_in_frame()
+        tex3.fix_in_frame()
+        self.play(Write(tex1))
+        self.play(Write(tex2))
+        self.play(Write(tex3))
+        self.wait(4)
+
 
 
 class ThreeDRotationVector_z(ThreeDScene):
@@ -1031,7 +1133,6 @@ class ThreeDRotationVector_x(ThreeDScene):
 
         return
 
-
 class ThreeDRotationVector_z_Latex(ThreeDScene):
     def construct(self):
 
@@ -1155,7 +1256,7 @@ class ThreeDRotationVector_z_Latex(ThreeDScene):
             [0, 0, 1]
         ], h_buff=1.7).scale(0.6)
 
-        matrix.shift(np.array([8, -0.5, 0]))
+        matrix.shift(np.array([7.6, -0.5, 0]))
 
         columns0 = SurroundingRectangle(matrix.get_columns()[0], stroke_width=1).set_color(BLUE)
         matrix.add(columns0)
@@ -1174,7 +1275,6 @@ class ThreeDRotationVector_z_Latex(ThreeDScene):
         self.play(Write(rz))
         self.play(Write(matrix))
         self.play(Write(columns0_labes), Write(columns1_labes), Write(columns2_labes))
-
 
 class ThreeDRotationVector_y_Latex(ThreeDScene):
     def construct(self):
@@ -1301,26 +1401,25 @@ class ThreeDRotationVector_y_Latex(ThreeDScene):
             [r"-\sin\theta",  0,r"\cos\theta"],
         ], h_buff=1.7).scale(0.6)
 
-        matrix.shift(np.array([8, -0.5, 0]))
+        matrix.shift(np.array([7.6, -0.5, 0]))
 
         columns0 = SurroundingRectangle(matrix.get_columns()[0], stroke_width=1).set_color(BLUE)
         matrix.add(columns0)
-        columns0_labes = MathTex(r"e_3'").next_to(columns0, DOWN).scale(0.6).set_color(BLUE)
+        columns0_labes = MathTex(r"e_1'").next_to(columns0, DOWN).scale(0.6).set_color(BLUE)
 
         columns1 = SurroundingRectangle(matrix.get_columns()[1], stroke_width=1).set_color(BLUE)
         matrix.add(columns1)
-        columns1_labes = MathTex(r"e_1'").next_to(columns1, DOWN).scale(0.6).set_color(BLUE)
+        columns1_labes = MathTex(r"e_2'").next_to(columns1, DOWN).scale(0.6).set_color(BLUE)
 
         columns2 = SurroundingRectangle(matrix.get_columns()[2], stroke_width=1).set_color(BLUE)
         matrix.add(columns2)
-        columns2_labes = MathTex(r"e_2'").next_to(columns2, DOWN).scale(0.6).set_color(BLUE)
+        columns2_labes = MathTex(r"e_3'").next_to(columns2, DOWN).scale(0.6).set_color(BLUE)
 
         rz = MathTex(r"R_y=")
         rz.next_to(matrix,LEFT)
         self.play(Write(rz))
         self.play(Write(matrix))
         self.play(Write(columns0_labes), Write(columns1_labes), Write(columns2_labes))
-
 
 class ThreeDRotationVector_x_Latex(ThreeDScene):
     def construct(self):
@@ -1447,19 +1546,19 @@ class ThreeDRotationVector_x_Latex(ThreeDScene):
             [ 0, r"\sin\theta", r"\cos\theta"],
         ], h_buff=1.7).scale(0.6)
 
-        matrix.shift(np.array([8, -0.5, 0]))
+        matrix.shift(np.array([7.6, -0.5, 0]))
 
         columns0 = SurroundingRectangle(matrix.get_columns()[0], stroke_width=1).set_color(BLUE)
         matrix.add(columns0)
-        columns0_labes = MathTex(r"e_2'").next_to(columns0, DOWN).scale(0.6).set_color(BLUE)
+        columns0_labes = MathTex(r"e_1'").next_to(columns0, DOWN).scale(0.6).set_color(BLUE)
 
         columns1 = SurroundingRectangle(matrix.get_columns()[1], stroke_width=1).set_color(BLUE)
         matrix.add(columns1)
-        columns1_labes = MathTex(r"e_3'").next_to(columns1, DOWN).scale(0.6).set_color(BLUE)
+        columns1_labes = MathTex(r"e_2'").next_to(columns1, DOWN).scale(0.6).set_color(BLUE)
 
         columns2 = SurroundingRectangle(matrix.get_columns()[2], stroke_width=1).set_color(BLUE)
         matrix.add(columns2)
-        columns2_labes = MathTex(r"e_1'").next_to(columns2, DOWN).scale(0.6).set_color(BLUE)
+        columns2_labes = MathTex(r"e_3'").next_to(columns2, DOWN).scale(0.6).set_color(BLUE)
 
         rz = MathTex(r"R_x=")
         rz.next_to(matrix,LEFT)
@@ -1467,6 +1566,9 @@ class ThreeDRotationVector_x_Latex(ThreeDScene):
         self.play(Write(matrix))
         self.play(Write(columns0_labes), Write(columns1_labes), Write(columns2_labes))
 
+
+
+
 with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl"}):
-    ThreeDRotationVector_y_Latex().render()
+    ThreeDRotationVector_base_vector().render()
     exit(1)
