@@ -69,8 +69,9 @@ class ThreeDRotationVector向量基础(ThreeDScene):
 
         vector=OpenGLArrow3D(start=[0,0,0],end=[2,2,2],color=BLUE)
         self.play(Create(vector))
+        return
 
-        self.begin_ambient_camera_rotation(rate=1)
+        # self.begin_ambient_camera_rotation(rate=1)
         # self.wait(2)
 
         # return
@@ -1570,5 +1571,5 @@ class ThreeDRotationVector_x_Latex(ThreeDScene):
 
 
 with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl"}):
-    ThreeDRotationVector_base_vector().render()
+    ThreeDRotationVector向量基础().render()
     exit(1)
