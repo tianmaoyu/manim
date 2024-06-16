@@ -52,13 +52,13 @@ class ThreeDRotationVector向量基础(ThreeDScene):
         start_dot_lables= MathTex("O(0,0,0)").scale(0.4)
         # start_dot_lables.shift([0,0,0])
         start_dot_lables.next_to(start_dot)
-        # self.add_fixed_orientation_mobjects(start_dot_lables)
+        self.add_fixed_orientation_mobjects(start_dot_lables)
         self.add(start_dot_lables)
 
         end_dot_lables= MathTex("P(x,y,z)").scale(0.4)
         # end_dot_lables.shift([2,2,2])
         end_dot_lables.next_to(end_dot)
-        # self.add_fixed_orientation_mobjects(end_dot_lables)
+        self.add_fixed_orientation_mobjects(end_dot_lables)
         self.add(end_dot_lables)
 
 
@@ -69,10 +69,10 @@ class ThreeDRotationVector向量基础(ThreeDScene):
 
         vector=OpenGLArrow3D(start=[0,0,0],end=[2,2,2],color=BLUE)
         self.play(Create(vector))
-        return
 
-        # self.begin_ambient_camera_rotation(rate=1)
-        # self.wait(2)
+        self.begin_ambient_camera_rotation(rate=1)
+        self.wait(2)
+        return
 
         # return
         # self.move_camera(theta=0 * DEGREES, phi=0 * DEGREES)
@@ -81,7 +81,7 @@ class ThreeDRotationVector向量基础(ThreeDScene):
         # self.remove_fixed_orientation_mobjects(start_dot_lables)
 
 
-        self.move_camera(frame_center=[6, 0, 0])
+        # self.move_camera(frame_center=[6, 0, 0])
 
         # start_dot_lables= MathTex("O(0,0,0)").scale(0.4)
         # start_dot_lables.shift([-6,0,0])
@@ -99,7 +99,7 @@ class ThreeDRotationVector向量基础(ThreeDScene):
 \vec{e_1}=\begin{bmatrix} 1 \\ 0 \\ 0\end{bmatrix}
         """)
 
-        self.add_fixed_in_frame_mobjects(tex1)
+        self.add_fixed_in_frame_mobjects(tex1.to_corner(UL))
         # tex1.shift(np.array([7.5, 3, 0]))
 
         tex2 = MathTex(r"""
