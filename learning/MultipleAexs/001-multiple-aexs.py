@@ -76,15 +76,15 @@ class ThreeDRotation000(ThreeDScene):
         1 & 0& 0\\
         0 & 1& 0\\
         0 & 0& 1
-        \end{bmatrix} """).scale(0.7)
+        \end{bmatrix} """).scale(0.8)
 
         matrix2 = MathTex(r"""
         M =
         \begin{bmatrix} 
-        cos(\alpha) & -sin(\alpha) &0 \\ 
-        sin(\alpha) & cos(\alpha) &0\\
+        cos(30) & -sin(30) &0 \\ 
+        sin(30) & cos(30) &0\\
         0 & 0 &1
-        \end{bmatrix} """).set_color(YELLOW).scale(0.7)
+        \end{bmatrix} """).set_color(YELLOW).scale(0.55)
 
         self.add_fixed_in_frame_mobjects(matrix.to_corner(UL))
 
