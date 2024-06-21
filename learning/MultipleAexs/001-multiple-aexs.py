@@ -159,28 +159,11 @@ class MultipleAexs002(ThreeDScene):
         ]);
 
 
-
         animate = group.animate.apply_matrix(about_point=[2, 2, 2], matrix=matrix_init@Ry@Rz)
         self.play(animate)
 
-        label0= labels[0]
-        label1 = labels[1]
-        label2 = labels[2]
 
-        label0_1= MarkupText("X")
-        label1_1 = MarkupText("Y")
-        label2_1 = MarkupText("-Z")
-
-
-        self.play(ReplacementTransform(label0_1,label0))
-        self.play(ReplacementTransform(label1_1, label1))
-
-        # ReplacementTransform
-        # label0.become(label0_1)
-        # label1.become(label1_1)
-        # label2_1.become(label2_1)
-
-        self.begin_ambient_camera_rotation(rate=-0.2)
+        self.begin_ambient_camera_rotation(rate=0.2)
 
         self.wait(1)
 

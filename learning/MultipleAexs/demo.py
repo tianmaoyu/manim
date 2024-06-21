@@ -30,6 +30,17 @@ class MultipleAexs001(ThreeDScene):
         self.play(ReplacementTransform(label0_1, label0))
 
 
-with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl"}):
-    MultipleAexs001().render()
+class VariableExample(Scene):
+    def construct(self):
+
+        x_var = Variable(2.0, 'x', num_decimal_places=3)
+
+        self.add(x_var)
+        animate = x_var.tracker.set_value(5)
+        # self.play(, run_time=2, rate_func=linear)
+        # self.wait(1)
+
+ # "renderer": "opengl"
+with tempconfig({"preview": True, "disable_caching": False}):
+    VariableExample().render()
     exit(1)
