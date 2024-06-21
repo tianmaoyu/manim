@@ -726,6 +726,9 @@ class OpenGLVMobject(OpenGLMobject):
         nppc = self.n_points_per_curve
         remainder = len(points) % nppc
         points = points[: len(points) - remainder]
+        #一个bug 修复
+        if  isinstance(points,list):
+            points=np.array(points)
         return points.reshape((-1, nppc, 3))
 
     def get_bezier_tuples(self):
