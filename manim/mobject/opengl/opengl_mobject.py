@@ -2326,6 +2326,12 @@ class OpenGLMobject:
                     continue
                 arr1 = mob1.data[key]
                 arr2 = mob2.data[key]
+                if isinstance(arr2,float):
+                    continue;
+                    # arr2=[arr2]
+                if isinstance(arr1, float):
+                    continue;
+                    # arr1 = [arr1]
                 if len(arr2) > len(arr1):
                     mob1.data[key] = resize_preserving_order(arr1, len(arr2))
                 elif len(arr1) > len(arr2):
