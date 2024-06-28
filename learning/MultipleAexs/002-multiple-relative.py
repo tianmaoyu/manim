@@ -758,6 +758,6 @@ class MultipleRelative005(ThreeDScene):
 
 
 with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl"}):
-    MultipleRelative001_2().render()
+    MultipleRelative001_1().render()
     # MultipleAexs002().render()
     exit(1)

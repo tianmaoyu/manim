@@ -414,7 +414,7 @@ class MultipleAexs0032(ThreeDScene):
         # animate = group.animate.apply_matrix(about_point=[2, 2, 2], matrix=Rx)
         # self.play(animate)
 
-        animate = group.animate.apply_matrix(about_point=[2, 2, 2], matrix=matrix_init.T)
+        animate = group.animate.apply_matrix(about_point=[2, 2, 2], matrix=matrix_init)
         self.play(animate)
 
 
@@ -573,6 +573,182 @@ class MultipleAexs005(ThreeDScene):
         self.begin_ambient_camera_rotation(rate=-0.2)
         self.wait(1)
 
+
+#复合变换 -非原点-旋转-分布
+class MultipleAexs004_2(ThreeDScene):
+    def construct(self):
+        self.next_section(skip_animations=True)
+        self.set_camera_orientation(phi=70 * DEGREES, theta=35 * DEGREES)
+
+        axes = ThreeDAxes(include_numbers=False, x_range=[-3, 3, 1], y_range=[-3, 3, 1], z_range=[-3, 3, 1], x_length=6,
+                          y_length=6, z_length=6)
+        axes.add(axes.get_axis_labels())
+        number_plane = NumberPlane(include_numbers=False, x_range=[-7, 7, 1], y_range=[-7, 7, 1], z_range=[-4, 4, 1],
+                                   x_length=14, y_length=14, z_length=8)
+        self.play(Create(number_plane))
+        self.play(Create(axes))
+
+        axes1 = ThreeDAxes(include_numbers=False, x_range=[-3, 3, 1], y_range=[-3, 3, 1], z_range=[-3, 3, 1],
+                           x_length=6,
+                           y_length=6, z_length=6)
+
+        axes1.add(axes1.get_axis_labels(x_label=MarkupText("x").scale(0.5), y_label=MarkupText("y").scale(0.5),
+                                        z_label=MarkupText("z").scale(0.5)))
+        axes1.set_color(YELLOW)
+
+        def uv_func(u, v):
+            x = 1
+            y = u
+            z = v
+            return [x, y, z]
+
+        planSurface = OpenGLSurface(uv_func=uv_func, u_range=[-0.4, 0.4], v_range=[-0.3, 0.3],
+                                    depth_test=False).set_color(RED).set_opacity(0.5)
+
+        self.play(Create(planSurface))
+        self.play(Create(axes1))
+
+        group = Group()
+        group.add(planSurface, axes1)
+
+
+        matrix_init = np.array([
+            [0, 1, 0],
+            [1, 0, 0],
+            [0, 0, -1]
+        ])
+        # self.play(ApplyMethod(group.apply_matrix, matrix_init))
+
+        self.play(group.animate.shift([2, 2, 2]))
+
+        self.move_camera(zoom=0.75, run_time=2)
+
+        yawRad = -34.3 * DEGREES
+        pitchRad = -47.4 * DEGREES
+        rollRad = 0.0
+        Rz = np.array([
+            [np.cos(yawRad), -np.sin(yawRad), 0],
+            [np.sin(yawRad), np.cos(yawRad), 0],
+            [0, 0, 1]
+        ]);
+
+        Ry = np.array([
+            [np.cos(pitchRad), 0, np.sin(pitchRad)],
+            [0, 1, 0],
+            [-np.sin(pitchRad), 0, np.cos(pitchRad)]
+        ]);
+
+        Rx = np.array([
+            [1, 0, 0],
+            [0, np.cos(rollRad), -np.sin(rollRad)],
+            [0, np.sin(rollRad), np.cos(rollRad)]
+        ]);
+        self.next_section(skip_animations=False)
+        self.wait(2)
+
+
+        animate = group.animate.shift([-2, -2, -2])
+        self.play(animate)
+
+
+        animate = group.animate.apply_matrix(matrix=Ry@Rz)
+        self.play(animate)
+
+        self.play(group.animate.shift([2, 2, 2]))
+        self.wait()
+        #
+        # animate = group.animate.apply_matrix(about_point=[2, 2, 2], matrix=Ry)
+        # self.play(animate)
+        #
+        # animate = group.animate.apply_matrix(about_point=[2, 2, 2], matrix=Rx)
+        # self.play(animate)
+        #
+        # animate = group.animate.apply_matrix(about_point=[2, 2, 2], matrix=matrix_init)
+        # self.play(animate)
+#复合变换 -非原点-非标准-分布
+class MultipleAexs004_3(ThreeDScene):
+    def construct(self):
+        self.next_section(skip_animations=True)
+        self.set_camera_orientation(phi=70 * DEGREES, theta=35 * DEGREES)
+
+        axes = ThreeDAxes(include_numbers=False, x_range=[-3, 3, 1], y_range=[-3, 3, 1], z_range=[-3, 3, 1], x_length=6,
+                          y_length=6, z_length=6)
+        axes.add(axes.get_axis_labels())
+        number_plane = NumberPlane(include_numbers=False, x_range=[-7, 7, 1], y_range=[-7, 7, 1], z_range=[-4, 4, 1],
+                                   x_length=14, y_length=14, z_length=8)
+        self.play(Create(number_plane))
+        self.play(Create(axes))
+
+        axes1 = ThreeDAxes(include_numbers=False, x_range=[-3, 3, 1], y_range=[-3, 3, 1], z_range=[-3, 3, 1],
+                           x_length=6,
+                           y_length=6, z_length=6)
+
+        axes1.add(axes1.get_axis_labels(x_label=MarkupText("x").scale(0.5), y_label=MarkupText("y").scale(0.5),
+                                        z_label=MarkupText("z").scale(0.5)))
+        axes1.set_color(YELLOW)
+
+        def uv_func(u, v):
+            x = 1
+            y = u
+            z = v
+            return [x, y, z]
+
+        planSurface = OpenGLSurface(uv_func=uv_func, u_range=[-0.4, 0.4], v_range=[-0.3, 0.3],
+                                    depth_test=False).set_color(RED).set_opacity(0.5)
+
+        self.play(Create(planSurface))
+        self.play(Create(axes1))
+
+        group = Group()
+        group.add(planSurface, axes1)
+
+
+        matrix_init = np.array([
+            [0, 1, 0],
+            [1, 0, 0],
+            [0, 0, -1]
+        ])
+        self.play(ApplyMethod(group.apply_matrix, matrix_init))
+
+        self.play(group.animate.shift([2, 2, 2]))
+
+        self.move_camera(zoom=0.75, run_time=2)
+
+        yawRad = -34.3 * DEGREES
+        pitchRad = -47.4 * DEGREES
+        rollRad = 0.0
+        Rz = np.array([
+            [np.cos(yawRad), -np.sin(yawRad), 0],
+            [np.sin(yawRad), np.cos(yawRad), 0],
+            [0, 0, 1]
+        ]);
+
+        Ry = np.array([
+            [np.cos(pitchRad), 0, np.sin(pitchRad)],
+            [0, 1, 0],
+            [-np.sin(pitchRad), 0, np.cos(pitchRad)]
+        ]);
+
+        Rx = np.array([
+            [1, 0, 0],
+            [0, np.cos(rollRad), -np.sin(rollRad)],
+            [0, np.sin(rollRad), np.cos(rollRad)]
+        ]);
+        self.next_section(skip_animations=False)
+        self.wait(2)
+
+
+        animate = group.animate.shift([-2, -2, -2])
+        self.play(animate)
+
+        animate = group.animate.apply_matrix(matrix=matrix_init.T)
+        self.play(animate)
+
+        animate = group.animate.apply_matrix(matrix= matrix_init@Rx@Ry@Rz)
+        self.play(animate)
+
+        self.play(group.animate.shift([2, 2, 2]))
+        self.wait()
 
 
 with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl"}):
