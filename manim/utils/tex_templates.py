@@ -61,6 +61,14 @@ class TexTemplateLibrary:
     """
 
     default = TexTemplate(preamble=_3b1b_preamble)
+    # default = TexTemplate(
+    #     tex_compiler="xelatex",
+    #     output_format=".xdv",
+    #     preamble=_3b1b_preamble.replace(
+    #         r"\DisableLigatures{encoding = *, family = * }",
+    #         r"\usepackage[UTF8]{ctex}",
+    #     ),
+    # )
     """An instance of the default TeX template in manim"""
 
     threeb1b = TexTemplate(preamble=_3b1b_preamble)
