@@ -85,6 +85,7 @@ class Multiple2DRelative000(ThreeDScene):
 class Multiple2DRelative001(ThreeDScene):
     def construct(self):
 
+
         axes = Axes(include_numbers=False, x_range=[-4, 4, 1], y_range=[-4, 4, 1], z_range=[-4, 4, 1], x_length=8,
                     y_length=8, z_length=6)
         axes.add(axes.get_axis_labels())
@@ -121,18 +122,18 @@ class Multiple2DRelative001(ThreeDScene):
         arrow= OpenGLArrow3D(start=ORIGIN,end=dot.get_center())
 
 
-        self.play(
-            axes.animate.set_opacity(0),
-            lable.animate.set_opacity(0),
-            FadeIn(arrow),
-        )
+        # self.play(
+        #     axes.animate.set_opacity(0),
+        #     lable.animate.set_opacity(0),
+        #     FadeIn(arrow),
+        # )
 
         matrix = MathTex(r"""
                M_白=
                \begin{bmatrix}
-               1 & 0& \\
-               0 & 1& 
-               \end{bmatrix} """,tex_template=TexTemplateLibrary.ctex)
+               1 & 0 \\
+               0 & 1 
+               \end{bmatrix}""",tex_template=TexTemplateLibrary.ctex)
 
         matrix2 = MathTex(r"""
                M_黄 =
@@ -148,18 +149,105 @@ class Multiple2DRelative001(ThreeDScene):
 
         self.wait()
 
+        # self.play(
+        #     axes.animate.set_opacity(1),
+        #     lable.animate.set_opacity(1),
+        #     axes1.animate.set_opacity(0),
+        #     lable1.animate.set_opacity(0),
+        # )
+
+        # self.wait()
+
+
+class Multiple2DRelative002(ThreeDScene):
+    def construct(self):
+
+
+        axes = Axes(include_numbers=False, x_range=[-4, 4, 1], y_range=[-4, 4, 1], z_range=[-4, 4, 1], x_length=8,
+                    y_length=8, z_length=6)
+        axes.add(axes.get_axis_labels())
+
+        dot = Dot(point=[2, 0.5, 0])
+        lable = MarkupText("P(2,0.5)").scale(0.3)
+        lable.next_to(dot, RIGHT, buff=0.1)
+        self.add(lable)
+        self.play(FadeIn(axes), FadeIn(dot), FadeIn(lable))
+
+        self.wait()
+
+        axes1 = Axes(include_numbers=False, x_range=[-4, 4, 1], y_range=[-4, 4, 1], z_range=[-4, 4, 1], x_length=8,
+                     y_length=8, z_length=6)
+
+        axes1.add(axes1.get_axis_labels(x_label="x'",y_label="y'"))
+        axes1.set_color(YELLOW)
+        dot1 = Dot(point=[2, 0.5, 0], color=YELLOW)
+        lable1 = MarkupText("P'(2,0.5)").set_color(YELLOW).scale(0.3)
+        lable1.next_to(dot1, RIGHT, buff=0.1)
+
+        rad = 30 * DEGREES
+        matrix_y = np.array([
+            [np.cos(rad), -np.sin(rad), 0],
+            [np.sin(rad), np.cos(rad), 0],
+            [0, 0, 1]
+        ])
         self.play(
-            axes.animate.set_opacity(1),
-            lable.animate.set_opacity(1),
-            axes1.animate.set_opacity(0),
-            lable1.animate.set_opacity(0),
+            ApplyMethod(axes1.apply_matrix, matrix_y),
+            ApplyMethod(dot1.apply_matrix, matrix_y),
+            ApplyMethod(lable1.apply_matrix, matrix_y)
+        )
+
+
+
+
+        # self.play(
+        #     axes.animate.set_opacity(0),
+        #     lable.animate.set_opacity(0),
+        #     FadeIn(arrow),
+        # )
+        self.move_camera(zoom=0.8)
+        matrix = MathTex(r"""
+               M=
+               \begin{bmatrix}
+               1 & 0 \\
+               0 & 1 
+               \end{bmatrix}""",tex_template=TexTemplateLibrary.ctex)
+
+        matrix2 = MathTex(r"""
+               M' =
+               \begin{bmatrix} 
+               cos(\theta) & -sin(\theta) \\ 
+               sin(\theta) & cos(\theta) 
+               \end{bmatrix} """,tex_template=TexTemplateLibrary.ctex).set_color(YELLOW)
+
+        self.play(
+            Create(matrix.to_corner(UL+LEFT)),
+            Create(matrix2.next_to(matrix,direction=DOWN,aligned_edge=LEFT)),
         )
 
         self.wait()
 
 
 
+        self.play(
+            axes1.animate.shift([2,2,0]),
+            lable1.animate.shift([2,2,0]),
+            dot1.animate.shift([2,2,0]),
 
+        )
+        dot_o1 = Dot(point=ORIGIN)
+        lable_o1 = MarkupText("O(0,0)").scale(0.3)
+        lable_o1.next_to(dot_o1, RIGHT, buff=0.1)
+
+        dot_o2 = Dot(point=[2, 2, 0], color=YELLOW)
+        lable_o2 = MarkupText("O'(2,2)").set_color(YELLOW).scale(0.3)
+        lable_o2.next_to(dot_o2, RIGHT, buff=0.1)
+
+        self.add(dot_o1,lable_o1,dot_o2,lable_o2)
+
+        arrow = OpenGLArrow3D(start=ORIGIN, end=dot_o2.get_center())
+        self.play(Create(arrow))
+
+        # self.wait()
 
 #
 class Multiple2DRelative0012(ThreeDScene):
@@ -417,5 +505,5 @@ class Multiple2DRelative0032(ThreeDScene):
 
 
 with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl"}):
-    Multiple2DRelative001().render()
+    Multiple2DRelative002().render()
     exit(1)
