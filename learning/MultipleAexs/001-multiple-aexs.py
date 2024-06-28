@@ -743,7 +743,7 @@ class MultipleAexs004_3(ThreeDScene):
 
         animate = group.animate.apply_matrix(matrix=matrix_init.T)
         self.play(animate)
-
+        # 先还原- 在变换-移动
         animate = group.animate.apply_matrix(matrix= matrix_init@Rx@Ry@Rz)
         self.play(animate)
 
