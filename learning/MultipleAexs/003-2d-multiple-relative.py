@@ -101,10 +101,10 @@ class Multiple2DRelative001(ThreeDScene):
         axes1 = Axes(include_numbers=False, x_range=[-4, 4, 1], y_range=[-4, 4, 1], z_range=[-4, 4, 1], x_length=8,
                      y_length=8, z_length=6)
 
-        axes1.add(axes1.get_axis_labels())
+        axes1.add(axes1.get_axis_labels(x_label="x'",y_label="y'"))
         axes1.set_color(YELLOW)
         dot1 = Dot(point=[2, 0.5, 0], color=YELLOW)
-        lable1 = MarkupText("P(2,0.5)").set_color(YELLOW).scale(0.3)
+        lable1 = MarkupText("P'(2,0.5)").set_color(YELLOW).scale(0.3)
         lable1.next_to(dot1, RIGHT, buff=0.1)
 
         rad = 30 * DEGREES
@@ -129,14 +129,14 @@ class Multiple2DRelative001(ThreeDScene):
         # )
 
         matrix = MathTex(r"""
-               M_白=
+               M=
                \begin{bmatrix}
                1 & 0 \\
                0 & 1 
                \end{bmatrix}""",tex_template=TexTemplateLibrary.ctex)
 
         matrix2 = MathTex(r"""
-               M_黄 =
+               M' =
                \begin{bmatrix} 
                cos(\theta) & -sin(\theta) \\ 
                sin(\theta) & cos(\theta) 
@@ -251,5 +251,5 @@ class Multiple2DRelative002(ThreeDScene):
 
 
 with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl"}):
-    Multiple2DRelative002().render()
+    Multiple2DRelative001().render()
     exit(1)
