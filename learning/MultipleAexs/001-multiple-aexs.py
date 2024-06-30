@@ -752,6 +752,6 @@ class MultipleAexs004_3(ThreeDScene):
 
 
 with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl"}):
-    MultipleAexs0032().render()
+    MultipleAexs004().render()
     # MultipleAexs002().render()
     exit(1)
