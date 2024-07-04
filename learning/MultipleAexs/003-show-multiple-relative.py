@@ -161,9 +161,69 @@ class Case_2D_Rotation_Vector_ADD_Sub(ThreeDScene):
 
 class Case_Vector_Transfrom_Multiplication(ThreeDScene):
     def construct(self):
-        pass
+        latex_str1 = r"""
+                \begin{bmatrix} x\\y\\1 \end{bmatrix}
+=
+\begin{bmatrix} 1&0&2\\0&1&2\\0&0&1\end{bmatrix}
+\begin{bmatrix} 
+cos(30) & -sin(30) &0 \\
+sin(30) & cos(30) &0 \\
+0&0&1
+\end{bmatrix}
+\begin{bmatrix} 1&0&-2\\0&1&-2\\0&0&1\end{bmatrix}
+\begin{bmatrix}  x\\  y\\1 \end{bmatrix}
+           """
+        math_tex1 = MathTex(latex_str1)
+        self.play(Create(math_tex1))
+        self.play(math_tex1.animate.to_corner(UL))
+
+        image_array = np.array(Image.open("src/test.jpg").convert("RGBA"))
+        # image_array_part = image_array[50:150, 50:150]
+        image = NumpyImage(image_array=image_array, distance=0.01, stroke_width=1, depth_test=False)
+        self.play(Create(image))
+
+        axes = ThreeDAxes(include_numbers=False, x_range=[-3, 3, 1], y_range=[-3, 3, 1], z_range=[-3, 3, 1], x_length=6,
+                          y_length=6, z_length=6)
+        self.play(Create(axes))
+        #
+        # latex_str2 = r"""
+        #   \begin{bmatrix} cos(30) & -sin(30) \\ sin(30) & cos(30)\end{bmatrix}
+        #    \cdot
+        # """
+        # math_tex2 = MathTex(latex_str2).to_corner(corner=LEFT)
+        # self.play(Create(math_tex2.next_to(math_tex1, direction=DOWN)))
+
+        mover_vector = np.array([2, 2, 0])
+        dot = Dot(point=mover_vector, color=YELLOW)
+        self.add(dot)
+        line = DashedLine(start=ORIGIN, end=mover_vector, color=YELLOW)
+        self.play(Create(line), Create(line.copy()))
+
+        rad = 30 * DEGREES
+        matrix = np.array([
+            [np.cos(rad), -np.sin(rad), 0],
+            [np.sin(rad), np.cos(rad), 0],
+            [0, 0, 1]
+        ])
+        matrix2 = np.array([
+            [1, 0, 2],
+            [0, 1, 2],
+            [0, 0, 1]
+        ])
+        matrix3 = np.array([
+            [1, 0, -2],
+            [0, 1, -2],
+            [0, 0, 1]
+        ])
+        points= image.points.copy()
+        points[:,2]=1
+        new_points = (matrix2 @matrix @ matrix3 @ points.T).T
+
+        line_animate = line.animate.rotate(30 * DEGREES, about_point=mover_vector)
+        arc = Arc(start_angle=225 * DEGREES, angle=30 * DEGREES, arc_center=mover_vector)
+        self.play(ApplyMethod(image.set_points, new_points), line_animate, Create(arc))
 
 
 with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl"}):
-    Case_2D_Rotation_Vector_ADD_Sub().render()
+    Case_Vector_Transfrom_Multiplication().render()
     exit(1)
