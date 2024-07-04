@@ -35,7 +35,7 @@ class Complex001(ThreeDScene):
 
         image_array = np.array(Image.open("src/test.jpg").convert("RGBA"))
         image_array_part = image_array[50:150, 50:150]
-        image = NumpyImage(image_array=image_array_part, distance=0.025, stroke_width=2)
+        image = NumpyImage(image_array=image_array_part, distance=0.025, stroke_width=2,depth_test=False)
         self.play(Create(image))
 
         self.play(Create(Axes(tips=True,include_numbers=False)))
@@ -100,7 +100,7 @@ class Complex002(ThreeDScene):
 
         image_array = np.array(Image.open("src/test.jpg").convert("RGBA"))
         image_array_part = image_array[50:150, 50:150]
-        image = NumpyImage(image_array=image_array_part, distance=0.025, stroke_width=2)
+        image = NumpyImage(image_array=image_array_part, distance=0.025, stroke_width=2,depth_test=False)
         self.play(Create(image))
 
         self.play(Create(Axes(tips=True,include_numbers=False)))
@@ -336,5 +336,5 @@ class Complex006(ThreeDScene):
         self.play(ApplyMethod(image.set_points, new_points))
 
 with tempconfig({"preview": True, "disable_caching": True, "renderer": "opengl"}):
-    Complex006().render()
+    Complex002().render()
     exit(1)
