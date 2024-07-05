@@ -1571,5 +1571,5 @@ class ThreeDRotationVector_x_Latex(ThreeDScene):
 
 
 with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl"}):
-    ThreeDRotationVector向量基础().render()
+    ThreeDRotationVector向量基础2().render()
     exit(1)
