@@ -250,7 +250,7 @@ class Three_Two_Dimensional_coordinate_systems(ThreeDScene):
     def construct(self):
         axes = Axes(include_numbers=False, x_range=[-4, 4, 1], y_range=[-4, 4, 1], z_range=[-4, 4, 1], x_length=8,
                     y_length=8, z_length=6)
-        axes.add(axes.get_axis_labels())
+        # axes.add(axes.get_axis_labels())
 
         dot = Dot(point=[2, 0.5, 0])
         lable = MarkupText("P(2,0.5)").scale(0.3)
@@ -263,7 +263,7 @@ class Three_Two_Dimensional_coordinate_systems(ThreeDScene):
         axes1 = Axes(include_numbers=False, x_range=[-4, 4, 1], y_range=[-4, 4, 1], z_range=[-4, 4, 1], x_length=8,
                      y_length=8, z_length=6)
 
-        axes1.add(axes1.get_axis_labels(x_label="x'", y_label="y'"))
+        # axes1.add(axes1.get_axis_labels(x_label="x'", y_label="y'"))
         axes1.set_color(YELLOW)
         dot1 = Dot(point=[2, 0.5, 0], color=YELLOW)
         lable1 = MarkupText("P'(2,0.5)").set_color(YELLOW).scale(0.3)
@@ -280,27 +280,31 @@ class Three_Two_Dimensional_coordinate_systems(ThreeDScene):
             ApplyMethod(dot1.apply_matrix, matrix_y),
             ApplyMethod(lable1.apply_matrix, matrix_y)
         )
-        return
 
-        self.move_camera(zoom=0.8)
-        matrix = MathTex(r"""
-                       M=
-                       \begin{bmatrix}
-                       1 & 0 \\
-                       0 & 1 
-                       \end{bmatrix}""", tex_template=TexTemplateLibrary.ctex)
+        axes2 = Axes(include_numbers=False, x_range=[-4, 4, 1], y_range=[-4, 4, 1], z_range=[-4, 4, 1], x_length=8,
+                     y_length=8, z_length=6)
 
-        matrix2 = MathTex(r"""
-                       M' =
-                       \begin{bmatrix} 
-                       cos(\theta) & -sin(\theta) \\ 
-                       sin(\theta) & cos(\theta) 
-                       \end{bmatrix} """, tex_template=TexTemplateLibrary.ctex).set_color(YELLOW)
+        # axes2.add(axes2.get_axis_labels(x_label="x''", y_label="y''"))
+        axes2.set_color(BLUE)
+        dot2 = Dot(point=[2, 0.5, 0], color=BLUE)
+        lable2 = MarkupText("P''(2,0.5)").set_color(BLUE).scale(0.3)
+        lable2.next_to(dot2, RIGHT, buff=0.1)
+
+        rad = -30 * DEGREES
+        matrix_y = np.array([
+            [np.cos(rad), -np.sin(rad), 0],
+            [np.sin(rad), np.cos(rad), 0],
+            [0, 0, 1]
+        ])
 
         self.play(
-            Create(matrix.to_corner(UL + LEFT)),
-            Create(matrix2.next_to(matrix, direction=DOWN, aligned_edge=LEFT)),
+            ApplyMethod(axes2.apply_matrix, matrix_y),
+            ApplyMethod(dot2.apply_matrix, matrix_y),
+            ApplyMethod(lable2.apply_matrix, matrix_y)
         )
+
+        self.move_camera(zoom=0.7)
+
 
         self.wait()
 
@@ -310,6 +314,14 @@ class Three_Two_Dimensional_coordinate_systems(ThreeDScene):
             dot1.animate.shift([2, 2, 0]),
 
         )
+
+        self.play(
+            axes2.animate.shift([3, -2, 0]),
+            lable2.animate.shift([3, -2, 0]),
+            dot2.animate.shift([3, -2, 0]),
+
+        )
+
         dot_o1 = Dot(point=ORIGIN)
         lable_o1 = MarkupText("O(0,0)").scale(0.3)
         lable_o1.next_to(dot_o1, RIGHT, buff=0.1)
@@ -318,7 +330,40 @@ class Three_Two_Dimensional_coordinate_systems(ThreeDScene):
         lable_o2 = MarkupText("O'(2,2)").set_color(YELLOW).scale(0.3)
         lable_o2.next_to(dot_o2, RIGHT, buff=0.1)
 
-        self.add(dot_o1, lable_o1, dot_o2, lable_o2)
+        dot_o3 = Dot(point=[3, -2, 0], color=BLUE)
+        lable_o3 = MarkupText("O''(3, -2, 0)").set_color(BLUE).scale(0.3)
+        lable_o3.next_to(dot_o3, RIGHT, buff=0.1)
+
+        self.add(dot_o1, lable_o1, dot_o2, lable_o2,dot_o3,lable_o3)
+
+        matrix1 = MathTex(r"""
+                            M=
+                            \begin{bmatrix}
+                            1 & 0 \\
+                            0 & 1 
+                            \end{bmatrix}""", tex_template=TexTemplateLibrary.ctex)
+        matrix2 = MathTex(r"""
+                            M' =
+                            \begin{bmatrix} 
+                            cos(30) & -sin(30) \\ 
+                            sin(30) & cos(30) 
+                            \end{bmatrix} """, tex_template=TexTemplateLibrary.ctex).set_color(YELLOW)
+        matrix3 = MathTex(r"""
+                                 M'' =
+                                 \begin{bmatrix} 
+                                 cos(-30) & -sin(-30) \\ 
+                                 sin(-30) & cos(-30) 
+                                 \end{bmatrix} """, tex_template=TexTemplateLibrary.ctex).set_color(BLUE)
+        matrix1.scale(0.7).fix_in_frame()
+        matrix2.scale(0.7).fix_in_frame()
+        matrix3.scale(0.7).fix_in_frame()
+
+        self.play(FadeIn(matrix1.to_corner(UL)))
+        self.play(FadeIn(matrix2.next_to(matrix1, direction=DOWN, aligned_edge=LEFT)))
+        self.play(FadeIn(matrix3.next_to(matrix2, direction=DOWN, aligned_edge=LEFT)))
+
+
+
 class ThreeDAexs_Matrix_Base_Vector(ThreeDScene):
     def construct(self):
         self.set_camera_orientation(phi=70 * DEGREES, theta=35 * DEGREES)
@@ -391,7 +436,113 @@ e_{1z} & e_{2z} & e_{3z}
         self.begin_ambient_camera_rotation(rate=0.2)
         self.wait(2)
 
+class Five_Step_Rotation_For_Aexs(ThreeDScene):
+    def construct(self):
+        self.next_section(skip_animations=True)
+        self.set_camera_orientation(phi=70 * DEGREES, theta=35 * DEGREES)
+
+        axes = ThreeDAxes(include_numbers=False, x_range=[-3, 3, 1], y_range=[-3, 3, 1], z_range=[-3, 3, 1], x_length=6,
+                          y_length=6, z_length=6)
+        axes.add(axes.get_axis_labels())
+        number_plane = NumberPlane(include_numbers=False, x_range=[-7, 7, 1], y_range=[-7, 7, 1], z_range=[-4, 4, 1],
+                                   x_length=14, y_length=14, z_length=8)
+        self.play(Create(number_plane))
+        self.play(Create(axes))
+
+        axes1 = ThreeDAxes(include_numbers=False, x_range=[-3, 3, 1], y_range=[-3, 3, 1], z_range=[-3, 3, 1],
+                           x_length=6,
+                           y_length=6, z_length=6)
+
+        axes1.add(axes1.get_axis_labels(x_label=MarkupText("x").scale(0.5), y_label=MarkupText("y").scale(0.5),
+                                        z_label=MarkupText("z").scale(0.5)))
+        axes1.set_color(YELLOW)
+
+        def uv_func(u, v):
+            x = 1
+            y = u
+            z = v
+            return [x, y, z]
+
+        planSurface = OpenGLSurface(uv_func=uv_func, u_range=[-0.4, 0.4], v_range=[-0.3, 0.3],
+                                    depth_test=False).set_color(RED).set_opacity(0.5)
+
+        self.play(Create(planSurface))
+        self.play(Create(axes1))
+
+        group = Group()
+        group.add(planSurface, axes1)
+
+
+        matrix_init = np.array([
+            [0, 1, 0],
+            [1, 0, 0],
+            [0, 0, -1]
+        ])
+        self.play(ApplyMethod(group.apply_matrix, matrix_init))
+
+        self.play(group.animate.shift([2, 2, 2]))
+
+        self.move_camera(zoom=0.75, run_time=2)
+
+        yawRad = -34.3 * DEGREES
+        pitchRad = -47.4 * DEGREES
+        rollRad = 0.0
+        Rz = np.array([
+            [np.cos(yawRad), -np.sin(yawRad), 0],
+            [np.sin(yawRad), np.cos(yawRad), 0],
+            [0, 0, 1]
+        ]);
+
+        Ry = np.array([
+            [np.cos(pitchRad), 0, np.sin(pitchRad)],
+            [0, 1, 0],
+            [-np.sin(pitchRad), 0, np.cos(pitchRad)]
+        ]);
+
+        Rx = np.array([
+            [1, 0, 0],
+            [0, np.cos(rollRad), -np.sin(rollRad)],
+            [0, np.sin(rollRad), np.cos(rollRad)]
+        ]);
+        self.next_section(skip_animations=False)
+        self.wait(2)
+
+        image = self.renderer.get_frame()
+        image_mobject = ImagePixelMobject(image=image)
+        image_mobject.fix_in_frame()
+
+        self.add(image_mobject.scale(0.5).to_corner(UL))
+
+        animate = group.animate.shift([-2, -2, -2])
+        self.play(animate)
+
+        animate = group.animate.apply_matrix(matrix=matrix_init.T)
+        self.play(animate)
+        # 先还原- 在变换-移动
+        animate = group.animate.apply_matrix(matrix= Rx@Ry@Rz)
+        self.play(animate)
+
+        animate = group.animate.apply_matrix(matrix=matrix_init)
+        self.play(animate)
+
+        self.play(group.animate.shift([2, 2, 2]))
+        self.wait()
+
+        image1 = self.renderer.get_frame()
+        image_mobject1=ImagePixelMobject(image=image1)
+        image_mobject1.fix_in_frame()
+
+        self.add(image_mobject1.scale(0.5).next_to(image_mobject,direction=DOWN))
+
+        box = SurroundingRectangle(image_mobject).fix_in_frame()
+        box2 = SurroundingRectangle(image_mobject1).fix_in_frame()
+        # box.scale(0.5).to_corner(UL)
+        # box2.scale(0.5).next_to(image_mobject, direction=DOWN)
+        self.add(box,box2)
+        self.begin_ambient_camera_rotation(rate=1)
+        self.wait(3)
+        #两图对比
 
 with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl"}):
-    ThreeDAexs_Matrix_Base_Vector().render()
+    Five_Step_Rotation_For_Aexs().render()
     exit(1)

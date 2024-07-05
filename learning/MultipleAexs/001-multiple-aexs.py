@@ -744,14 +744,18 @@ class MultipleAexs004_3(ThreeDScene):
         animate = group.animate.apply_matrix(matrix=matrix_init.T)
         self.play(animate)
         # 先还原- 在变换-移动
-        animate = group.animate.apply_matrix(matrix= matrix_init@Rx@Ry@Rz)
+        animate = group.animate.apply_matrix(matrix= Rx@Ry@Rz)
+        self.play(animate)
+
+        animate = group.animate.apply_matrix(matrix=matrix_init)
         self.play(animate)
 
         self.play(group.animate.shift([2, 2, 2]))
         self.wait()
 
+        #两图对比
+
 
 with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl"}):
-    MultipleAexs004().render()
-    # MultipleAexs002().render()
+    MultipleAexs004_3().render()
     exit(1)
