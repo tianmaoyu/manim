@@ -162,7 +162,7 @@ class Case_2D_Rotation_Vector_ADD_Sub(ThreeDScene):
 class Case_Vector_Transfrom_Multiplication(ThreeDScene):
     def construct(self):
         latex_str1 = r"""
-                \begin{bmatrix} x\\y\\1 \end{bmatrix}
+                \begin{bmatrix} x'\\y'\\1 \end{bmatrix}
 =
 \begin{bmatrix} 1&0&2\\0&1&2\\0&0&1\end{bmatrix}
 \begin{bmatrix} 
@@ -223,7 +223,34 @@ sin(30) & cos(30) &0 \\
         arc = Arc(start_angle=225 * DEGREES, angle=30 * DEGREES, arc_center=mover_vector)
         self.play(ApplyMethod(image.set_points, new_points), line_animate, Create(arc))
 
+class Right_Left_Multipliaction_Transfromer_Order(ThreeDScene):
+    def construct(self):
+        latex_str1 = r"""
+   \begin{bmatrix}
+x'\\y'
+\end{bmatrix}
+= A \left(B\left(C\begin{bmatrix}x\\y\end{bmatrix}\right)\right)
+=ABC 
+\begin{bmatrix}x\\y\end{bmatrix}
+                   """
+        math_tex1 = MathTex(latex_str1)
+        self.play(Create(math_tex1))
+        self.play(math_tex1.animate.to_corner(UP))
+
+        text1 = MarkupText("注意顺序和读发", font_size=44)
+        text2 = MarkupText("1:先进行C变换", font_size=33)
+        text3 = MarkupText("2:再进行B变换",  font_size=33)
+        text4 = MarkupText("3:最后进行A变换",  font_size=33)
+        group = VGroup(text1, text2, text3, text4).arrange(DOWN)
+        self.play(FadeIn(group))
+
+
+
+class Three_Two_Dimensional_coordinate_systems(ThreeDScene):
+    def construct(self):
+        pass
+
 
 with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl"}):
-    Case_Vector_Transfrom_Multiplication().render()
+    Right_Left_Multipliaction_Transfromer_Order().render()
     exit(1)
