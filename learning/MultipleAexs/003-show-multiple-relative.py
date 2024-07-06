@@ -543,6 +543,21 @@ class Five_Step_Rotation_For_Aexs(ThreeDScene):
         self.wait(3)
         #两图对比
 
+
+class Relative_3d_three_Aexs(ThreeDScene):
+    def construct(self):
+        pass
+
+class Multiple_Poster_Image(ThreeDScene):
+    def construct(self):
+
+        matrix = MathTex(r"""TR_iRR_i^{-1}T^{-1}""",tex_template=TexTemplateLibrary.ctex)
+        self.add(matrix.move_to(UP).set_color(YELLOW).scale(3))
+
+        text= Text(f"回退.回退.旋转.还原.还原",font="sans-serif").scale(1.5)
+        self.add(text.next_to(matrix,direction=DOWN).set_color(YELLOW))
+
+
 with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl"}):
-    Five_Step_Rotation_For_Aexs().render()
+    Multiple_Poster_Image().render()
     exit(1)

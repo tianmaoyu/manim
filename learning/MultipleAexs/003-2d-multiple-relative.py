@@ -263,7 +263,19 @@ class Multiple2D_Image(ThreeDScene):
                cos(\theta) & -sin(\theta) \\ 
                sin(\theta) & cos(\theta) 
                \end{bmatrix} """,tex_template=TexTemplateLibrary.ctex).set_color(YELLOW)
+class Multiple2D_Image2(ThreeDScene):
+    def construct(self):
 
+        matrix = MathTex(r""" Matrix=TR_iRT^{-1}""",tex_template=TexTemplateLibrary.ctex)
+
+        self.add(matrix.set_color(YELLOW).scale(2))
+
+        matrix2 = MathTex(r"""
+               M' =
+               \begin{bmatrix} 
+               cos(\theta) & -sin(\theta) \\ 
+               sin(\theta) & cos(\theta) 
+               \end{bmatrix} """,tex_template=TexTemplateLibrary.ctex).set_color(YELLOW)
 
 
 with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl"}):
