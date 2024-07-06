@@ -362,6 +362,67 @@ class Three_Two_Dimensional_coordinate_systems(ThreeDScene):
         self.play(FadeIn(matrix2.next_to(matrix1, direction=DOWN, aligned_edge=LEFT)))
         self.play(FadeIn(matrix3.next_to(matrix2, direction=DOWN, aligned_edge=LEFT)))
 
+class Three_Two_Dimensional_Only_Move(ThreeDScene):
+    def construct(self):
+        axes = Axes(include_numbers=False, x_range=[-4, 4, 1], y_range=[-4, 4, 1], z_range=[-4, 4, 1], x_length=8,
+                    y_length=8, z_length=6)
+        # axes.add(axes.get_axis_labels())
+
+        dot = Dot(point=[2, 0.5, 0])
+        lable = MarkupText("P(2,0.5)").scale(0.3)
+        lable.next_to(dot, RIGHT, buff=0.1)
+        self.add(lable)
+        self.play(FadeIn(axes), FadeIn(dot), FadeIn(lable))
+
+        self.wait()
+
+        axes1 = Axes(include_numbers=False, x_range=[-4, 4, 1], y_range=[-4, 4, 1], z_range=[-4, 4, 1], x_length=8,
+                     y_length=8, z_length=6)
+
+        # axes1.add(axes1.get_axis_labels(x_label="x'", y_label="y'"))
+        axes1.set_color(YELLOW)
+        dot1 = Dot(point=[2, 0.5, 0], color=YELLOW)
+        lable1 = MarkupText("P'(2,0.5)").set_color(YELLOW).scale(0.3)
+        lable1.next_to(dot1, RIGHT, buff=0.1)
+
+        self.move_camera(zoom=0.7)
+
+        self.wait()
+        self.play(
+            axes1.animate.shift([2, 2, 0]),
+            lable1.animate.shift([2, 2, 0]),
+            dot1.animate.shift([2, 2, 0]),
+
+        )
+
+        dot_o1 = Dot(point=ORIGIN)
+        lable_o1 = MarkupText("O(0,0)").scale(0.3)
+        lable_o1.next_to(dot_o1, RIGHT, buff=0.1)
+
+        dot_o2 = Dot(point=[2, 2, 0], color=YELLOW)
+        lable_o2 = MarkupText("O'(2,2)").set_color(YELLOW).scale(0.3)
+        lable_o2.next_to(dot_o2, RIGHT, buff=0.1)
+
+        self.add(dot_o1, lable_o1, dot_o2, lable_o2)
+
+        matrix1 = MathTex(r"""
+                            M=
+                            \begin{bmatrix}
+                            1 & 0 \\
+                            0 & 1 
+                            \end{bmatrix}""", tex_template=TexTemplateLibrary.ctex)
+        matrix2 = MathTex(r"""
+                            M' =
+                            \begin{bmatrix} 
+                            1 & 0 \\ 
+                            0 & 1 
+                            \end{bmatrix} """, tex_template=TexTemplateLibrary.ctex).set_color(YELLOW)
+
+        matrix1.scale(0.7).fix_in_frame()
+        matrix2.scale(0.7).fix_in_frame()
+
+        self.play(FadeIn(matrix1.to_corner(UL)))
+        self.play(FadeIn(matrix2.next_to(matrix1, direction=DOWN, aligned_edge=LEFT)))
 
 
 class ThreeDAexs_Matrix_Base_Vector(ThreeDScene):
@@ -557,7 +618,143 @@ class Multiple_Poster_Image(ThreeDScene):
         text= Text(f"回退.回退.旋转.还原.还原",font="sans-serif").scale(1.5)
         self.add(text.next_to(matrix,direction=DOWN).set_color(YELLOW))
 
+class Multiple_some_Image_1(ThreeDScene):
+    def construct(self):
+
+        matrix = MathTex(r"""\begin{bmatrix}
+x-a\\y-b\\z-c
+\end{bmatrix}
+=
+\begin{bmatrix}
+x\\y\\z
+\end{bmatrix}
+-
+\begin{bmatrix}
+a\\b\\c
+\end{bmatrix}""").move_to(UP).set_color(YELLOW).scale(0.8)
+        self.play(Create(matrix))
+
+        matrix2 = MathTex(r"""
+\begin{bmatrix}
+x-a\\y-b\\z-c\\1
+\end{bmatrix}
+=
+\begin{bmatrix}
+1&0&0&-a\\0&1&0&-b\\0&0&1&-c\\0&0&0&1
+\end{bmatrix}
+\begin{bmatrix}
+x\\y\\z \\1
+\end{bmatrix}
+        """).next_to(matrix,direction=DOWN).set_color(YELLOW).scale(0.8)
+        self.play(Create(matrix2))
+        self.wait()
+
+        # text= Text(f"回退.回退.旋转.还原.还原",font="sans-serif").scale(1.5)
+        # self.add(text.next_to(matrix,direction=DOWN).set_color(YELLOW))
+class Multiple_some_Image_2(ThreeDScene):
+    def construct(self):
+
+        matrix = MathTex(r"""\begin{bmatrix}
+x+a\\y+b\\z+c
+\end{bmatrix}
+=
+\begin{bmatrix}
+x\\y\\z
+\end{bmatrix}
++
+\begin{bmatrix}
+a\\b\\c
+\end{bmatrix}""").move_to(UP).set_color(YELLOW).scale(0.8)
+        self.play(Create(matrix))
+
+        matrix2 = MathTex(r"""
+\begin{bmatrix}
+x+a\\y+b\\z+c\\1
+\end{bmatrix}
+=
+\begin{bmatrix}
+1&0&0&a\\0&1&0&b\\0&0&1&c\\0&0&0&1
+\end{bmatrix}
+\begin{bmatrix}
+x\\y\\z \\1
+\end{bmatrix}
+        """).next_to(matrix,direction=DOWN).set_color(YELLOW).scale(0.8)
+        self.play(Create(matrix2))
+        self.wait()
+
+        # text= Text(f"回退.回退.旋转.还原.还原",font="sans-serif").scale(1.5)
+        # self.add(text.next_to(matrix,direction=DOWN).set_color(YELLOW))
+
+        class Multiple_some_Image_2(ThreeDScene):
+            def construct(self):
+                matrix = MathTex(r"""\begin{bmatrix}
+        x+a\\y+b\\z+c
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+        x\\y\\z
+        \end{bmatrix}
+        +
+        \begin{bmatrix}
+        a\\b\\c
+        \end{bmatrix}""").move_to(UP).set_color(YELLOW).scale(0.8)
+                self.play(Create(matrix))
+
+                matrix2 = MathTex(r"""
+        \begin{bmatrix}
+        x+a\\y+b\\z+c\\1
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+        1&0&0&a\\0&1&0&b\\0&0&1&c\\0&0&0&1
+        \end{bmatrix}
+        \begin{bmatrix}
+        x\\y\\z \\1
+        \end{bmatrix}
+                """).next_to(matrix, direction=DOWN).set_color(YELLOW).scale(0.8)
+                self.play(Create(matrix2))
+                self.wait()
+
+                # text= Text(f"回退.回退.旋转.还原.还原",font="sans-serif").scale(1.5)
+                # self.add(text.next_to(matrix,direction=DOWN).set_color(YELLOW))
+class Multiple_some_Image_3(ThreeDScene):
+    def construct(self):
+
+        matrix = MathTex(r"""
+T=\begin{bmatrix}
+1 & 0 & 0 & a\\
+0 & 1 & 0 & b\\
+0 & 0 & 1 & c\\
+0 & 0 & 0 & 1 
+\end{bmatrix}
+=>
+T^{-1}=\begin{bmatrix}
+1 & 0 & 0 & -a\\
+0 & 1 & 0 & -b\\
+0 & 0 & 1 & -c\\
+0 & 0 & 0 & 1 
+\end{bmatrix}
+""").move_to(UP).set_color(YELLOW).scale(0.8)
+        self.play(Create(matrix))
+        self.wait()
+        return
+class Multiple_some_Image_4(ThreeDScene):
+    def construct(self):
+
+        matrix = MathTex(r"""TR_iRR_i^{-1}T^{-1}""",tex_template=TexTemplateLibrary.ctex)
+        matrix.move_to(UP).set_color(YELLOW).scale(3)
+        self.play(Create(matrix))
+        text= Text(f"回退.回退.旋转.还原.还原",font="sans-serif").scale(1.5)
+        text.next_to(matrix,direction=DOWN).set_color(YELLOW)
+        self.play(Create(text))
+        self.wait()
+class Multiple_some_Image_5(ThreeDScene):
+    def construct(self):
+        text= Text(f"坐标系矩阵×坐标=原点到该坐标的向量",font="sans-serif")
+        text.set_color(YELLOW)
+        self.play(FadeIn(text))
+        self.wait()
 
 with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl"}):
-    Multiple_Poster_Image().render()
+    Multiple_some_Image_5().render()
     exit(1)
