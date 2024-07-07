@@ -612,7 +612,7 @@ class Relative_3d_three_Aexs(ThreeDScene):
 class Multiple_Poster_Image(ThreeDScene):
     def construct(self):
 
-        matrix = MathTex(r"""TR_iRR_i^{-1}T^{-1}""",tex_template=TexTemplateLibrary.ctex)
+        matrix = MathTex(r"""TR_iRR_i^{-1}T_i^{-1}""",tex_template=TexTemplateLibrary.ctex)
         self.add(matrix.move_to(UP).set_color(YELLOW).scale(3))
 
         text= Text(f"回退.回退.旋转.还原.还原",font="sans-serif").scale(1.5)
@@ -741,7 +741,7 @@ T^{-1}=\begin{bmatrix}
 class Multiple_some_Image_4(ThreeDScene):
     def construct(self):
 
-        matrix = MathTex(r"""TR_iRR_i^{-1}T^{-1}""",tex_template=TexTemplateLibrary.ctex)
+        matrix = MathTex(r"""TR_iRR_i^{-1}T_i^{-1}""",tex_template=TexTemplateLibrary.ctex)
         matrix.move_to(UP).set_color(YELLOW).scale(3)
         self.play(Create(matrix))
         text= Text(f"回退.回退.旋转.还原.还原",font="sans-serif").scale(1.5)
@@ -755,6 +755,50 @@ class Multiple_some_Image_5(ThreeDScene):
         self.play(FadeIn(text))
         self.wait()
 
+
+class Multiple_T(ThreeDScene):
+    def construct(self):
+
+        latex_list = MathTex("T", "R_i", "R","R_i^{-1}" "T_i^{-1}")
+        latex_list.to_corner(UP).set_color(YELLOW).scale(3)
+        lex_t=latex_list[0]
+
+        self.play(Write(latex_list))
+        self.play(lex_t.animate.set_color(BLUE).scale(2).move_to(ORIGIN))
+        self.wait()
+
+class Formula_Inv_T(ThreeDScene):
+    def construct(self):
+
+        latex_list = MathTex("T", "R_i", "R","R_i^{-1}","T_i^{-1}")
+        latex_list.to_corner(UP).set_color(YELLOW).scale(3)
+        lex_t=latex_list[4]
+
+        self.play(Write(latex_list))
+        self.play(lex_t.animate.set_color(BLUE).scale(2).move_to(ORIGIN))
+        self.wait()
+
+class Formula_RI(ThreeDScene):
+    def construct(self):
+
+        latex_list = MathTex("T", "R_i", "R","R_i^{-1}","T_i^{-1}")
+        latex_list.to_corner(UP).set_color(YELLOW).scale(3)
+        lex_RI=latex_list[3]
+
+        self.play(Write(latex_list))
+        self.play(lex_RI.animate.set_color(BLUE).scale(2).move_to(ORIGIN))
+        self.wait()
+class Formula_Inv_RI(ThreeDScene):
+    def construct(self):
+
+        latex_list = MathTex("T", "R_i", "R","R_i^{-1}","T_i^{-1}")
+        latex_list.to_corner(UP).set_color(YELLOW).scale(3)
+        lex_RI=latex_list[3]
+
+        self.play(Write(latex_list))
+        self.play(lex_RI.animate.set_color(BLUE).scale(2).move_to(ORIGIN))
+        self.wait()
+
 with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl"}):
-    Multiple_some_Image_5().render()
+    Multiple_Poster_Image().render()
     exit(1)

@@ -16,7 +16,7 @@ from PIL import Image
 
 class NumpyImage(OpenGLPMobject):
     def __init__(self, image_array: np.ndarray, stroke_width=2.0, distance=0.025, **kwargs):
-        super().__init__(**kwargs, stroke_width=stroke_width, depth_test=True)
+        super().__init__(**kwargs, stroke_width=stroke_width)
 
         # 构建三维坐标
         height, width, channel = image_array.shape
@@ -184,6 +184,43 @@ class Translation001(ThreeDScene):
         new_points= image_obj.points+mover_vector
         self.play(ApplyMethod(image_obj.set_points,new_points))
 
+class Translation002(ThreeDScene):
+
+    def construct(self):
+
+        latex_str1 = r"""
+\begin{bmatrix}x'\\y'\\\end{bmatrix}
+=
+\begin{bmatrix}x\\y\\\end{bmatrix}
++
+\begin{bmatrix}x_b\\ y_b\end{bmatrix}
+=
+\begin{bmatrix}x+x_b\\y+y_b\end{bmatrix}
+         """
+        math_tex1 = MathTex(latex_str1)
+        self.play(Create(math_tex1))
+        self.play(math_tex1.animate.to_corner(UL))
+
+        image_array = np.array(Image.open("src/test.jpg").convert("RGBA"))
+
+        image_obj = NumpyImage(image_array=image_array, distance=0.015, stroke_width=2,depth_test=False)
+        # self.add(image_obj)
+        self.play(Create(image_obj))
+        # plane = NumberPlane()
+        # self.play(Create(plane))
+        axes = Axes(x_range=[-7, 7, 1],include_numbers=False, y_range=[-5, 5, 1],x_length=14, y_length=10)
+        self.play(Create(axes))
+        lines = axes.get_lines_to_point([2,2,0])
+        self.play(Create(lines))
+
+        vector = Vector(direction=[2,2,0])
+        vector.add(vector.coordinate_label())
+        self.play(Create(vector))
+        self.next_section("移动图像")
+        mover_vector = np.array([2, 2, 0])
+
+        new_points= image_obj.points+mover_vector
+        self.play(ApplyMethod(image_obj.set_points,new_points))
 with tempconfig({"preview": True, "renderer": "opengl"}):
-    Translation001().render()
+    Translation002().render()
     exit(1)
