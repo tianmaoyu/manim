@@ -341,7 +341,7 @@ class MultipleRelative002(ThreeDScene):
         ]);
 
 
-        animate = group.animate.apply_matrix(about_point=[2, 2, 2], matrix=matrix_init.T@ Ry@Rz@matrix_init.T)
+        animate = group.animate.apply_matrix(about_point=[2, 2, 2], matrix=matrix_init.T@ Rz@Ry@matrix_init.T)
         self.play(animate)
 
 
@@ -421,7 +421,7 @@ class MultipleRelative0022(ThreeDScene):
         ]);
 
 
-        animate = group.animate.apply_matrix(about_point=[2, 2, 2], matrix=matrix_init.T@ Ry@Rz@matrix_init.T)
+        animate = group.animate.apply_matrix(about_point=[2, 2, 2], matrix=matrix_init.T@Ry@Rz@matrix_init.T)
         self.play(animate)
 
 
@@ -758,6 +758,6 @@ class MultipleRelative005(ThreeDScene):
 
 
 with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl"}):
-    MultipleRelative001_2().render()
+    MultipleRelative002().render()
     # MultipleAexs002().render()
     exit(1)
