@@ -778,16 +778,6 @@ class Formula_Inv_T(ThreeDScene):
         self.play(lex_t.animate.set_color(BLUE).scale(2).move_to(ORIGIN))
         self.wait()
 
-class Formula_RI(ThreeDScene):
-    def construct(self):
-
-        latex_list = MathTex("T", "R_i", "R","R_i^{-1}","T_i^{-1}")
-        latex_list.to_corner(UP).set_color(YELLOW).scale(3)
-        lex_RI=latex_list[3]
-
-        self.play(Write(latex_list))
-        self.play(lex_RI.animate.set_color(BLUE).scale(2).move_to(ORIGIN))
-        self.wait()
 class Formula_Inv_RI(ThreeDScene):
     def construct(self):
 
@@ -798,7 +788,90 @@ class Formula_Inv_RI(ThreeDScene):
         self.play(Write(latex_list))
         self.play(lex_RI.animate.set_color(BLUE).scale(2).move_to(ORIGIN))
         self.wait()
+class Formula_RI(ThreeDScene):
+    def construct(self):
+
+        latex_list = MathTex("T", "R_i", "R","R_i^{-1}","T_i^{-1}")
+        latex_list.to_corner(UP).set_color(YELLOW).scale(3)
+        lex_RI=latex_list[1]
+
+        self.play(Write(latex_list))
+        self.play(lex_RI.animate.set_color(BLUE).scale(2).move_to(ORIGIN))
+        self.wait()
+
+class Formula_RT(ThreeDScene):
+    def construct(self):
+
+        latex_list = MathTex("T", "R_i", "R","R_i^{-1}","T_i^{-1}")
+        latex_list.to_corner(UP).set_color(YELLOW).scale(3)
+        lex_T=latex_list[0]
+        lex_R = latex_list[2]
+        group = Group(lex_T, lex_R)
+        self.play(Write(latex_list))
+        self.play(group.animate.set_color(BLUE).scale(2).move_to(ORIGIN).arrange(direction=RIGHT,buff=SMALL_BUFF))
+        self.wait()
+class Formula_RT_Inv(ThreeDScene):
+    def construct(self):
+
+        latex_list = MathTex("T", "R_i", "R","R_i^{-1}","T_i^{-1}")
+        latex_list.to_corner(UP).set_color(YELLOW).scale(3)
+        lex_T=latex_list[4]
+        lex_R = latex_list[3]
+        group = Group(lex_R,lex_T )
+        self.play(Write(latex_list))
+        self.play(group.animate.set_color(BLUE).scale(2).move_to(ORIGIN).arrange(direction=RIGHT,buff=SMALL_BUFF))
+        self.wait()
+class Formula_TRT_Inv(ThreeDScene):
+    def construct(self):
+        latex_list = MathTex("T", "R_i", "R","R_i^{-1}","T_i^{-1}")
+        latex_list.to_corner(UP).set_color(YELLOW).scale(3)
+        lex_T = latex_list[0]
+        lex_R = latex_list[2]
+        lex_T_inv = latex_list[4]
+        group = Group(lex_T,lex_R,lex_T_inv )
+        self.play(Write(latex_list))
+        self.play(group.animate.set_color(BLUE).scale(2).move_to(ORIGIN).arrange(direction=RIGHT,buff=SMALL_BUFF))
+        self.wait()
+class Formula_ALL(ThreeDScene):
+    def construct(self):
+        latex_list = MathTex("T", "R_i", "R","R_i^{-1}","T_i^{-1}")
+        latex_list.to_corner(UP).set_color(YELLOW).scale(3)
+        self.play(Write(latex_list))
+        self.play(latex_list.animate.set_color(BLUE).scale(1.2).move_to(ORIGIN).arrange(direction=RIGHT,buff=SMALL_BUFF))
+        self.wait()
+
+class Formula_ALL_Remark_1(ThreeDScene):
+    def construct(self):
+        latex_list = MathTex("T", "R_i", "R","R_i^{-1}","T_i^{-1}")
+        latex_list.to_corner(UP).set_color(YELLOW).scale(3)
+        self.play(Write(latex_list))
+
+        lex_R_inv = latex_list[3]
+        lex_T_inv = latex_list[4]
+        group1 = Group(lex_R_inv, lex_T_inv)
+
+        self.play(group1.animate.set_color(BLUE).scale(1.2).move_to(ORIGIN+UP*2).arrange(direction=RIGHT,buff=SMALL_BUFF))
+        text1 = Text("非参考坐标系 -> 参考标系转换").next_to(group1,direction=DOWN).set_color(YELLOW).scale(1.2)
+
+        self.play(FadeIn(text1))
+        self.wait()
+
+class Formula_ALL_Remark_2(ThreeDScene):
+    def construct(self):
+        latex_list = MathTex("T", "R_i", "R","R_i^{-1}","T_i^{-1}")
+        latex_list.to_corner(UP).set_color(YELLOW).scale(3)
+        self.play(Write(latex_list))
+
+        lex_0 = latex_list[0]
+        lex_1 = latex_list[1]
+        lex_2 = latex_list[2]
+        group = Group(lex_0, lex_1,lex_2)
+
+        self.play(group.animate.move_to(ORIGIN).set_color(BLUE).scale(1.2).arrange(direction=RIGHT,buff=SMALL_BUFF))
+        text = Text("参考标系 -> 非参考坐标系").next_to(group,direction=DOWN).set_color(YELLOW).scale(1.2)
+        self.play(FadeIn(text))
+        self.wait()
 
 with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl"}):
-    Multiple_Poster_Image().render()
+    Formula_ALL_Remark_2().render()
     exit(1)
