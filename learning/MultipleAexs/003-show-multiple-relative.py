@@ -872,6 +872,77 @@ class Formula_ALL_Remark_2(ThreeDScene):
         self.play(FadeIn(text))
         self.wait()
 
+
+class Prove_ZYX_Rotate_Matrix(ThreeDScene):
+    """
+    证明 饶 Z,Y,X 旋转的
+    """
+    def construct(self):
+        self.set_camera_orientation(phi=70 * DEGREES, theta=35 * DEGREES)
+
+        axes = ThreeDAxes(include_numbers=False, x_range=[-3, 3, 1], y_range=[-3, 3, 1], z_range=[-3, 3, 1], x_length=6,
+                          y_length=6, z_length=6)
+        axes.add(axes.get_axis_labels())
+        number_plane = NumberPlane(include_numbers=False, x_range=[-7, 7, 1], y_range=[-7, 7, 1], z_range=[-4, 4, 1],
+                                   x_length=14, y_length=14, z_length=8)
+        self.play(Create(number_plane))
+        self.play(Create(axes))
+
+        yawRad = 45 * DEGREES
+        pitchRad = 45 * DEGREES
+        rollRad = 45 * DEGREES
+        Rz = np.array([
+            [np.cos(yawRad), -np.sin(yawRad), 0],
+            [np.sin(yawRad), np.cos(yawRad), 0],
+            [0, 0, 1]
+        ]);
+
+        Ry = np.array([
+            [np.cos(pitchRad), 0, np.sin(pitchRad)],
+            [0, 1, 0],
+            [-np.sin(pitchRad), 0, np.cos(pitchRad)]
+        ]);
+
+        Rx = np.array([
+            [1, 0, 0],
+            [0, np.cos(rollRad), -np.sin(rollRad)],
+            [0, np.sin(rollRad), np.cos(rollRad)]
+        ]);
+
+        axes1 = ThreeDAxes(include_numbers=False, x_range=[-3, 3, 1], y_range=[-3, 3, 1], z_range=[-3, 3, 1],
+                           x_length=6,
+                           y_length=6, z_length=6)
+
+        axes1.add(axes1.get_axis_labels())
+        axes1.set_color(YELLOW)
+        self.play(Create(axes1))
+
+        matrix = MathTex(r"""
+        M=\begin{bmatrix}
+        1 & 0 & 0 & a\\
+        0 & 1 & 0 & b\\
+        0 & 0 & 1 & c\\
+        0 & 0 & 0 & 1 
+        \end{bmatrix}
+        """).move_to(UR).set_color(YELLOW).scale(0.8)
+        self.play(Create(matrix))
+
+
+        animate = axes1.animate.apply_matrix(matrix=Rx)
+        self.play(animate)
+        self.wait()
+
+        animate = axes1.animate.apply_matrix(matrix=Rx@Ry@Rx.T)
+        self.play(animate)
+        self.wait()
+        #
+        animate = axes1.animate.apply_matrix(matrix=(Rx@Ry)@Rz@(Rx@Ry).T)
+        self.play(animate)
+        self.wait()
+
+
+
+
 with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl"}):
     Formula_ALL_Remark_2().render()
     exit(1)

@@ -333,7 +333,151 @@ class MultipleRelative005(ThreeDScene):
         self.wait(1)
 
 
+class Prove_ZYX_Rotate_Matrix(ThreeDScene):
+    """
+    证明 饶 Z,Y,X 旋转的
+    """
+    def construct(self):
+        self.set_camera_orientation(phi=70 * DEGREES, theta=35 * DEGREES)
+
+        axes = ThreeDAxes(include_numbers=False, x_range=[-3, 3, 1], y_range=[-3, 3, 1], z_range=[-3, 3, 1], x_length=6,
+                          y_length=6, z_length=6)
+        axes.add(axes.get_axis_labels())
+        number_plane = NumberPlane(include_numbers=False, x_range=[-7, 7, 1], y_range=[-7, 7, 1], z_range=[-4, 4, 1],
+                                   x_length=14, y_length=14, z_length=8)
+        self.play(Create(number_plane))
+        self.play(Create(axes))
+
+        yawRad = 45 * DEGREES
+        pitchRad = 45 * DEGREES
+        rollRad = 45 * DEGREES
+        Rz = np.array([
+            [np.cos(yawRad), -np.sin(yawRad), 0],
+            [np.sin(yawRad), np.cos(yawRad), 0],
+            [0, 0, 1]
+        ]);
+
+        Ry = np.array([
+            [np.cos(pitchRad), 0, np.sin(pitchRad)],
+            [0, 1, 0],
+            [-np.sin(pitchRad), 0, np.cos(pitchRad)]
+        ]);
+
+        Rx = np.array([
+            [1, 0, 0],
+            [0, np.cos(rollRad), -np.sin(rollRad)],
+            [0, np.sin(rollRad), np.cos(rollRad)]
+        ]);
+
+        axes1 = ThreeDAxes(include_numbers=False, x_range=[-3, 3, 1], y_range=[-3, 3, 1], z_range=[-3, 3, 1],
+                           x_length=6,
+                           y_length=6, z_length=6)
+
+        axes1.add(axes1.get_axis_labels())
+        axes1.set_color(YELLOW)
+        self.play(Create(axes1))
+
+
+        animate = axes1.animate.apply_matrix(matrix=Rx)
+        self.play(animate)
+        self.wait()
+
+        animate = axes1.animate.apply_matrix(matrix=Rx@Ry@Rx.T)
+        self.play(animate)
+        self.wait()
+        #
+        animate = axes1.animate.apply_matrix(matrix=(Rx@Ry)@Rz@(Rx@Ry).T)
+        self.play(animate)
+        self.wait()
+
+# 绕x,y,z旋转 并且带有一个 平移- 正对  M R M^-1 形式
+class Prove_ZYX_and_move_Rotate_Matrix(ThreeDScene):
+    def construct(self):
+        self.set_camera_orientation(phi=70 * DEGREES, theta=35 * DEGREES)
+        axes = ThreeDAxes(include_numbers=False, x_range=[-3, 3, 1], y_range=[-3, 3, 1], z_range=[-3, 3, 1], x_length=6,
+                          y_length=6, z_length=6)
+        self.add(axes)
+
+        axes1 = ThreeDAxes(include_numbers=False, x_range=[-3, 3, 1], y_range=[-3, 3, 1], z_range=[-3, 3, 1],
+                           x_length=6,
+                           y_length=6, z_length=6)
+
+        axes1.add(axes1.get_axis_labels())
+        axes1.set_color(YELLOW)
+        self.play(Create(axes1))
+        self.wait()
+
+        T_matrix=np.array([
+            [1, 0, 0,2],
+            [0, 1, 0,2],
+            [0, 0, 1,0],
+            [0, 0, 0,1]
+        ]);
+        T_matrix_inv= np.linalg.inv(T_matrix)
+
+        yawRad = 45 * DEGREES
+        pitchRad = 45 * DEGREES
+        rollRad = 45 * DEGREES
+        Rz = np.array([
+            [np.cos(yawRad), -np.sin(yawRad), 0,0],
+            [np.sin(yawRad), np.cos(yawRad), 0,0],
+            [0, 0, 1,0],
+            [0, 0, 0, 1]
+        ]);
+
+        Ry = np.array([
+            [np.cos(pitchRad), 0, np.sin(pitchRad),0],
+            [0, 1, 0,0],
+            [-np.sin(pitchRad), 0, np.cos(pitchRad),0],
+            [0, 0, 0, 1]
+        ]);
+
+        Rx = np.array([
+            [1, 0, 0,0],
+            [0, np.cos(rollRad), -np.sin(rollRad),0],
+            [0, np.sin(rollRad), np.cos(rollRad),0],
+            [0, 0, 0, 1]
+        ]);
+
+
+        for mob in axes1.family_members_with_points():
+            # mob.points
+            # 将points转换为齐次坐标
+            homogenous_points = np.hstack((mob.points, np.ones((mob.points.shape[0], 1))))
+            # 应用变换矩阵T
+            transformed_points = T_matrix@homogenous_points.T
+            # 更新mobject的points属性
+            mob.points = transformed_points.T[:, :3]
+
+        M0 = T_matrix
+        self.wait()
+
+        for mob in axes1.family_members_with_points():
+            homogenous_points = np.hstack((mob.points, np.ones((mob.points.shape[0], 1))))
+            transformed_points = M0 @ Rz @ np.linalg.inv(M0) @homogenous_points.T
+            mob.points = transformed_points.T[:, :3]
+        self.wait()
+        M1 = T_matrix@Rz
+
+        for mob in axes1.family_members_with_points():
+            homogenous_points = np.hstack((mob.points, np.ones((mob.points.shape[0], 1))))
+
+            transformed_points = M1 @ Ry @ np.linalg.inv(M1) @ homogenous_points.T
+            mob.points = transformed_points.T[:, :3]
+        self.wait()
+
+        M2 = T_matrix@Rz@Ry
+        for mob in axes1.family_members_with_points():
+            homogenous_points = np.hstack((mob.points, np.ones((mob.points.shape[0], 1))))
+            transformed_points = M2 @ Rx @ np.linalg.inv(M2) @ homogenous_points.T
+            mob.points = transformed_points.T[:, :3]
+        self.wait()
+        M3 = T_matrix @ Rz @ Ry @ Rx
+
+
+
+
 
 with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl"}):
-    MultipleRelative002().render()
+    Prove_ZYX_and_move_Rotate_Matrix().render()
     exit(1)
