@@ -44,7 +44,7 @@ class AddImage001(ThreeDScene):
         image = np.zeros((50, 50, 4), dtype=np.uint8)
         image[:, :, 0] = 255
         image[:, :, 3] = 255
-        image_obj = NumpyImage(image_array=image, distance=0.05, stroke_width=2)
+        image_obj = NumpyImage(image_array=image, distance=0.05, stroke_width=2,depth_test=False)
         self.add(image_obj)
         axes = Axes().add_coordinates()
         axes.add(axes.get_axis_labels())
