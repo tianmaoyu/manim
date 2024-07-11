@@ -178,12 +178,7 @@ class Euler_WorldDemo002(ThreeDScene):
         earth_animate= Rotate(earth,axis=OUT,angle=45*DEGREES)
         beijing_animate = Rotate(beijing,about_point=ORIGIN, axis=OUT, angle=45 * DEGREES)
         self.play(earth_animate,beijing_animate)
-        earth_animate = Rotate(earth, axis=OUT, angle=-45 * DEGREES)
-        beijing_animate = Rotate(beijing, about_point=ORIGIN, axis=OUT, angle=-45 * DEGREES)
-        self.play(earth_animate, beijing_animate)
-        earth_animate= Rotate(earth,axis=OUT,angle=45*DEGREES)
-        beijing_animate = Rotate(beijing,about_point=ORIGIN, axis=OUT, angle=45 * DEGREES)
-        self.play(earth_animate,beijing_animate)
+
         self.wait()
 
         # animate = axes1.animate.apply_matrix(matrix=Rx@Ry@Rx.T)
