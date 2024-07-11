@@ -255,9 +255,14 @@ class Euler_WorldDemo001(ThreeDScene):
 
 
         beijing_animate = Rotate(beijing,about_point=ORIGIN, axis=OUT, angle=45 * DEGREES)
-        self.play(beijing_animate)
-        self.wait()
 
+        arc= Arc(start_angle=0,angle=45*DEGREES,arc_center=ORIGIN,radius=1.2)
+
+        line= Line(start=ORIGIN,end=[1.2,0,0],depth_test=True)
+        line_animate = Rotate(line, about_point=ORIGIN, axis=OUT, angle=45 * DEGREES)
+
+        self.play(beijing_animate, Create(arc),line_animate)
+        self.wait()
         # animate = axes1.animate.apply_matrix(matrix=Rx@Ry@Rx.T)
         # self.play(animate)
         # self.wait()
@@ -271,5 +276,5 @@ class Euler_WorldDemo001(ThreeDScene):
 
 # "#004000"
 with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl","background_color" : "#004000"}):
-    Euler_WorldDemo002().render()
+    Euler_WorldDemo001().render()
     exit(1)
