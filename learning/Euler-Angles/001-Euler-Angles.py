@@ -613,7 +613,7 @@ class Euler_zxy_in(ThreeDScene):
 
         gamma_arc.add_tip(tip_length=0.15, tip_width=0.15)
         gamma_label = MathTex(r"\varphi").scale(0.5)
-        gamma_label.next_to(gamma_arc, RIGHT+OUT)
+        gamma_label.next_to(gamma_arc, UP+OUT)
         gamma_label.fix_orientation()
 
 
