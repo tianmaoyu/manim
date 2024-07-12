@@ -329,11 +329,12 @@ class Euler_zxz_in(ThreeDScene):
         alpha_arc.add_tip(tip_length=0.15, tip_width=0.15)
         alpha_labels= MathTex(r"\alpha")
         alpha_labels.next_to(alpha_arc)
+        alpha_labels.fix_orientation()
 
         animate = axes1.animate.apply_matrix(matrix=Rz)
         self.play(animate,Create(alpha_arc))
-
-        self.add(alpha_labels)
+        self.play(Create(alpha_labels))
+        # self.add(alpha_labels)
         self.wait()
 
         start_point=np.array([-3.2,0,0])
@@ -349,10 +350,12 @@ class Euler_zxz_in(ThreeDScene):
         beta_arc.rotate(axis=RIGHT,angle=90*DEGREES,about_point=ORIGIN)
         beta_arc.rotate(axis=OUT, angle=90*DEGREES, about_point=ORIGIN)
         beta_label.next_to(beta_arc, OUT)
+        beta_label.fix_orientation()
 
         animate = axes1.animate.apply_matrix(matrix=Rz @ Rx @ Rz.T)
         self.play(animate,Create(beta_arc))
-        self.add(beta_label)
+        # self.add(beta_label)
+        self.play(Create(beta_label))
         self.wait()
 
         arrow_vector = arrow.get_vector()
@@ -366,10 +369,13 @@ class Euler_zxz_in(ThreeDScene):
         gamma_label = MathTex(r"\gamma")
         gamma_arc.rotate(axis=arrow_vector, angle=30 * DEGREES, about_point=ORIGIN)
         gamma_label.next_to(gamma_arc, RIGHT+UP,buff=SMALL_BUFF)
+        gamma_label.fix_orientation()
+
 
         animate = axes1.animate.apply_matrix(matrix=(Rz @ Rx) @ Rz @ (Rz @ Rx).T)
         self.play(animate,Create(gamma_arc))
-        self.add(gamma_label)
+        # self.add(gamma_label)
+        self.play(FadeIn(gamma_label))
         self.wait()
 
 
