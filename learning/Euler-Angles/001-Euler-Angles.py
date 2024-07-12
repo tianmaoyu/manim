@@ -326,7 +326,7 @@ class Euler_zxz_in(ThreeDScene):
         self.play(Create(axes1))
 
         alpha_arc = Arc(start_angle=0, angle=zRad, arc_center=ORIGIN)
-        alpha_arc.add_tip(tip_length=0.2, tip_width=0.2)
+        alpha_arc.add_tip(tip_length=0.15, tip_width=0.15)
         alpha_labels= MathTex(r"\alpha")
         alpha_labels.next_to(alpha_arc)
 
@@ -344,7 +344,7 @@ class Euler_zxz_in(ThreeDScene):
         self.add(arrow)
 
         beta_arc = Arc(start_angle=90*DEGREES, angle=35*DEGREES, arc_center=ORIGIN)
-        beta_arc.add_tip(tip_length=0.2, tip_width=0.2)
+        beta_arc.add_tip(tip_length=0.15, tip_width=0.15)
         beta_label = MathTex(r"\beta")
         beta_arc.rotate(axis=RIGHT,angle=90*DEGREES,about_point=ORIGIN)
         beta_arc.rotate(axis=OUT, angle=90*DEGREES, about_point=ORIGIN)
@@ -362,7 +362,7 @@ class Euler_zxz_in(ThreeDScene):
 
 
         gamma_arc = Arc(start_angle=30*DEGREES, angle=30 * DEGREES, arc_center=ORIGIN,radius=1.5)
-        gamma_arc.add_tip(tip_length=0.2, tip_width=0.2)
+        gamma_arc.add_tip(tip_length=0.15, tip_width=0.15)
         gamma_label = MathTex(r"\gamma")
         gamma_arc.rotate(axis=arrow_vector, angle=30 * DEGREES, about_point=ORIGIN)
         gamma_label.next_to(gamma_arc, RIGHT+UP,buff=SMALL_BUFF)
