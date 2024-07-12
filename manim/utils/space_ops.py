@@ -32,6 +32,8 @@ __all__ = [
     "thick_diagonal",
     "rotation_matrix",
     "rotation_about_z",
+    "rotation_about_x",
+    "rotation_about_y",
     "z_to_vector",
     "angle_of_vector",
     "angle_between_vectors",
@@ -284,7 +286,36 @@ def rotation_about_z(angle: float) -> np.ndarray:
         ]
     )
 
+def rotation_about_x(angle: float) -> np.ndarray:
+    """Returns a rotation matrix for a given angle.
 
+    Parameters
+    ----------
+    angle
+        Angle for the rotation matrix.
+
+    Returns
+    -------
+    np.ndarray
+        Gives back the rotated matrix.
+    """
+    c, s = np.cos(angle), np.sin(angle)
+    return np.array(
+        [
+            [1, 0, 0],
+            [0, c, -s],
+            [0, s, c],
+        ]
+    )
+def rotation_about_y(angle: float) -> np.ndarray:
+    c, s = np.cos(angle), np.sin(angle)
+    return np.array(
+        [
+            [c, 0, s],
+            [0, 1, 0],
+            [-s, 0,c],
+        ]
+    )
 def z_to_vector(vector: np.ndarray) -> np.ndarray:
     """
     Returns some matrix in SO(3) which takes the z-axis to the
