@@ -332,8 +332,8 @@ class Euler_zxz_in(ThreeDScene):
         alpha_labels.fix_orientation()
 
         animate = axes1.animate.apply_matrix(matrix=Rz)
-        self.play(animate,Create(alpha_arc))
-        self.play(Create(alpha_labels))
+        self.play(animate,Create(alpha_arc),run_time=2)
+        self.play(FadeIn(alpha_labels))
         # self.add(alpha_labels)
         self.wait()
 
@@ -344,19 +344,20 @@ class Euler_zxz_in(ThreeDScene):
         arrow = Arrow(start=start_point, end=end_point, color=GREEN)
         self.add(arrow)
 
-        beta_arc = Arc(start_angle=90*DEGREES, angle=35*DEGREES, arc_center=ORIGIN)
+        beta_arc = Arc(start_angle=0, angle=-xRad, arc_center=ORIGIN)
         beta_arc.add_tip(tip_length=0.15, tip_width=0.15)
         beta_label = MathTex(r"\beta")
-        beta_arc.rotate(axis=RIGHT,angle=90*DEGREES,about_point=ORIGIN)
-        beta_arc.rotate(axis=OUT, angle=90*DEGREES, about_point=ORIGIN)
+        beta_arc.rotate(axis=UP,angle=-90*DEGREES,about_point=ORIGIN)
+        beta_arc.apply_matrix(matrix= Rz)
         beta_label.next_to(beta_arc, OUT)
         beta_label.fix_orientation()
 
         animate = axes1.animate.apply_matrix(matrix=Rz @ Rx @ Rz.T)
-        self.play(animate,Create(beta_arc))
+        self.play(animate,Create(beta_arc),run_time=2)
         # self.add(beta_label)
-        self.play(Create(beta_label))
+        self.play(FadeIn(beta_label))
         self.wait()
+
 
         arrow_vector = arrow.get_vector()
         circle_red = Circle(radius=3, color=RED,fill_opacity=0.1)
@@ -373,10 +374,12 @@ class Euler_zxz_in(ThreeDScene):
 
 
         animate = axes1.animate.apply_matrix(matrix=(Rz @ Rx) @ Rz @ (Rz @ Rx).T)
-        self.play(animate,Create(gamma_arc))
+        self.play(animate,Create(gamma_arc),run_time=2)
         # self.add(gamma_label)
         self.play(FadeIn(gamma_label))
         self.wait()
+        self.begin_ambient_camera_rotation(rate=0.5)
+        self.wait(14)
 
 class Euler_zxz_in2(ThreeDScene):
     def construct(self):
@@ -491,6 +494,117 @@ class Euler_zxz_in2(ThreeDScene):
         self.play(animate,Create(gamma_arc))
         self.play(FadeIn(gamma_label))
         self.wait()
+
+class Euler_zxz_ext(ThreeDScene):
+    def construct(self):
+        self.set_camera_orientation(phi=60 * DEGREES, theta=115 * DEGREES)
+        axis_config = {
+            # "include_tip": False,
+            "numbers_to_include": None,
+            "include_ticks": False,
+        }
+        axes = ThreeDAxes(include_numbers=False,
+                          x_range=[0, 3, 1],
+                          y_range=[0, 3, 1],
+                          z_range=[0, 3, 1],
+                          x_length=3, y_length=3, z_length=3,
+                          axis_config=axis_config,)
+
+        axes.add(axes.get_axis_labels())
+        axes.set_color(BLUE_C)
+        axes.shift(ORIGIN - axes.c2p(0, 0, 0))
+        self.play(Create(axes))
+        zRad = 30 * DEGREES
+        yRad = 30 * DEGREES
+        xRad = 30 * DEGREES
+        Rz = np.array([
+            [np.cos(zRad), -np.sin(zRad), 0],
+            [np.sin(zRad), np.cos(zRad), 0],
+            [0, 0, 1]
+        ]);
+        Ry = np.array([
+            [np.cos(yRad), 0, np.sin(yRad)],
+            [0, 1, 0],
+            [-np.sin(yRad), 0, np.cos(yRad)]
+        ]);
+        Rx = np.array([
+            [1, 0, 0],
+            [0, np.cos(xRad), -np.sin(xRad)],
+            [0, np.sin(xRad), np.cos(xRad)]
+        ]);
+
+        axes1 = ThreeDAxes(include_numbers=False,
+                           x_range=[0, 3, 1],
+                           y_range=[0, 3, 1],
+                           z_range=[0, 3, 1],
+                           x_length=3, y_length=3, z_length=3,
+                           axis_config=axis_config )
+        # axes1.move_to(ORIGIN)
+        axes1.shift(ORIGIN - axes1.c2p(0, 0, 0))
+        circle = Circle(radius=3, color=BLUE_C, fill_opacity=0.1)
+        # self.add(circle)
+        self.play(Create(circle))
+        axes1.add(axes1.get_axis_labels())
+        axes1.set_color(RED)
+        self.play(Create(axes1))
+
+        alpha_arc = Arc(start_angle=0, angle=zRad, arc_center=ORIGIN)
+        alpha_arc.add_tip(tip_length=0.15, tip_width=0.15)
+        alpha_labels= MathTex(r"\alpha")
+        alpha_labels.next_to(alpha_arc)
+        alpha_labels.fix_orientation()
+
+        animate = axes1.animate.apply_matrix(matrix=Rz)
+        self.play(animate,Create(alpha_arc),run_time=2)
+        self.play(FadeIn(alpha_labels))
+        # self.add(alpha_labels)
+        self.wait()
+
+        start_point=ORIGIN
+        end_point=np.array([4,0,0])
+        start_point= (Rz @ start_point.T).T
+        end_point =  (Rz @ end_point.T).T
+        arrow = Arrow(start=start_point, end=end_point, color=GREEN,tip_shape=ArrowTriangleFilledTipSmall)
+        dashed_arrow = DashedVMobject(arrow, num_dashes=20, dashed_ratio=0.5)
+        self.add(dashed_arrow)
+
+
+        beta_arc = Arc(start_angle=0, angle=90*DEGREES, arc_center=ORIGIN)
+        beta_arc.add_tip(tip_length=0.15, tip_width=0.15)
+        beta_label = MathTex(r"\beta")
+        beta_arc.rotate(axis=ORIGIN,angle=90*DEGREES,about_point=ORIGIN)
+        # beta_arc.apply_matrix(matrix= Rz)
+        beta_label.next_to(beta_arc, OUT)
+        beta_label.fix_orientation()
+
+        animate = axes1.animate.apply_matrix(matrix=Rx)
+        self.play(animate,Create(beta_arc),run_time=2)
+        self.play(FadeIn(beta_label))
+        self.wait()
+        return
+
+
+        arrow_vector = arrow.get_vector()
+        circle_red = Circle(radius=3, color=RED,fill_opacity=0.1)
+        circle_red.rotate(axis=arrow_vector, angle=30 * DEGREES, about_point=ORIGIN)
+        self.play(Create(circle_red))
+
+
+        gamma_arc = Arc(start_angle=30*DEGREES, angle=30 * DEGREES, arc_center=ORIGIN,radius=1.5)
+        gamma_arc.add_tip(tip_length=0.15, tip_width=0.15)
+        gamma_label = MathTex(r"\gamma")
+        gamma_arc.rotate(axis=arrow_vector, angle=30 * DEGREES, about_point=ORIGIN)
+        gamma_label.next_to(gamma_arc, RIGHT+UP,buff=SMALL_BUFF)
+        gamma_label.fix_orientation()
+
+
+        animate = axes1.animate.apply_matrix(matrix=(Rz @ Rx) @ Rz @ (Rz @ Rx).T)
+        self.play(animate,Create(gamma_arc),run_time=2)
+        # self.add(gamma_label)
+        self.play(FadeIn(gamma_label))
+        self.wait()
+        # self.begin_ambient_camera_rotation(rate=0.5)
+        # self.wait(14)
 
 class Euler_zxy_in(ThreeDScene):
     def construct(self):
@@ -623,9 +737,143 @@ class Euler_zxy_in(ThreeDScene):
         self.wait()
         self.move_camera(phi=60 * DEGREES, theta=115 * DEGREES)
         self.wait()
+class Euler_zxy_in2(ThreeDScene):
+    def construct(self):
+        self.set_camera_orientation(phi=60 * DEGREES, theta=115 * DEGREES)
+        self.move_camera(phi=60 * DEGREES, theta=155 * DEGREES)
+        axis_config = {
+            # "include_tip": False,
+            "numbers_to_include": None,
+            "include_ticks": False,
+        }
+        axes = ThreeDAxes(include_numbers=False,
+                          x_range=[0, 3, 1],
+                          y_range=[0, 3, 1],
+                          z_range=[0, 3, 1],
+                          x_length=3, y_length=3, z_length=3,
+                          axis_config=axis_config,)
 
+        axes.add(axes.get_axis_labels())
+        axes.set_color(BLUE_C)
+        axes.shift(ORIGIN - axes.c2p(0, 0, 0))
+        self.play(Create(axes))
+        zRad = 30 * DEGREES
+        yRad = -45 * DEGREES
+        xRad = 30 * DEGREES
+        Rz = np.array([
+            [np.cos(zRad), -np.sin(zRad), 0],
+            [np.sin(zRad), np.cos(zRad), 0],
+            [0, 0, 1]
+        ]);
+        Ry = np.array([
+            [np.cos(yRad), 0, np.sin(yRad)],
+            [0, 1, 0],
+            [-np.sin(yRad), 0, np.cos(yRad)]
+        ]);
+        Rx = np.array([
+            [1, 0, 0],
+            [0, np.cos(xRad), -np.sin(xRad)],
+            [0, np.sin(xRad), np.cos(xRad)]
+        ]);
+
+        axes1 = ThreeDAxes(include_numbers=False,
+                           x_range=[0, 3, 1],
+                           y_range=[0, 3, 1],
+                           z_range=[0, 3, 1],
+                           x_length=3, y_length=3, z_length=3,
+                           axis_config=axis_config )
+
+        axes1.shift(ORIGIN - axes1.c2p(0, 0, 0))
+        circle = Circle(radius=3, color=BLUE_C, fill_opacity=0.1)
+        self.play(Create(circle))
+        axes1.add(axes1.get_axis_labels())
+        axes1.set_color(RED)
+        self.play(Create(axes1))
+
+
+
+        alpha_arc = Arc(start_angle=0, angle=zRad, arc_center=ORIGIN)
+        alpha_arc.add_tip(tip_length=0.15, tip_width=0.15)
+        alpha_labels= MathTex(r"\psi")
+        alpha_labels.next_to(alpha_arc)
+        alpha_labels.fix_orientation()
+
+        animate = axes1.animate.apply_matrix(matrix=Rz)
+        self.play(animate,Create(alpha_arc),run_time=2)
+        self.play(FadeIn(alpha_labels))
+        self.wait()
+
+        # self.move_camera(phi=60 * DEGREES, theta=45 * DEGREES)
+        # self.move_camera(phi=60 * DEGREES, theta=0 * DEGREES)
+        # 第二转
+        # circle_green = Circle(radius=3, color=GREEN, fill_opacity=0.1)
+        # circle_green.rotate(axis=RIGHT, angle=90 * DEGREES, about_point=ORIGIN)
+        # circle_green.apply_matrix(matrix=Rz @ Ry)
+        # self.play(Create(circle_green))
+
+
+        start_point=np.array([-3.2,0,0])
+        end_point=np.array([4,0,0])
+        start_point= (Rz @ start_point.T).T
+        end_point =  (Rz @ end_point.T).T
+        arrow1 = Arrow(start=start_point, end=end_point, color=GREEN)
+        dashed_arrow = DashedVMobject(arrow1, num_dashes=20, dashed_ratio=0.5)
+        self.add(dashed_arrow)
+
+        start_point2 = np.array([ 0,-3.2, 0])
+        end_point2 = np.array([ 0,4, 0])
+        start_point2 = (Rz @ start_point2.T).T
+        end_point2 = (Rz @ end_point2.T).T
+        arrow2 = Arrow(start=start_point2, end=end_point2, color=GREEN)
+
+
+        beta_arc = Arc(start_angle=0, angle=-yRad, arc_center=ORIGIN)
+        beta_arc.add_tip(tip_length=0.15, tip_width=0.15)
+        beta_label = MathTex(r"\theta")
+
+
+        beta_arc.rotate(axis=RIGHT,angle=90*DEGREES,about_point=ORIGIN)
+        beta_arc.apply_matrix(matrix=Rz)
+        # beta_arc.rotate(axis=OUT, angle=30*DEGREES, about_point=ORIGIN)
+        beta_label.next_to(beta_arc, UR+OUT)
+        beta_label.fix_orientation()
+
+        animate = axes1.animate.apply_matrix(matrix=Rz @ Ry @ Rz.T)
+        self.play(animate,Create(beta_arc),run_time=2)
+        self.play(FadeIn(beta_label))
+        self.wait()
+
+
+        # 第三转
+
+        circle_red = Circle(radius=3, color=RED,fill_opacity=0.1)
+        circle_red.rotate(axis=UP, angle=90 * DEGREES, about_point=ORIGIN)
+        circle_red.apply_matrix(matrix=Rz@Ry)
+        self.play(Create(circle_red))
+        self.add(arrow2)
+        # self.move_camera(phi=60 * DEGREES, theta=0 * DEGREES)
+        # self.move_camera(phi=60 * DEGREES, theta=45 * DEGREES)
+
+
+        gamma_arc = Arc(start_angle=90*DEGREES, angle=xRad, arc_center=ORIGIN,radius=1)
+        gamma_arc.rotate(axis=UP, angle=90 * DEGREES, about_point=ORIGIN)
+        gamma_arc.apply_matrix(matrix=Rz @ Ry)
+
+        gamma_arc.add_tip(tip_length=0.15, tip_width=0.15)
+        gamma_label = MathTex(r"\varphi")
+        gamma_label.next_to(gamma_arc, UP)
+        gamma_label.fix_orientation()
+
+
+        animate = axes1.animate.apply_matrix(matrix=(Rz @ Ry) @ Rx @ (Rz @ Ry).T)
+        self.play(animate,Create(gamma_arc),run_time=2)
+        self.play(FadeIn(gamma_label))
+        self.wait()
+        self.begin_ambient_camera_rotation(rate=0.5)
+        # self.move_camera(phi=60 * DEGREES, theta=115 * DEGREES)
+        self.wait(14)
 
 # "#004000"
 with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl","background_color" : "#000000"}):
-    Euler_zxy_in().render()
+    Euler_zxz_ext().render()
     exit(1)
