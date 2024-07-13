@@ -517,6 +517,7 @@ class Euler_zxz_ext(ThreeDScene):
         zRad = 30 * DEGREES
         yRad = 30 * DEGREES
         xRad = 30 * DEGREES
+        zRad2 = 20 * DEGREES
         Rz = np.array([
             [np.cos(zRad), -np.sin(zRad), 0],
             [np.sin(zRad), np.cos(zRad), 0],
@@ -531,6 +532,11 @@ class Euler_zxz_ext(ThreeDScene):
             [1, 0, 0],
             [0, np.cos(xRad), -np.sin(xRad)],
             [0, np.sin(xRad), np.cos(xRad)]
+        ]);
+        Rz2 = np.array([
+            [np.cos(zRad2), -np.sin(zRad2), 0],
+            [np.sin(zRad2), np.cos(zRad2), 0],
+            [0, 0, 1]
         ]);
 
         axes1 = ThreeDAxes(include_numbers=False,
@@ -548,63 +554,72 @@ class Euler_zxz_ext(ThreeDScene):
         axes1.set_color(RED)
         self.play(Create(axes1))
 
+        circle_red = Circle(radius=3, color=RED, fill_opacity=0.1)
+        circle_red.rotate(axis=RIGHT, angle=90 * DEGREES, about_point=ORIGIN)
+        self.play(Create(circle_red))
+
+
         alpha_arc = Arc(start_angle=0, angle=zRad, arc_center=ORIGIN)
         alpha_arc.add_tip(tip_length=0.15, tip_width=0.15)
+
         alpha_labels= MathTex(r"\alpha")
         alpha_labels.next_to(alpha_arc)
         alpha_labels.fix_orientation()
 
+        arrow = Arrow(start=ORIGIN, end=[4, 0, 0], stroke_width=3, color=GREEN, tip_shape=ArrowTriangleFilledTipSmall)
+        dashed_arrow = DashedVMobject(arrow, num_dashes=20, dashed_ratio=0.5)
+        arrow_animate=dashed_arrow.animate.apply_matrix(matrix=Rz)
+
         animate = axes1.animate.apply_matrix(matrix=Rz)
-        self.play(animate,Create(alpha_arc),run_time=2)
+        animate_red= circle_red.animate.apply_matrix(matrix=Rz)
+
+        self.play(animate,animate_red,Create(alpha_arc),arrow_animate,run_time=2)
         self.play(FadeIn(alpha_labels))
-        # self.add(alpha_labels)
         self.wait()
 
-        start_point=ORIGIN
-        end_point=np.array([4,0,0])
-        start_point= (Rz @ start_point.T).T
-        end_point =  (Rz @ end_point.T).T
-        arrow = Arrow(start=start_point, end=end_point, color=GREEN,tip_shape=ArrowTriangleFilledTipSmall)
-        dashed_arrow = DashedVMobject(arrow, num_dashes=20, dashed_ratio=0.5)
-        self.add(dashed_arrow)
 
 
-        beta_arc = Arc(start_angle=0, angle=90*DEGREES, arc_center=ORIGIN)
+        beta_arc = Arc(start_angle=90*DEGREES, angle=xRad, arc_center=ORIGIN)
         beta_arc.add_tip(tip_length=0.15, tip_width=0.15)
+        beta_arc.rotate(axis=UP,angle=90*DEGREES,about_point=ORIGIN)
+
         beta_label = MathTex(r"\beta")
-        beta_arc.rotate(axis=ORIGIN,angle=90*DEGREES,about_point=ORIGIN)
-        # beta_arc.apply_matrix(matrix= Rz)
-        beta_label.next_to(beta_arc, OUT)
+        beta_label.next_to(beta_arc, UP)
         beta_label.fix_orientation()
 
+        arrow = Arrow(start=ORIGIN, end=[0, 4, 0], stroke_width=3, color=GREEN, tip_shape=ArrowTriangleFilledTipSmall)
+        dashed_arrow = DashedVMobject(arrow, num_dashes=20, dashed_ratio=0.5)
+        animate_arrow=dashed_arrow.animate.apply_matrix(matrix=Rx)
+
         animate = axes1.animate.apply_matrix(matrix=Rx)
-        self.play(animate,Create(beta_arc),run_time=2)
+        animate_red = circle_red.animate.apply_matrix(matrix=Rx)
+        self.play(animate,animate_red,Create(beta_arc),animate_arrow,run_time=2)
         self.play(FadeIn(beta_label))
         self.wait()
-        return
 
+        # 第三次转
 
-        arrow_vector = arrow.get_vector()
-        circle_red = Circle(radius=3, color=RED,fill_opacity=0.1)
-        circle_red.rotate(axis=arrow_vector, angle=30 * DEGREES, about_point=ORIGIN)
-        self.play(Create(circle_red))
-
-
-        gamma_arc = Arc(start_angle=30*DEGREES, angle=30 * DEGREES, arc_center=ORIGIN,radius=1.5)
+        gamma_arc = Arc(start_angle=0, angle=zRad2, arc_center=ORIGIN,radius=2)
         gamma_arc.add_tip(tip_length=0.15, tip_width=0.15)
+
         gamma_label = MathTex(r"\gamma")
-        gamma_arc.rotate(axis=arrow_vector, angle=30 * DEGREES, about_point=ORIGIN)
-        gamma_label.next_to(gamma_arc, RIGHT+UP,buff=SMALL_BUFF)
+        gamma_label.next_to(gamma_arc, RIGHT)
         gamma_label.fix_orientation()
 
+        arrow = Arrow(start=ORIGIN, end=[4, 0, 0],stroke_width=3, color=GREEN, tip_shape=ArrowTriangleFilledTipSmall)
+        dashed_arrow = DashedVMobject(arrow, num_dashes=20, dashed_ratio=0.5)
+        arrow_animate = dashed_arrow.animate.apply_matrix(matrix=Rz2)
 
-        animate = axes1.animate.apply_matrix(matrix=(Rz @ Rx) @ Rz @ (Rz @ Rx).T)
-        self.play(animate,Create(gamma_arc),run_time=2)
-        # self.add(gamma_label)
+
+        animate = axes1.animate.apply_matrix(matrix=Rz2)
+        circle_red = circle_red.animate.apply_matrix(matrix=Rz2)
+        self.play(animate,circle_red,arrow_animate,Create(gamma_arc),run_time=2)
+
         self.play(FadeIn(gamma_label))
         self.wait()
-        # self.begin_ambient_camera_rotation(rate=0.5)
-        # self.wait(14)
+        self.begin_ambient_camera_rotation(rate=0.5)
+        self.wait(14)
+
 
 class Euler_zxy_in(ThreeDScene):
     def construct(self):
