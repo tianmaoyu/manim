@@ -265,6 +265,10 @@ class OpenGLVMobject(OpenGLMobject):
 
         if width is not None:
             for mob in self.get_family(recurse):
+                # 确保 width 是一个 numpy 数组
+                width_array = np.array([width]) if np.isscalar(width) else np.array(width)
+                if width_array.ndim > 1:
+                    continue;
                 mob.stroke_width = np.array([[width] for width in listify(width)])
 
         if background is not None:
