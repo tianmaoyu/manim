@@ -161,8 +161,7 @@ class Multiple2DRelative001(ThreeDScene):
 
 class Multiple2DRelative002(ThreeDScene):
     def construct(self):
-
-
+        self.move_camera(zoom=0.8)
         axes = Axes(include_numbers=False, x_range=[-4, 4, 1], y_range=[-4, 4, 1], z_range=[-4, 4, 1], x_length=8,
                     y_length=8, z_length=6)
         axes.add(axes.get_axis_labels())
@@ -197,14 +196,6 @@ class Multiple2DRelative002(ThreeDScene):
         )
 
 
-
-
-        # self.play(
-        #     axes.animate.set_opacity(0),
-        #     lable.animate.set_opacity(0),
-        #     FadeIn(arrow),
-        # )
-        self.move_camera(zoom=0.8)
         matrix = MathTex(r"""
                M=
                \begin{bmatrix}
@@ -279,5 +270,5 @@ class Multiple2D_Image2(ThreeDScene):
 
 
 with tempconfig({"preview": True, "disable_caching": False, "renderer": "opengl"}):
-    Multiple2D_Image().render()
+    Multiple2DRelative002().render()
     exit(1)
