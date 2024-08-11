@@ -6,6 +6,7 @@ from manim.mobject.opengl.opengl_shpere import OpenGLSphere
 from manim.mobject.opengl.opengl_surface import OpenGLSurface
 import numpy as np
 
+from manim.mobject.opengl.opengl_vectorized_mobject import OpenGLVGroup
 from manim.typing import Point3D, Vector3D
 
 
@@ -654,3 +655,66 @@ class OpenGLDot3D(OpenGLSphere):
     ) -> None:
         super().__init__(center=point, radius=radius, resolution=resolution, **kwargs)
         self.set_color(color)
+
+
+
+class OpenGLCube(OpenGLVGroup):
+    """A three-dimensional cube.
+
+    Parameters
+    ----------
+    side_length
+        Length of each side of the :class:`Cube`.
+    fill_opacity
+        The opacity of the :class:`Cube`, from 0 being fully transparent to 1 being
+        fully opaque. Defaults to 0.75.
+    fill_color
+        The color of the :class:`Cube`.
+    stroke_width
+        The width of the stroke surrounding each face of the :class:`Cube`.
+
+    Examples
+    --------
+
+    .. manim:: CubeExample
+        :save_last_frame:
+
+        class CubeExample(ThreeDScene):
+            def construct(self):
+                self.set_camera_orientation(phi=75*DEGREES, theta=-45*DEGREES)
+
+                axes = ThreeDAxes()
+                cube = Cube(side_length=3, fill_opacity=0.7, fill_color=BLUE)
+                self.add(cube)
+    """
+
+    def __init__(
+        self,
+        side_length: float = 2,
+        fill_opacity: float = 0.75,
+        fill_color: ParsableManimColor = BLUE,
+        stroke_width: float = 0,
+        **kwargs,
+    ) -> None:
+        self.side_length = side_length
+        super().__init__(
+            fill_color=fill_color,
+            fill_opacity=fill_opacity,
+            stroke_width=stroke_width,
+            **kwargs,
+        )
+
+    def generate_points(self) -> None:
+        """Creates the sides of the :class:`Cube`."""
+        for vect in IN, OUT, LEFT, RIGHT, UP, DOWN:
+            face = Square(
+                side_length=self.side_length,
+                shade_in_3d=True,
+            )
+            face.flip()
+            face.shift(self.side_length * OUT / 2.0)
+            face.apply_matrix(z_to_vector(vect))
+
+            self.add(face)
+
+    init_points = generate_points
